@@ -1,3 +1,4 @@
+import { useMediaQuery, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, Chip, Avatar, Typography } from "@mui/material";
@@ -8,12 +9,16 @@ interface TableProps {
 }
 
 export const Table = ({ data }: TableProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const rows = data?.map((item, index) => ({
     id: index,
     ...item,
   }));
 
-  const columns: GridColDef[] = [
+  // Desktop columns (original)
+  const desktopColumns: GridColDef[] = [
     {
       field: "imageUrl",
       headerName: "",
@@ -22,7 +27,6 @@ export const Table = ({ data }: TableProps) => {
       filterable: false,
       headerAlign: "center",
       renderCell: (params: GridRenderCellParams) => {
-        console.log(params.value);
         if (params.value.includes("wp-content")) {
           return null;
         }
@@ -185,6 +189,145 @@ export const Table = ({ data }: TableProps) => {
     },
   ];
 
+  // Mobile columns (collapsed)
+  const mobileColumns: GridColDef[] = [
+    {
+      field: "movieInfo",
+      headerName: "Movie",
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        const hasValidImage =
+          params.row.imageUrl && !params.row.imageUrl.includes("wp-content");
+
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              gap: 1,
+              height: "100%",
+            }}
+          >
+            {hasValidImage && (
+              <Avatar
+                src={params.row.imageUrl}
+                alt={params.row.title}
+                variant="rounded"
+                sx={{ width: 40, height: 40, flexShrink: 0 }}
+              />
+            )}
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "bold",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {params.row.title}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {new Date(params.row.date).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}
+              </Typography>
+            </Box>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "details",
+      headerName: "Details",
+      flex: 1,
+      sortable: false,
+      align: "right",
+      renderCell: (params: GridRenderCellParams) => (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "flex-end",
+            height: "100%",
+            gap: 0.5,
+            py: 0.5,
+          }}
+        >
+          {" "}
+          <Chip
+            label={params.row.theatre}
+            size="small"
+            color="primary"
+            variant="filled"
+          />
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 0.25,
+            }}
+          >
+            {params.row.times.slice(0, 2).map((time: string, index: number) => (
+              <Chip
+                key={index}
+                label={time}
+                size="small"
+                variant="outlined"
+                sx={{ fontSize: "0.7rem" }}
+              />
+            ))}
+            {params.row.times.length > 2 && (
+              <Chip
+                label={`+${params.row.times.length - 2}`}
+                size="small"
+                variant="outlined"
+                color="secondary"
+                sx={{ fontSize: "0.7rem" }}
+              />
+            )}
+          </Box>
+          <Chip
+            label={params.row.format}
+            size="small"
+            color="info"
+            variant="outlined"
+          />
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 0.25,
+            }}
+          >
+            {params.row.accessibility?.map((feature: string, index: number) => (
+              <Chip
+                key={index}
+                label={feature}
+                size="small"
+                color="success"
+                variant="outlined"
+                sx={{ fontSize: "0.65rem" }}
+              />
+            ))}
+          </Box>
+        </Box>
+      ),
+    },
+  ];
+
   return (
     <Box
       sx={{
@@ -196,7 +339,7 @@ export const Table = ({ data }: TableProps) => {
     >
       <DataGrid
         rows={rows}
-        columns={columns}
+        columns={isMobile ? mobileColumns : desktopColumns}
         initialState={{
           sorting: {
             sortModel: [{ field: "date", sort: "asc" }],
@@ -205,7 +348,12 @@ export const Table = ({ data }: TableProps) => {
             paginationModel: { pageSize: 50, page: 0 },
           },
         }}
-        rowHeight={80}
+        sx={{
+          "& .MuiDataGrid-columnHeaders": {
+            display: isMobile ? "none" : "flex",
+          },
+        }}
+        rowHeight={isMobile ? 160 : 80}
         hideFooter
         checkboxSelection={false}
         disableRowSelectionOnClick
