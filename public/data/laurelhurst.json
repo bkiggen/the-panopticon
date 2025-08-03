@@ -1,0 +1,374 @@
+[
+  {
+    "date": "2025-08-03",
+    "title": "Eddington",
+    "originalTitle": "Eddington",
+    "times": [
+      "12:45pm",
+      "3:30pm",
+      "6:20pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=1573028d0dca2a20ad3a51a0d847a900&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "R",
+    "duration": "150 min",
+    "movieUrl": "https://www.imdb.com/title/tt31176520/?ref_=fn_all_ttl_1"
+  },
+  {
+    "date": "2025-08-03",
+    "title": "The Fantastic Four: First Steps",
+    "originalTitle": "The Fantastic Four: First Steps",
+    "times": [
+      "12:30pm",
+      "3:45pm",
+      "6:30pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=678799a82fc263f36af4f7782c6a7a8a&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "PG13",
+    "duration": "120 min",
+    "movieUrl": "https://www.imdb.com/title/tt10676052/?ref_=nv_sr_srsg_5_tt_5_nm_1_in_0_q_fanta"
+  },
+  {
+    "date": "2025-08-03",
+    "title": "The Naked Gun",
+    "originalTitle": "The Naked Gun",
+    "times": [
+      "1:20pm",
+      "4:20pm",
+      "7:15pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=62e39bc6c5ff2b302c168166417e4bab&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "PG13",
+    "duration": "90 min",
+    "movieUrl": "https://www.imdb.com/title/tt3402138/?ref_=nv_sr_srsg_1_tt_7_nm_0_in_0_q_the%2520naked%2520gun"
+  },
+  {
+    "date": "2025-08-03",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "1:00pm",
+      "4:00pm",
+      "6:45pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=e901e1d51338f6744f5a5b67b1d6de9f&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "R",
+    "duration": "105 min",
+    "movieUrl": "https://www.imdb.com/title/tt31184028/?ref_=fn_all_ttl_1"
+  },
+  {
+    "date": "2025-08-04",
+    "title": "Eddington",
+    "originalTitle": "Eddington",
+    "times": [
+      "3:30pm",
+      "6:20pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=1573028d0dca2a20ad3a51a0d847a900&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "R",
+    "duration": "150 min",
+    "movieUrl": "https://www.imdb.com/title/tt31176520/?ref_=fn_all_ttl_1"
+  },
+  {
+    "date": "2025-08-04",
+    "title": "The Fantastic Four: First Steps",
+    "originalTitle": "The Fantastic Four: First Steps",
+    "times": [
+      "3:45pm",
+      "6:30pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=678799a82fc263f36af4f7782c6a7a8a&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "PG13",
+    "duration": "120 min",
+    "movieUrl": "https://www.imdb.com/title/tt10676052/?ref_=nv_sr_srsg_5_tt_5_nm_1_in_0_q_fanta"
+  },
+  {
+    "date": "2025-08-04",
+    "title": "The Naked Gun",
+    "originalTitle": "The Naked Gun",
+    "times": [
+      "4:20pm",
+      "7:15pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=62e39bc6c5ff2b302c168166417e4bab&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "PG13",
+    "duration": "90 min",
+    "movieUrl": "https://www.imdb.com/title/tt3402138/?ref_=nv_sr_srsg_1_tt_7_nm_0_in_0_q_the%2520naked%2520gun"
+  },
+  {
+    "date": "2025-08-04",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "4:00pm",
+      "6:45pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=e901e1d51338f6744f5a5b67b1d6de9f&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "R",
+    "duration": "105 min",
+    "movieUrl": "https://www.imdb.com/title/tt31184028/?ref_=fn_all_ttl_1"
+  },
+  {
+    "date": "2025-08-05",
+    "title": "Eddington",
+    "originalTitle": "Eddington",
+    "times": [
+      "3:30pm",
+      "6:20pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=1573028d0dca2a20ad3a51a0d847a900&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "R",
+    "duration": "150 min",
+    "movieUrl": "https://www.imdb.com/title/tt31176520/?ref_=fn_all_ttl_1"
+  },
+  {
+    "date": "2025-08-05",
+    "title": "The Fantastic Four: First Steps",
+    "originalTitle": "The Fantastic Four: First Steps",
+    "times": [
+      "3:45pm",
+      "6:30pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=678799a82fc263f36af4f7782c6a7a8a&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "PG13",
+    "duration": "120 min",
+    "movieUrl": "https://www.imdb.com/title/tt10676052/?ref_=nv_sr_srsg_5_tt_5_nm_1_in_0_q_fanta"
+  },
+  {
+    "date": "2025-08-05",
+    "title": "The Naked Gun",
+    "originalTitle": "The Naked Gun",
+    "times": [
+      "4:20pm",
+      "7:15pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=62e39bc6c5ff2b302c168166417e4bab&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "PG13",
+    "duration": "90 min",
+    "movieUrl": "https://www.imdb.com/title/tt3402138/?ref_=nv_sr_srsg_1_tt_7_nm_0_in_0_q_the%2520naked%2520gun"
+  },
+  {
+    "date": "2025-08-05",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "4:00pm",
+      "6:45pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=e901e1d51338f6744f5a5b67b1d6de9f&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "R",
+    "duration": "105 min",
+    "movieUrl": "https://www.imdb.com/title/tt31184028/?ref_=fn_all_ttl_1"
+  },
+  {
+    "date": "2025-08-06",
+    "title": "Eddington",
+    "originalTitle": "Eddington (open caption)",
+    "times": [
+      "3:30pm",
+      "6:20pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=3dc0776e76be2225006dfd98cc8ad038&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": [
+      "Open Captions"
+    ],
+    "discount": null,
+    "rating": "R",
+    "duration": "150 min",
+    "movieUrl": "https://www.imdb.com/title/tt31176520/?ref_=nv_sr_srsg_1_tt_2_nm_5_in_0_q_eddington"
+  },
+  {
+    "date": "2025-08-06",
+    "title": "The Fantastic Four: First Steps",
+    "originalTitle": "The Fantastic Four: First Steps (open caption)",
+    "times": [
+      "3:45pm",
+      "6:30pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=dea8524f8ba4e219c968c098b343b084&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": [
+      "Open Captions"
+    ],
+    "discount": null,
+    "rating": "R",
+    "duration": "120 min",
+    "movieUrl": "https://www.imdb.com/title/tt10676052/?ref_=nv_sr_srsg_2_tt_5_nm_1_in_0_q_fantastic%2520"
+  },
+  {
+    "date": "2025-08-06",
+    "title": "The Naked Gun",
+    "originalTitle": "The Naked Gun (open caption)",
+    "times": [
+      "4:20pm",
+      "7:15pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=99a8380ac9ede3a144a9c24959ceba18&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": [
+      "Open Captions"
+    ],
+    "discount": null,
+    "rating": "PG13",
+    "duration": "90 min",
+    "movieUrl": "https://www.imdb.com/title/tt3402138/?ref_=nv_sr_srsg_1_tt_6_nm_1_in_0_q_the%2520naked%2520"
+  },
+  {
+    "date": "2025-08-06",
+    "title": "Together",
+    "originalTitle": "Together (open caption)",
+    "times": [
+      "4:00pm",
+      "6:45pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=9c57cd4f2b26674823a29878b990533e&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": [
+      "Open Captions"
+    ],
+    "discount": null,
+    "rating": "R",
+    "duration": "105 min",
+    "movieUrl": "https://www.imdb.com/title/tt31184028/?ref_=fn_all_ttl_1"
+  },
+  {
+    "date": "2025-08-07",
+    "title": "The Fantastic Four: First Steps",
+    "originalTitle": "The Fantastic Four: First Steps",
+    "times": [
+      "3:45pm",
+      "6:30pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=678799a82fc263f36af4f7782c6a7a8a&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "PG13",
+    "duration": "120 min",
+    "movieUrl": "https://www.imdb.com/title/tt10676052/?ref_=nv_sr_srsg_5_tt_5_nm_1_in_0_q_fanta"
+  },
+  {
+    "date": "2025-08-07",
+    "title": "The Naked Gun",
+    "originalTitle": "The Naked Gun",
+    "times": [
+      "4:20pm",
+      "7:15pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=62e39bc6c5ff2b302c168166417e4bab&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "PG13",
+    "duration": "90 min",
+    "movieUrl": "https://www.imdb.com/title/tt3402138/?ref_=nv_sr_srsg_1_tt_7_nm_0_in_0_q_the%2520naked%2520gun"
+  },
+  {
+    "date": "2025-08-07",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "4:00pm",
+      "7:00pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=e901e1d51338f6744f5a5b67b1d6de9f&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "R",
+    "duration": "105 min",
+    "movieUrl": "https://www.imdb.com/title/tt31184028/?ref_=fn_all_ttl_1"
+  },
+  {
+    "date": "2025-08-07",
+    "title": "Weapons",
+    "originalTitle": "Weapons",
+    "times": [
+      "3:30pm",
+      "6:45pm"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://www.laurelhursttheater.com/media.php?guid=f747d2be8511d7263a78ee2ab36c497a&code=full",
+    "ariaLabel": "",
+    "theatre": "Laurelhurst Theater",
+    "accessibility": null,
+    "discount": null,
+    "rating": "R",
+    "duration": "130 min",
+    "movieUrl": "https://www.imdb.com/title/tt26581740/?ref_=fn_all_ttl_1"
+  }
+]

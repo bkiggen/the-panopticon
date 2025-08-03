@@ -20,20 +20,36 @@ export const Table = ({ data }: TableProps) => {
       width: 80,
       sortable: false,
       filterable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <Avatar
-          src={params.value}
-          alt={params.row.title}
-          variant="rounded"
-          sx={{ width: 40, height: 60 }}
-        />
-      ),
+      headerAlign: "center",
+      renderCell: (params: GridRenderCellParams) => {
+        console.log(params.value);
+        if (params.value.includes("wp-content")) {
+          return null;
+        }
+
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <Avatar
+              src={params.value}
+              alt={params.row.title}
+              variant="rounded"
+              sx={{ height: "80%", margin: "auto" }}
+            />
+          </Box>
+        );
+      },
     },
     {
       field: "title",
       headerName: "Movie Title",
       width: 250,
-      flex: 1,
+      flex: 2,
       renderCell: (params: GridRenderCellParams) => {
         return (
           <Box
@@ -56,7 +72,7 @@ export const Table = ({ data }: TableProps) => {
       width: 120,
       type: "date",
       valueGetter: (params: any) => {
-        return new Date(params.value);
+        return params?.value ? new Date(params.value) : null;
       },
       renderCell: (params: GridRenderCellParams) => (
         <Box
@@ -79,7 +95,7 @@ export const Table = ({ data }: TableProps) => {
       field: "times",
       headerName: "Showtimes",
       width: 200,
-      flex: 1,
+      flex: 2,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Box
@@ -116,6 +132,7 @@ export const Table = ({ data }: TableProps) => {
       field: "theatre",
       headerName: "Theatre",
       width: 130,
+      flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
           label={params.value}
@@ -144,7 +161,15 @@ export const Table = ({ data }: TableProps) => {
       width: 100,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 0.5,
+            height: "100%",
+          }}
+        >
           {params.value?.map((feature: string, index: number) => (
             <Chip
               key={index}
@@ -177,12 +202,13 @@ export const Table = ({ data }: TableProps) => {
             sortModel: [{ field: "date", sort: "asc" }],
           },
         }}
+        rowHeight={80}
         hideFooter
         checkboxSelection={false}
         disableRowSelectionOnClick
         disableColumnMenu
+        disableColumnSorting
         disableVirtualization
-        sx={{}}
       />
     </Box>
   );

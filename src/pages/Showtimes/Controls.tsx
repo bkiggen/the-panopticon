@@ -4,18 +4,12 @@ import {
   TextField,
   Autocomplete,
   Chip,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Button,
   Accordion,
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
-import type { SelectChangeEvent } from "@mui/material/Select";
 import { Clear as ClearIcon } from "@mui/icons-material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import type { MovieEvent } from "../../models/MovieEvent";
 
@@ -191,12 +185,10 @@ export const Controls = ({ data, onFilteredDataChange }: ControlsProps) => {
     timeFilter;
 
   return (
-    <Accordion sx={{ backgroundColor: "#f5f5f5" }}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <FilterAltIcon />
-      </AccordionSummary>
-      <AccordionDetails sx={{ backgroundColor: "white" }}>
-        <Box sx={{ p: 3, mb: 3 }}>
+    <Accordion sx={{ border: "none", boxShadow: "none" }}>
+      <AccordionSummary expandIcon={<FilterAltIcon />}></AccordionSummary>
+      <AccordionDetails sx={{ backgroundColor: "white", pt: 0 }}>
+        <Box sx={{ mb: 3 }}>
           <Box
             sx={{
               display: "flex",
@@ -229,28 +221,6 @@ export const Controls = ({ data, onFilteredDataChange }: ControlsProps) => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Type movie title..."
                 />
-              </Box>
-              <Box sx={{ flex: 1, minWidth: 200 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Time of Day</InputLabel>
-                  <Select
-                    value={timeFilter}
-                    label="Time of Day"
-                    onChange={(e: SelectChangeEvent) =>
-                      setTimeFilter(e.target.value)
-                    }
-                  >
-                    <MenuItem value="">All Times</MenuItem>
-                    <MenuItem value="morning">Morning (6AM - 12PM)</MenuItem>
-                    <MenuItem value="afternoon">
-                      Afternoon (12PM - 6PM)
-                    </MenuItem>
-                    <MenuItem value="evening">Evening (6PM - 12AM)</MenuItem>
-                    <MenuItem value="latenight">
-                      Late Night (12AM - 6AM)
-                    </MenuItem>
-                  </Select>
-                </FormControl>
               </Box>
             </Box>
 
@@ -381,32 +351,6 @@ export const Controls = ({ data, onFilteredDataChange }: ControlsProps) => {
                       {...params}
                       label="Accessibility"
                       placeholder="Select features..."
-                    />
-                  )}
-                />
-              </Box>
-              <Box sx={{ flex: 1, minWidth: 180 }}>
-                <Autocomplete
-                  multiple
-                  options={filterOptions.discounts}
-                  value={selectedDiscounts}
-                  onChange={(_, newValue) => setSelectedDiscounts(newValue)}
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                      <Chip
-                        variant="outlined"
-                        color="warning"
-                        label={option}
-                        {...getTagProps({ index })}
-                        key={option}
-                      />
-                    ))
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Discounts"
-                      placeholder="Select discounts..."
                     />
                   )}
                 />
