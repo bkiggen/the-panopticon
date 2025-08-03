@@ -16,7 +16,7 @@ export const Table = ({ data }: TableProps) => {
   const columns: GridColDef[] = [
     {
       field: "imageUrl",
-      headerName: "Poster",
+      headerName: "",
       width: 80,
       sortable: false,
       filterable: false,
@@ -200,6 +200,9 @@ export const Table = ({ data }: TableProps) => {
         initialState={{
           sorting: {
             sortModel: [{ field: "date", sort: "asc" }],
+          },
+          pagination: {
+            paginationModel: { pageSize: 50, page: 0 },
           },
         }}
         rowHeight={80}

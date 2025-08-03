@@ -73,7 +73,7 @@ class TomorrowTheaterScraper {
           const runtimeEl = showEl.querySelector(".show-specs");
           const descriptionEl = showEl.querySelector(".show-content");
           const tagEls = showEl.querySelectorAll(".pill");
-          const showTimesEl = showEl.querySelectorAll(".selected-date span");
+          const showTimesEl = showEl.querySelectorAll(".showtimes .showtime");
 
           const title = titleEl?.textContent.trim() ?? null;
           const url = titleEl?.href ?? null;

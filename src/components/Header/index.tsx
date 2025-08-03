@@ -2,16 +2,16 @@ import panopticonLogo from "/panopticon.png";
 
 export const Header = () => {
   return (
-    <header>
-      <img
-        src={panopticonLogo}
-        className="logo"
-        alt="Panopticon logo"
-        style={{
-          width: "300px",
-          objectFit: "cover",
-        }}
-      />
+    <header
+      style={{
+        backgroundImage: `url(${panopticonLogo})`,
+        backgroundRepeat: "repeat-x",
+        backgroundPosition: "-100px 0",
+        backgroundSize: "300px auto", // maintains your 300px width
+        height: "90px",
+      }}
+    >
+      {/* Content can go here if needed */}
     </header>
   );
 };
