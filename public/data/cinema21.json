@@ -1,0 +1,905 @@
+[
+  {
+    "date": "2025-08-03",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "2:00 PM",
+      "4:30 PM",
+      "7:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4eae4b1b-10d3-4173-80f2-64cd54fc779f.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-03",
+    "title": "Sorry, Baby",
+    "originalTitle": "Sorry, Baby",
+    "times": [
+      "2:05 PM",
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4619f34a-a439-4ba1-b036-90e09753d0d9.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-03",
+    "title": "Eddington",
+    "originalTitle": "Eddington",
+    "times": [
+      "3:00 PM",
+      "6:30 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_083a730d-6541-4870-88b2-380f48d8a2dc.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-03",
+    "title": "IN THE MOOD FOR LOVE 25th Anniversary (4K)",
+    "originalTitle": "IN THE MOOD FOR LOVE 25th Anniversary (4K)",
+    "times": [
+      "4:25 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_08e7df87-ab13-4269-8b49-4a901aaef052.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-04",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "4:30 PM",
+      "7:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4eae4b1b-10d3-4173-80f2-64cd54fc779f.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-04",
+    "title": "Sorry, Baby",
+    "originalTitle": "Sorry, Baby",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4619f34a-a439-4ba1-b036-90e09753d0d9.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-04",
+    "title": "Eddington",
+    "originalTitle": "Eddington",
+    "times": [
+      "3:50 PM",
+      "6:45 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_083a730d-6541-4870-88b2-380f48d8a2dc.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-04",
+    "title": "IN THE MOOD FOR LOVE 25th Anniversary (4K)",
+    "originalTitle": "IN THE MOOD FOR LOVE 25th Anniversary (4K)",
+    "times": [
+      "4:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_08e7df87-ab13-4269-8b49-4a901aaef052.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-05",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "4:30 PM",
+      "7:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4eae4b1b-10d3-4173-80f2-64cd54fc779f.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-05",
+    "title": "Sorry, Baby",
+    "originalTitle": "Sorry, Baby",
+    "times": [
+      "4:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4619f34a-a439-4ba1-b036-90e09753d0d9.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-05",
+    "title": "Eddington",
+    "originalTitle": "Eddington",
+    "times": [
+      "6:45 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_083a730d-6541-4870-88b2-380f48d8a2dc.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-05",
+    "title": "IN THE MOOD FOR LOVE 25th Anniversary (4K)",
+    "originalTitle": "IN THE MOOD FOR LOVE 25th Anniversary (4K)",
+    "times": [
+      "4:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_08e7df87-ab13-4269-8b49-4a901aaef052.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-05",
+    "title": "High and Low (1963)",
+    "originalTitle": "High and Low (1963)",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_9588ec8e-d982-457b-8073-51a689a22f34.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-06",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "4:15 PM",
+      "7:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4eae4b1b-10d3-4173-80f2-64cd54fc779f.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-06",
+    "title": "Sorry, Baby",
+    "originalTitle": "Sorry, Baby",
+    "times": [
+      "4:30 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4619f34a-a439-4ba1-b036-90e09753d0d9.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-06",
+    "title": "Eddington",
+    "originalTitle": "Eddington",
+    "times": [
+      "6:45 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_083a730d-6541-4870-88b2-380f48d8a2dc.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-06",
+    "title": "IN THE MOOD FOR LOVE 25th Anniversary (4K)",
+    "originalTitle": "IN THE MOOD FOR LOVE 25th Anniversary (4K)",
+    "times": [
+      "4:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_08e7df87-ab13-4269-8b49-4a901aaef052.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-06",
+    "title": "BETWEEN THE MOUNTAIN AND THE SKY",
+    "originalTitle": "BETWEEN THE MOUNTAIN AND THE SKY",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_0bce659b-2518-4c04-8e0d-40284422a578.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-07",
+    "title": "Together",
+    "originalTitle": "Together",
+    "times": [
+      "4:30 PM",
+      "7:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4eae4b1b-10d3-4173-80f2-64cd54fc779f.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-07",
+    "title": "Sorry, Baby",
+    "originalTitle": "Sorry, Baby",
+    "times": [
+      "4:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4619f34a-a439-4ba1-b036-90e09753d0d9.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-07",
+    "title": "Eddington",
+    "originalTitle": "Eddington",
+    "times": [
+      "6:45 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_083a730d-6541-4870-88b2-380f48d8a2dc.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-07",
+    "title": "High and Low (1963)",
+    "originalTitle": "High and Low (1963)",
+    "times": [
+      "3:50 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_9588ec8e-d982-457b-8073-51a689a22f34.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-07",
+    "title": "Weapons",
+    "originalTitle": "Weapons",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_1dfb6641-92a3-42ab-be1f-47e04642d917.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-08",
+    "title": "Weapons",
+    "originalTitle": "Weapons",
+    "times": [
+      "4:00 PM",
+      "6:50 PM",
+      "10:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_1dfb6641-92a3-42ab-be1f-47e04642d917.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": [
+      "Open Captions"
+    ],
+    "discount": null
+  },
+  {
+    "date": "2025-08-08",
+    "title": "It’s Never Over, Jeff Buckley",
+    "originalTitle": "It’s Never Over, Jeff Buckley",
+    "times": [
+      "4:15 PM",
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_92baa275-8f4b-4997-a67e-6a66b77fc819.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-08",
+    "title": "The Matrix (1999)",
+    "originalTitle": "The Matrix (1999)",
+    "times": [
+      "9:40 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_e092bf4f-561a-4e88-9e9e-99828f6ea3ef.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-09",
+    "title": "Weapons",
+    "originalTitle": "Weapons",
+    "times": [
+      "1:00 PM",
+      "4:00 PM",
+      "6:50 PM",
+      "10:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_1dfb6641-92a3-42ab-be1f-47e04642d917.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-09",
+    "title": "It’s Never Over, Jeff Buckley",
+    "originalTitle": "It’s Never Over, Jeff Buckley",
+    "times": [
+      "4:15 PM",
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_92baa275-8f4b-4997-a67e-6a66b77fc819.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-09",
+    "title": "The Matrix (1999)",
+    "originalTitle": "The Matrix (1999)",
+    "times": [
+      "9:40 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_e092bf4f-561a-4e88-9e9e-99828f6ea3ef.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-09",
+    "title": "Chinatown (1974)",
+    "originalTitle": "Chinatown (1974)",
+    "times": [
+      "11:00 AM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_3bd077b3-0739-4503-9241-d1f25094ea50.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-10",
+    "title": "Weapons",
+    "originalTitle": "Weapons",
+    "times": [
+      "1:00 PM",
+      "4:00 PM",
+      "7:10 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_1dfb6641-92a3-42ab-be1f-47e04642d917.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-10",
+    "title": "It’s Never Over, Jeff Buckley",
+    "originalTitle": "It’s Never Over, Jeff Buckley",
+    "times": [
+      "3:45 PM",
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_92baa275-8f4b-4997-a67e-6a66b77fc819.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-11",
+    "title": "Weapons",
+    "originalTitle": "Weapons",
+    "times": [
+      "4:00 PM",
+      "7:10 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_1dfb6641-92a3-42ab-be1f-47e04642d917.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-11",
+    "title": "It’s Never Over, Jeff Buckley",
+    "originalTitle": "It’s Never Over, Jeff Buckley",
+    "times": [
+      "4:15 PM",
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_92baa275-8f4b-4997-a67e-6a66b77fc819.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-12",
+    "title": "Weapons",
+    "originalTitle": "Weapons",
+    "times": [
+      "4:00 PM",
+      "7:00 PM",
+      "4:00 PM",
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_1dfb6641-92a3-42ab-be1f-47e04642d917.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-12",
+    "title": "It’s Never Over, Jeff Buckley",
+    "originalTitle": "It’s Never Over, Jeff Buckley",
+    "times": [
+      "3:45 PM",
+      "6:45 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_92baa275-8f4b-4997-a67e-6a66b77fc819.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-13",
+    "title": "It’s Never Over, Jeff Buckley",
+    "originalTitle": "It’s Never Over, Jeff Buckley",
+    "times": [
+      "3:45 PM",
+      "3:45 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_92baa275-8f4b-4997-a67e-6a66b77fc819.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-14",
+    "title": "Weapons",
+    "originalTitle": "Weapons",
+    "times": [
+      "4:00 PM",
+      "7:10 PM",
+      "4:00 PM",
+      "7:10 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_1dfb6641-92a3-42ab-be1f-47e04642d917.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-14",
+    "title": "It’s Never Over, Jeff Buckley",
+    "originalTitle": "It’s Never Over, Jeff Buckley",
+    "times": [
+      "3:45 PM",
+      "7:00 PM",
+      "3:45 PM",
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_92baa275-8f4b-4997-a67e-6a66b77fc819.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-14",
+    "title": "THE GRATEFUL DEAD MOVIE 2025 MEET-UP",
+    "originalTitle": "THE GRATEFUL DEAD MOVIE 2025 MEET-UP",
+    "times": [
+      "6:45 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_a96a09c6-246e-4d29-94d9-f5f827c79c14.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-15",
+    "title": "Inside Man (2006)",
+    "originalTitle": "Inside Man (2006)",
+    "times": [
+      "9:30 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_388a42c2-2a33-4897-9db7-acdadec404a7.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-16",
+    "title": "THE GRATEFUL DEAD MOVIE 2025 MEET-UP",
+    "originalTitle": "THE GRATEFUL DEAD MOVIE 2025 MEET-UP",
+    "times": [
+      "2:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_a96a09c6-246e-4d29-94d9-f5f827c79c14.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-16",
+    "title": "Inside Man (2006)",
+    "originalTitle": "Inside Man (2006)",
+    "times": [
+      "9:30 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_388a42c2-2a33-4897-9db7-acdadec404a7.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-16",
+    "title": "The French Connection (1971)",
+    "originalTitle": "The French Connection (1971)",
+    "times": [
+      "11:00 AM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_5437c3aa-611e-4403-8d22-77833503b3c1.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-20",
+    "title": "The Last Class",
+    "originalTitle": "The Last Class",
+    "times": [
+      "7:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_9bdab064-c55f-45ba-8e79-32dc02cba1cb.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-22",
+    "title": "Brick (2006)",
+    "originalTitle": "Brick (2006)",
+    "times": [
+      "9:35 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_b170be66-8d7e-4173-98bc-21f98d720366.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-23",
+    "title": "Brick (2006)",
+    "originalTitle": "Brick (2006)",
+    "times": [
+      "9:35 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_b170be66-8d7e-4173-98bc-21f98d720366.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-23",
+    "title": "The Wanderers (1979)",
+    "originalTitle": "The Wanderers (1979)",
+    "times": [
+      "11:00 AM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_00301007-611f-43b9-b047-d5eac15f922d.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-29",
+    "title": "Thirst (2009)",
+    "originalTitle": "Thirst (2009)",
+    "times": [
+      "9:20 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_b3af4fa6-5550-4998-996f-5d1ad92a42e8.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-30",
+    "title": "Thirst (2009)",
+    "originalTitle": "Thirst (2009)",
+    "times": [
+      "9:20 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_b3af4fa6-5550-4998-996f-5d1ad92a42e8.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-08-30",
+    "title": "Saturday Night Fever (1977)",
+    "originalTitle": "Saturday Night Fever (1977)",
+    "times": [
+      "11:00 AM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_d96d4a01-88b7-4d4c-b728-44fe32730d3f.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-06",
+    "title": "Pee-wee's Big Adventure (1985)",
+    "originalTitle": "Pee-wee's Big Adventure (1985)",
+    "times": [
+      "11:00 AM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_ffbbc8b2-575c-47b9-bdce-dbb0dfe1d805.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-07",
+    "title": "Know Your Place",
+    "originalTitle": "Know Your Place",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_72baac23-180e-47a5-8cec-9d2993633868.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-13",
+    "title": "Broadcast News (1987)",
+    "originalTitle": "Broadcast News (1987)",
+    "times": [
+      "11:00 AM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_4bbdb829-10be-4502-a72d-1d3d86a0f595.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-14",
+    "title": "Democracy Noir",
+    "originalTitle": "Democracy Noir",
+    "times": [
+      "4:15 PM",
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_93ee60a2-060b-499f-b9ce-87f150feb166.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-15",
+    "title": "Democracy Noir",
+    "originalTitle": "Democracy Noir",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_93ee60a2-060b-499f-b9ce-87f150feb166.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-16",
+    "title": "Democracy Noir",
+    "originalTitle": "Democracy Noir",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_93ee60a2-060b-499f-b9ce-87f150feb166.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-17",
+    "title": "Eno (final Art House Day screening)",
+    "originalTitle": "Eno (final Art House Day screening)",
+    "times": [
+      "7:15 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_fa46a8af-2114-43da-beb1-ca168611ee67.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-20",
+    "title": "Diner (1982)",
+    "originalTitle": "Diner (1982)",
+    "times": [
+      "11:00 AM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_dffa80f8-9cbb-4df7-952d-750efe624d38.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-09-27",
+    "title": "Tootsie (1982)",
+    "originalTitle": "Tootsie (1982)",
+    "times": [
+      "11:00 AM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_1d102674-d7b2-4525-935f-e674b76ac1de.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-10-22",
+    "title": "After The Snowfall",
+    "originalTitle": "After The Snowfall",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_dd0c604b-8b8f-4407-9db9-670d9c848a74.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  },
+  {
+    "date": "2025-10-22",
+    "title": "After The Snowfall (VIP ACCESS)",
+    "originalTitle": "After The Snowfall (VIP ACCESS)",
+    "times": [
+      "7:00 PM"
+    ],
+    "format": "Digital",
+    "imageUrl": "https://img.vwassets.com/cinema21.com/vertical_f3484b54-a05e-4130-b0c4-c2b503ee83f7.jpg",
+    "ariaLabel": "",
+    "theatre": "Cinema 21",
+    "accessibility": null,
+    "discount": null
+  }
+]

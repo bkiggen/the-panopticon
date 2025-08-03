@@ -1,0 +1,1078 @@
+[
+  {
+    "monthYear": "July 2025",
+    "events": []
+  },
+  {
+    "monthYear": "August 2025",
+    "events": [
+      {
+        "date": "2025-08-01",
+        "title": "CLOUD",
+        "originalTitle": "CLOUD",
+        "times": [
+          "6:00pm",
+          "8:45pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/cloud.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-01",
+        "title": "EDDINGTON",
+        "originalTitle": "EDDINGTON",
+        "times": [
+          "6:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/eddington.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-01",
+        "title": "STRANGERS WITH CANDY",
+        "originalTitle": "STRANGERS WITH CANDY",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/strangerswithcandy.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-02",
+        "title": "EDDINGTON",
+        "originalTitle": "EDDINGTON",
+        "times": [
+          "2:30pm",
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/eddington.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-02",
+        "title": "THE AMERICAN ASTRONAUT",
+        "originalTitle": "THE AMERICAN ASTRONAUT in 35mm",
+        "times": [
+          "3:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/american-astronaut.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-02",
+        "title": "CLOUD",
+        "originalTitle": "CLOUD",
+        "times": [
+          "3:30pm",
+          "6:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/cloud.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-02",
+        "title": "TRICK OR TREAT",
+        "originalTitle": "TRICK OR TREAT",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/OZZYTrickorTreat_FB.jpeg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-03",
+        "title": "EDDINGTON",
+        "originalTitle": "EDDINGTON",
+        "times": [
+          "2:30pm",
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/eddington.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-03",
+        "title": "STRANGERS ON A TRAIN",
+        "originalTitle": "STRANGERS ON A TRAIN in 35mm",
+        "times": [
+          "3:00pm",
+          "6:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/strangers-on-a-train.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-03",
+        "title": "CLOUD",
+        "originalTitle": "CLOUD",
+        "times": [
+          "3:30pm",
+          "6:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/cloud.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-04",
+        "title": "CLOUD",
+        "originalTitle": "CLOUD",
+        "times": [
+          "6:30pm",
+          "9:15pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/cloud.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-04",
+        "title": "EDDINGTON",
+        "originalTitle": "EDDINGTON",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/eddington.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-04",
+        "title": "CONAN THE BARBARIAN",
+        "originalTitle": "CONAN THE BARBARIAN in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/conan-barbarian-35mm.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-05",
+        "title": "CLOUD",
+        "originalTitle": "CLOUD",
+        "times": [
+          "6:30pm",
+          "9:15pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/cloud.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-05",
+        "title": "EDDINGTON",
+        "originalTitle": "EDDINGTON",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/eddington.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-05",
+        "title": "PRINCESS MADAM",
+        "originalTitle": "PRINCESS MADAM",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/16x9_princessmadam.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-06",
+        "title": "CLOUD",
+        "originalTitle": "CLOUD",
+        "times": [
+          "6:30pm",
+          "9:15pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/cloud.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-06",
+        "title": "EDDINGTON",
+        "originalTitle": "EDDINGTON",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/eddington.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-06",
+        "title": "HAWK JONES",
+        "originalTitle": "HAWK JONES",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/05/image-5.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-07",
+        "title": "CLOUD",
+        "originalTitle": "CLOUD",
+        "times": [
+          "6:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/cloud.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-07",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-07",
+        "title": "CAPE FEAR",
+        "originalTitle": "CAPE FEAR in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/cape-fear.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-07",
+        "title": "EDDINGTON",
+        "originalTitle": "EDDINGTON",
+        "times": [
+          "9:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/eddington.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-08",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-08",
+        "title": "CURSE OF FRANKENSTEIN",
+        "originalTitle": "CURSE OF FRANKENSTEIN",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/curse-of-frank.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-08",
+        "title": "EBONY & IVORY",
+        "originalTitle": "EBONY & IVORY",
+        "times": [
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/ebonyivory.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-09",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "2:17pm",
+          "6:00pm",
+          "9:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-09",
+        "title": "THE MATRIX",
+        "originalTitle": "THE MATRIX",
+        "times": [
+          "3:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/thematrix.jpeg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-09",
+        "title": "EXCALIBUR",
+        "originalTitle": "EXCALIBUR",
+        "times": [
+          "6:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/excalibur.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-09",
+        "title": "TODD SHEETS DOUBLE FEATURE with Todd Sheets!",
+        "originalTitle": "TODD SHEETS DOUBLE FEATURE with Todd Sheets!",
+        "times": [
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/HOLLYWOOD-DOUBLE.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-10",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "2:17pm",
+          "6:00pm",
+          "9:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-10",
+        "title": "SKY HIGH",
+        "originalTitle": "SKY HIGH",
+        "times": [
+          "3:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/sky-high-movie.jpeg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-10",
+        "title": "EASY RIDER",
+        "originalTitle": "EASY RIDER in 35mm",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/easy-rider.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-11",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-11",
+        "title": "BEST IN SHOW",
+        "originalTitle": "BEST IN SHOW in 35mm",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/best-in-show.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-11",
+        "title": "YEAST",
+        "originalTitle": "YEAST",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/IMG_1301.jpeg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-12",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-12",
+        "title": "CRIPPLED AVENGERS",
+        "originalTitle": "CRIPPLED AVENGERS in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/crippled-avengers.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-13",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-13",
+        "title": "SEVENTEEN with Kelly Reichardt",
+        "originalTitle": "SEVENTEEN with Kelly Reichardt",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/Seventeen-Lynn-on-Phone-.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-13",
+        "title": "ROAD WARRIOR",
+        "originalTitle": "ROAD WARRIOR in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/road-warrior-35mm.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-14",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-14",
+        "title": "ROAD WARRIOR",
+        "originalTitle": "ROAD WARRIOR in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/road-warrior-35mm.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-15",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-15",
+        "title": "NIGHT ALWAYS COMES",
+        "originalTitle": "NIGHT ALWAYS COMES",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/night-always-comes.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-15",
+        "title": "KILL BILL VOL 1",
+        "originalTitle": "KILL BILL VOL 1 in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/kill-bill-1.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-16",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "2:00pm",
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-16",
+        "title": "KILL BILL VOL 1",
+        "originalTitle": "KILL BILL VOL 1 in 35mm",
+        "times": [
+          "2:30pm",
+          "6:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/kill-bill-1.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-16",
+        "title": "THE SISTERHOOD OF THE TRAVELING PANTS",
+        "originalTitle": "THE SISTERHOOD OF THE TRAVELING PANTS",
+        "times": [
+          "3:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/Sisterhood.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-16",
+        "title": "NIGHT ALWAYS COMES",
+        "originalTitle": "NIGHT ALWAYS COMES",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/night-always-comes.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-16",
+        "title": "KILL BILL VOL 2",
+        "originalTitle": "KILL BILL VOL 2 in 35mm",
+        "times": [
+          "8:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/kill-bill-2.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-16",
+        "title": "CANNIBAL THE MUSICAL",
+        "originalTitle": "CANNIBAL THE MUSICAL",
+        "times": [
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/hills.cannibal.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-17",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "2:00pm",
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-17",
+        "title": "KILL BILL VOL 2",
+        "originalTitle": "KILL BILL VOL 2 in 35mm",
+        "times": [
+          "2:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/kill-bill-2.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-17",
+        "title": "THE SISTERHOOD OF THE TRAVELING PANTS",
+        "originalTitle": "THE SISTERHOOD OF THE TRAVELING PANTS",
+        "times": [
+          "3:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/Sisterhood.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-17",
+        "title": "NIGHT ALWAYS COMES",
+        "originalTitle": "NIGHT ALWAYS COMES",
+        "times": [
+          "6:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/night-always-comes.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-17",
+        "title": "CYBER CITY OEDO 808",
+        "originalTitle": "CYBER CITY OEDO 808",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/Cyber_City_Banner.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-18",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-18",
+        "title": "NIGHT ALWAYS COMES",
+        "originalTitle": "NIGHT ALWAYS COMES",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/night-always-comes.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-18",
+        "title": "MOBY DICK",
+        "originalTitle": "MOBY DICK",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/mobydick.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-19",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-19",
+        "title": "NIGHT ALWAYS COMES",
+        "originalTitle": "NIGHT ALWAYS COMES",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/night-always-comes.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-19",
+        "title": "THE 1960S SUPER SHOW",
+        "originalTitle": "THE 1960S SUPER SHOW in 16mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "16mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/super-show.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-20",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-20",
+        "title": "THE 9 LIVES OF BARBARA DANE",
+        "originalTitle": "THE 9 LIVES OF BARBARA DANE",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/Barbara-Dane-TM-web-photo-2025.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-20",
+        "title": "KILL BILL VOL 2",
+        "originalTitle": "KILL BILL VOL 2 in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/kill-bill-2.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-20",
+        "title": "NIGHT ALWAYS COMES",
+        "originalTitle": "NIGHT ALWAYS COMES",
+        "times": [
+          "9:15pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/night-always-comes.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-21",
+        "title": "WEAPONS",
+        "originalTitle": "WEAPONS",
+        "times": [
+          "6:30pm",
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/weapons.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-21",
+        "title": "MILLION DOLLAR BABY",
+        "originalTitle": "MILLION DOLLAR BABY in 35mm",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/million-dollar-baby.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-21",
+        "title": "NIGHT ALWAYS COMES",
+        "originalTitle": "NIGHT ALWAYS COMES",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/night-always-comes.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-22",
+        "title": "12 MONKEYS",
+        "originalTitle": "12 MONKEYS in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/12-monkeys.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-23",
+        "title": "THERE WILL BE BLOOD",
+        "originalTitle": "THERE WILL BE BLOOD in 35mm",
+        "times": [
+          "2:00pm",
+          "6:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/there-will-be-blood-35mm.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-23",
+        "title": "12 MONKEYS",
+        "originalTitle": "12 MONKEYS in 35mm",
+        "times": [
+          "9:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/12-monkeys.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-24",
+        "title": "RRR",
+        "originalTitle": "RRR",
+        "times": [
+          "2:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2024/04/RRR-1.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-24",
+        "title": "FIRST REFORMED",
+        "originalTitle": "FIRST REFORMED",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/first-reformed.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-25",
+        "title": "PURPLE RAIN",
+        "originalTitle": "PURPLE RAIN in 35mm",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/purple-rain-35mm.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-25",
+        "title": "The Movie Quiz in August",
+        "originalTitle": "The Movie Quiz in August",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/Quiz-08.2025-Site.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-26",
+        "title": "NIGHT OF THE JUGGLER",
+        "originalTitle": "NIGHT OF THE JUGGLER",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/night-of-the-juggler.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-27",
+        "title": "RAIDERS OF THE LOST ARK",
+        "originalTitle": "RAIDERS OF THE LOST ARK in 35mm",
+        "times": [
+          "7:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/raiders-lost-ark-35mm.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-28",
+        "title": "RAIDERS OF THE LOST ARK",
+        "originalTitle": "RAIDERS OF THE LOST ARK in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/06/raiders-lost-ark-35mm.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-29",
+        "title": "JAWS",
+        "originalTitle": "JAWS in 35mm",
+        "times": [
+          "6:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2024/05/jaws.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-29",
+        "title": "THE RUINS",
+        "originalTitle": "THE RUINS",
+        "times": [
+          "9:30pm"
+        ],
+        "format": "Digital",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/theruins.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-30",
+        "title": "JAWS",
+        "originalTitle": "JAWS in 35mm",
+        "times": [
+          "3:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2024/05/jaws.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-30",
+        "title": "FLESH + BLOOD",
+        "originalTitle": "FLESH + BLOOD in 35mm",
+        "times": [
+          "7:30pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2025/07/fleshblood_screen.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      },
+      {
+        "date": "2025-08-31",
+        "title": "JAWS",
+        "originalTitle": "JAWS in 35mm",
+        "times": [
+          "3:00pm",
+          "6:00pm"
+        ],
+        "format": "35mm",
+        "imageUrl": "https://hollywoodtheatre.org/wp-content/uploads/2024/05/jaws.jpg",
+        "ariaLabel": "",
+        "theatre": "Hollywood Theatre"
+      }
+    ]
+  },
+  {
+    "monthYear": "September 2025",
+    "events": []
+  },
+  {
+    "monthYear": "October 2025",
+    "events": []
+  },
+  {
+    "monthYear": "November 2025",
+    "events": []
+  },
+  {
+    "monthYear": "December 2025",
+    "events": []
+  }
+]

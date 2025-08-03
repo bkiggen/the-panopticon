@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hollywood Theatre Showtimes</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        opacity: 0.8;
+      }
+
+      .controls {
+        padding: 20px 30px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .file-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+      }
+
+      .file-input {
+        position: absolute;
+        left: -9999px;
+      }
+
+      .file-input-label {
+        background: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: none;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .file-input-label:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+      }
+
+      .filters {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .filter-group label {
+        font-size: 12px;
+        color: #6c757d;
+        font-weight: 500;
+      }
+
+      .filter-group select,
+      .filter-group input {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .stats {
+        padding: 15px 30px;
+        background: #e3f2fd;
+        border-bottom: 1px solid #bbdefb;
+        font-weight: 500;
+        color: #1565c0;
+      }
+
+      .table-container {
+        max-height: 70vh;
+        overflow-y: auto;
+        margin: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+      }
+
+      th {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        padding: 15px 12px;
+        text-align: left;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #f1f3f4;
+        vertical-align: top;
+      }
+
+      tr:hover {
+        background: #f8f9fa;
+      }
+
+      .movie-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 4px;
+      }
+
+      .movie-poster {
+        width: 40px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .times {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .time-badge {
+        background: #007bff;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .format-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .format-35mm {
+        background: #ff6b6b;
+        color: white;
+      }
+      .format-70mm {
+        background: #ff8c42;
+        color: white;
+      }
+      .format-16mm {
+        background: #ffd93d;
+        color: #333;
+      }
+      .format-digital {
+        background: #6c5ce7;
+        color: white;
+      }
+      .format-imax {
+        background: #00b894;
+        color: white;
+      }
+
+      .date-cell {
+        font-weight: 600;
+        color: #495057;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+      }
+
+      .empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: #6c757d;
+      }
+
+      @media (max-width: 768px) {
+        .controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .filters {
+          justify-content: center;
+        }
+
+        table {
+          font-size: 14px;
+        }
+
+        th,
+        td {
+          padding: 8px;
+        }
+
+        .header h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🎬 Panopticon</h1>
+        <div class="subtitle">Independent Cinema Showtimes</div>
+      </div>
+
+      <div class="controls">
+        <div class="file-input-wrapper">
+          <input type="file" id="jsonFile" class="file-input" accept=".json" />
+          <label for="jsonFile" class="file-input-label"
+            >📁 Load JSON Data</label
+          >
+        </div>
+
+        <div class="filters">
+          <div class="filter-group">
+            <label>Month</label>
+            <select id="monthFilter">
+              <option value="">All Months</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Format</label>
+            <select id="formatFilter">
+              <option value="">All Formats</option>
+              <option value="35mm">35mm</option>
+              <option value="70mm">70mm</option>
+              <option value="16mm">16mm</option>
+              <option value="Digital">Digital</option>
+              <option value="IMAX">IMAX</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Search</label>
+            <input type="text" id="searchInput" placeholder="Movie title..." />
+          </div>
+
+          <div class="filter-group">
+            <label>Date</label>
+            <input type="date" id="dateFilter" />
+          </div>
+        </div>
+      </div>
+
+      <div class="stats" id="stats">
+        Load your scraped JSON data to view showtimes
+      </div>
+
+      <div class="table-container">
+        <div id="content">
+          <div class="empty-state">
+            <h3>🎭 Welcome!</h3>
+            <p>
+              Click "Load JSON Data" above and select your scraped
+              hollywood_theatre_events.json file to view showtimes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let allEvents = [];
+      let filteredEvents = [];
+
+      document
+        .getElementById("jsonFile")
+        .addEventListener("change", handleFileLoad);
+      document
+        .getElementById("monthFilter")
+        .addEventListener("change", applyFilters);
+      document
+        .getElementById("formatFilter")
+        .addEventListener("change", applyFilters);
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", applyFilters);
+      document
+        .getElementById("dateFilter")
+        .addEventListener("change", applyFilters);
+
+      function handleFileLoad(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const data = JSON.parse(e.target.result);
+            loadData(data);
+          } catch (error) {
+            alert("Error reading JSON file: " + error.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      function loadData(data) {
+        // Flatten the data structure
+        allEvents = [];
+
+        data.forEach((monthData) => {
+          monthData.events.forEach((event) => {
+            // Create separate rows for each showtime
+            if (event.times && event.times.length > 0) {
+              event.times.forEach((time) => {
+                allEvents.push({
+                  ...event,
+                  time: time,
+                  monthYear: monthData.monthYear,
+                  dateObj: new Date(event.date),
+                });
+              });
+            } else {
+              allEvents.push({
+                ...event,
+                time: "",
+                monthYear: monthData.monthYear,
+                dateObj: new Date(event.date),
+              });
+            }
+          });
+        });
+
+        // Sort by date and time
+        allEvents.sort((a, b) => {
+          if (a.date !== b.date) {
+            return new Date(a.date) - new Date(b.date);
+          }
+          return a.time.localeCompare(b.time);
+        });
+
+        populateFilters();
+        applyFilters();
+        updateStats();
+      }
+
+      function populateFilters() {
+        const monthFilter = document.getElementById("monthFilter");
+        const uniqueMonths = [
+          ...new Set(allEvents.map((event) => event.monthYear)),
+        ];
+
+        monthFilter.innerHTML = '<option value="">All Months</option>';
+        uniqueMonths.forEach((month) => {
+          const option = document.createElement("option");
+          option.value = month;
+          option.textContent = month;
+          monthFilter.appendChild(option);
+        });
+      }
+
+      function applyFilters() {
+        const monthFilter = document.getElementById("monthFilter").value;
+        const formatFilter = document.getElementById("formatFilter").value;
+        const searchInput = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const dateFilter = document.getElementById("dateFilter").value;
+
+        filteredEvents = allEvents.filter((event) => {
+          if (monthFilter && event.monthYear !== monthFilter) return false;
+          if (formatFilter && event.format !== formatFilter) return false;
+          if (searchInput && !event.title.toLowerCase().includes(searchInput))
+            return false;
+          if (dateFilter && event.date !== dateFilter) return false;
+          return true;
+        });
+
+        renderTable();
+        updateStats();
+      }
+
+      function updateStats() {
+        const total = filteredEvents.length;
+        const uniqueMovies = new Set(filteredEvents.map((e) => e.title)).size;
+        const uniqueDates = new Set(filteredEvents.map((e) => e.date)).size;
+
+        document.getElementById(
+          "stats"
+        ).innerHTML = `📊 Showing ${total} showtimes • ${uniqueMovies} unique movies • ${uniqueDates} days`;
+      }
+
+      function renderTable() {
+        const content = document.getElementById("content");
+
+        if (filteredEvents.length === 0) {
+          content.innerHTML = `
+                    <div class="empty-state">
+                        <h3>🔍 No events found</h3>
+                        <p>Try adjusting your filters or load different data.</p>
+                    </div>
+                `;
+          return;
+        }
+
+        const tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>🖼️</th>
+                            <th>📅 Date</th>
+                            <th>🎬 Movie</th>
+                            <th>🎞️ Format</th>
+                            <th>🕐 Time</th>
+                            <th>📍 Theatre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filteredEvents
+                          .map(
+                            (event) => `
+                            <tr>
+                                <td>
+                                    ${
+                                      event.imageUrl
+                                        ? `<img src="${event.imageUrl}" alt="${event.title}" class="movie-poster" onerror="this.style.display='none'">`
+                                        : "🎭"
+                                    }
+                                </td>
+                                <td class="date-cell">
+                                    ${formatDate(event.date)}
+                                </td>
+                                <td>
+                                    <div class="movie-title">${
+                                      event.title
+                                    }</div>
+                                    ${
+                                      event.originalTitle !== event.title
+                                        ? `<small style="color: #6c757d;">${event.originalTitle}</small>`
+                                        : ""
+                                    }
+                                </td>
+                                <td>
+                                    <span class="format-badge format-${event.format.toLowerCase()}">${
+                              event.format
+                            }</span>
+                                </td>
+                                <td>
+                                    ${
+                                      event.time
+                                        ? `<span class="time-badge">${event.time}</span>`
+                                        : "—"
+                                    }
+                                </td>
+                                <td>${event.theatre}</td>
+                            </tr>
+                        `
+                          )
+                          .join("")}
+                    </tbody>
+                </table>
+            `;
+
+        content.innerHTML = tableHTML;
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        if (dateString === today.toISOString().split("T")[0]) {
+          return "🔴 Today";
+        } else if (dateString === tomorrow.toISOString().split("T")[0]) {
+          return "🟡 Tomorrow";
+        } else {
+          return date.toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          });
+        }
+      }
+
+      // Sample data loader for demo
+      function loadSampleData() {
+        const sampleData = [
+          {
+            monthYear: "August 2025",
+            events: [
+              {
+                date: "2025-08-01",
+                title: "CLOUD",
+                originalTitle: "CLOUD",
+                times: ["6:00pm", "8:45pm"],
+                format: "Digital",
+                imageUrl:
+                  "https://hollywoodtheatre.org/wp-content/uploads/2025/07/cloud.jpg",
+                ariaLabel: "CLOUD - view showtimes for Aug 01",
+                theatre: "Hollywood Theatre",
+              },
+              {
+                date: "2025-08-02",
+                title: "THE AMERICAN ASTRONAUT",
+                originalTitle: "THE AMERICAN ASTRONAUT in 35mm",
+                times: ["3:00pm"],
+                format: "35mm",
+                imageUrl:
+                  "https://hollywoodtheatre.org/wp-content/uploads/2025/06/american-astronaut.jpg",
+                ariaLabel:
+                  "THE AMERICAN ASTRONAUT in 35mm - view showtimes for Aug 02",
+                theatre: "Hollywood Theatre",
+              },
+            ],
+          },
+        ];
+
+        loadData(sampleData);
+      }
+
+      // Load sample data button for demo
+      document.addEventListener("DOMContentLoaded", function () {
+        const controls = document.querySelector(".controls");
+        const demoButton = document.createElement("button");
+        demoButton.textContent = "🎭 Load Demo Data";
+        demoButton.style.marginLeft = "auto";
+        demoButton.onclick = loadSampleData;
+        controls.appendChild(demoButton);
+      });
+    </script>
+  </body>
+</html>
