@@ -63,7 +63,10 @@ export const Table = ({ data }: TableProps) => {
               height: "100%",
             }}
           >
-            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: "medium", textTransform: "capitalize" }}
+            >
               {params.value}
             </Typography>
           </Box>
