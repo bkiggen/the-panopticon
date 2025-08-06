@@ -1,8 +1,9 @@
-import { useMediaQuery, useTheme } from "@mui/material";
+import { Button, Modal, Paper, useMediaQuery, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, Chip, Avatar, Typography } from "@mui/material";
 import type { MovieEvent } from "@prismaTypes";
+import { useState } from "react";
 
 interface TableProps {
   data: MovieEvent[] | null;
@@ -11,6 +12,20 @@ interface TableProps {
 export const Table = ({ data }: TableProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<MovieEvent | null>(null);
+  console.log("🚀 ~ Table ~ selectedEvent:", selectedEvent);
+
+  const handleCellClick = (event: MovieEvent) => {
+    setSelectedEvent(event);
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setSelectedEvent(null);
+  };
 
   // Desktop columns (original)
   const desktopColumns: GridColDef[] = [
@@ -32,13 +47,25 @@ export const Table = ({ data }: TableProps) => {
               display: "flex",
               alignItems: "center",
               height: "100%",
+              cursor: "pointer",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCellClick(params.row);
             }}
           >
             <Avatar
               src={params.value}
               alt={params.row.title}
               variant="rounded"
-              sx={{ height: "80%", margin: "auto" }}
+              sx={{
+                height: "80%",
+                margin: "auto",
+                transition: "transform 0.2s",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
+              }}
             />
           </Box>
         );
@@ -56,11 +83,18 @@ export const Table = ({ data }: TableProps) => {
               display: "flex",
               alignItems: "center",
               height: "100%",
+              flexWrap: "wrap",
             }}
           >
             <Typography
               variant="body2"
-              sx={{ fontWeight: "medium", textTransform: "capitalize" }}
+              sx={{
+                fontWeight: "medium",
+                textTransform: "capitalize",
+                whiteSpace: "normal",
+                wordWrap: "break-word",
+                lineHeight: 1.2,
+              }}
             >
               {params.value}
             </Typography>
@@ -359,6 +393,44 @@ export const Table = ({ data }: TableProps) => {
         disableColumnSorting
         disableVirtualization
       />
+      <Modal
+        open={modalOpen}
+        onClose={handleModalClose}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Paper
+          sx={{
+            width: "90%",
+            maxWidth: 600,
+            maxHeight: "90%",
+            overflow: "auto",
+            p: 4,
+            outline: "none",
+          }}
+        >
+          <img
+            src={selectedEvent?.imageUrl || ""}
+            alt={selectedEvent?.title}
+            style={{ width: "100%", height: "auto", marginBottom: "16px" }}
+          />
+          <Typography variant="h5" gutterBottom>
+            {selectedEvent?.title || "Movie Details"}
+          </Typography>
+
+          {/* Your modal content goes here */}
+          <Typography variant="body1">
+            Modal content for: {selectedEvent?.title}
+          </Typography>
+          {/* Close button */}
+          <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
+            <Button onClick={handleModalClose}>Close</Button>
+          </Box>
+        </Paper>
+      </Modal>
     </Box>
   );
 };

@@ -27,11 +27,25 @@ model MovieEvent {
   theatre            String
   accessibility      String[]
   discount           String[]
-  genres             String[]
+  pendingApprovalAt  DateTime? 
+  approvedAt         DateTime?
+  scrapedAt          DateTime? 
+  movieDataId        Int?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model MovieData {
+  id                 Int       @id @default(autoincrement())
+  title              String
+  originalTitle      String
   description        String?
+  imageUrl           String?
   trailerUrl         String?
+  omdbId             String?   @unique // Might want unique constraint
   imdbId             String?   @unique // Might want unique constraint
   rottenTomatoesId   String?   @unique // Might want unique constraint
+  genres             String[]
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 }
