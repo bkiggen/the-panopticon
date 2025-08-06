@@ -2,7 +2,7 @@ import { useMediaQuery, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, Chip, Avatar, Typography } from "@mui/material";
-import type { MovieEvent } from "../../models/MovieEvent";
+import type { MovieEvent } from "@prismaTypes";
 
 interface TableProps {
   data: MovieEvent[] | null;
@@ -11,11 +11,6 @@ interface TableProps {
 export const Table = ({ data }: TableProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  const rows = data?.map((item, index) => ({
-    id: index,
-    ...item,
-  }));
 
   // Desktop columns (original)
   const desktopColumns: GridColDef[] = [
@@ -341,7 +336,7 @@ export const Table = ({ data }: TableProps) => {
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={data || []}
         columns={isMobile ? mobileColumns : desktopColumns}
         initialState={{
           sorting: {

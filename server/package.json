@@ -9,7 +9,8 @@
     "db:migrate": "npx prisma migrate dev",
     "db:generate": "npx prisma generate",
     "db:studio": "npx prisma studio",
-    "db:seed": "npx prisma db seed"
+    "db:seed": "npx prisma db seed",
+    "cinema21": "npx ts-node src/cron/scrapers/cinema21.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,15 +22,19 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "module-alias": "^2.2.3",
     "morgan": "^1.10.1",
     "node-cron": "^4.2.1",
-    "prisma": "^6.13.0"
+    "prisma": "^6.13.0",
+    "puppeteer": "^24.15.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/module-alias": "^2.0.4",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.2.0",
+    "@types/puppeteer": "^7.0.4",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"

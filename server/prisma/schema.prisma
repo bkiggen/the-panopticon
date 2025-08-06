@@ -14,3 +14,24 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model MovieEvent {
+  id                 Int       @id @default(autoincrement())
+  date               DateTime  
+  title              String
+  originalTitle      String
+  times              String[]  
+  format             String
+  imageUrl           String
+  ariaLabel          String
+  theatre            String
+  accessibility      String[]
+  discount           String[]
+  genres             String[]
+  description        String?
+  trailerUrl         String?
+  imdbId             String?   @unique // Might want unique constraint
+  rottenTomatoesId   String?   @unique // Might want unique constraint
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}

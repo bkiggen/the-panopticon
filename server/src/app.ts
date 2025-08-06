@@ -1,9 +1,13 @@
+import "./paths";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
+
+// Import routes
+import movieEventRoutes from "./routes/movieEvents";
 
 dotenv.config();
 
@@ -18,13 +22,13 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Health check route
 app.get("/health", (req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
 });
 
-// Your API routes will go here
-// app.use('/api', routes);
+// API routes
+app.use("/api/movie-events", movieEventRoutes);
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
@@ -33,7 +37,9 @@ process.on("SIGINT", async () => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📊 Health check: http://localhost:${PORT}/health`);
+  console.log(`🎬 Movie events: http://localhost:${PORT}/api/movie-events`);
 });
 
 export { prisma };

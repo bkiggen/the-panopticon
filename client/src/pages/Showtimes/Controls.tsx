@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { Clear as ClearIcon } from "@mui/icons-material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import type { MovieEvent } from "../../models/MovieEvent";
+import type { MovieEvent } from "@prismaTypes";
 
 interface ControlsProps {
   data: MovieEvent[] | null;

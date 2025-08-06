@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { MovieEvent } from "../../models/MovieEvent";
+import type { MovieEvent } from "@prismaTypes";
 
 export interface MovieDataState {
   cinema21Data: MovieEvent[] | null;
@@ -206,18 +206,6 @@ export const useMovieData = (): UseMovieDataReturn => {
       if (tomorrowData) {
         combined.push(...tomorrowData);
       }
-
-      // Sort combined data by date, then by theater, then by title
-      combined.sort((a, b) => {
-        if (!a.date || !b.date) return 0; // Handle missing dates gracefully
-        const dateCompare = a.date.localeCompare(b.date);
-        if (dateCompare !== 0) return dateCompare;
-
-        const theaterCompare = a.theatre.localeCompare(b.theatre);
-        if (theaterCompare !== 0) return theaterCompare;
-
-        return a.title.localeCompare(b.title);
-      });
 
       setCombinedData(combined);
     } else {
