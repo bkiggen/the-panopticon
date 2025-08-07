@@ -1,7 +1,9 @@
 // src/services/movieEventService.ts
 import type { MovieEvent } from "@prismaTypes";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3021/api";
+const API_BASE = import.meta.env.PROD
+  ? "/api" // Same domain in production
+  : import.meta.env.VITE_API_URL || "http://localhost:3021/api";
 
 export interface MovieEventFilters {
   theatre?: string;
