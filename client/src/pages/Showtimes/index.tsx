@@ -10,7 +10,7 @@ export const Showtimes = () => {
 
   useEffect(() => {
     fetchEvents();
-  }, [fetchEvents]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading && events.length === 0) {
     return (
