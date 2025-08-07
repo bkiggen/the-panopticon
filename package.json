@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "build": "npm run build:server && npm run build:client",
-    "build:client": "cd client && npm ci && npm run build",
-    "build:server": "cd server && npm ci && npm run build",
-    "start": "cd server && npm start"
+    "build:client": "(cd client && npm ci && npm run build)",
+    "build:server": "(cd server && npm ci && npx prisma generate && npm run build)",
+    "start": "(cd server && npm start)"
   },
-  "engines": {
-    "node": "18.x"
-  }
+  "workspaces": [
+    "client",
+    "server"
+  ]
 }
