@@ -35,8 +35,8 @@ if (process.env.NODE_ENV === "production") {
   // Serve static files from React build
   app.use(express.static(path.join(__dirname, "../../client/dist")));
 
-  // Catch all handler: send back React's index.html file for any non-API routes
-  app.get("*", (req, res) => {
+  // More specific catch-all - exclude API routes
+  app.get(/^(?!\/api).*$/, (req, res) => {
     res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
   });
 }
