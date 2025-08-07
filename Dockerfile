@@ -1,32 +1,27 @@
-# Use Node.js LTS
 FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files for both client and server
+# Copy package.json files first (for better Docker layer caching)
 COPY server/package*.json ./server/
 COPY client/package*.json ./client/
 
-# Install server dependencies
-WORKDIR /app/server
-RUN npm ci --only=production
+# Install dependencies
+RUN cd server && npm ci
+RUN cd client && npm ci
 
-# Install client dependencies and build
-WORKDIR /app/client
-RUN npm ci
-RUN npm run build
-
-# Copy all source files
-WORKDIR /app
+# Copy ALL source code (this was missing before the build step)
 COPY . .
 
+# Build client (now that source code is available)
+RUN cd client && npm run build
+
 # Build server
-WORKDIR /app/server
-RUN npm run build
+RUN cd server && npm run build
 
 # Expose port
 EXPOSE 3000
 
-# Start the server
+# Start server
+WORKDIR /app/server
 CMD ["npm", "start"]
