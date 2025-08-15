@@ -1,19 +1,33 @@
-# Use Node.js 18 Alpine for smaller image size
-FROM node:18-alpine
+# Use Node.js 18 on Debian instead of Alpine to avoid Rollup musl issues
+FROM node:18-slim
 
-# Install necessary system dependencies
-RUN apk add --no-cache \
+# Install necessary system dependencies including Chromium for Puppeteer
+RUN apt-get update && apt-get install -y \
     chromium \
-    nss \
-    freetype \
-    freetype-dev \
-    harfbuzz \
+    fonts-liberation \
+    libappindicator3-1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libcups2 \
+    libdbus-1-3 \
+    libdrm2 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libxss1 \
+    libxtst6 \
+    xdg-utils \
     ca-certificates \
-    ttf-freefont
+    && rm -rf /var/lib/apt/lists/*
 
 # Set Puppeteer to use installed Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # Set working directory
 WORKDIR /app
@@ -24,11 +38,11 @@ COPY package*.json ./
 # Install root dependencies
 RUN npm ci
 
-# Copy server package files and install dependencies
+# Copy server package files and install dependencies (including devDependencies for build)
 COPY server/package*.json ./server/
 RUN cd server && npm ci
 
-# Copy client package files and install dependencies
+# Copy client package files and install dependencies (including devDependencies for build)
 COPY client/package*.json ./client/
 RUN cd client && npm ci
 
