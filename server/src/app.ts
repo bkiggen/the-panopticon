@@ -5,6 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
 import { PrismaClient } from "@prisma/client";
 
 // Import routes
@@ -31,86 +32,65 @@ app.get("/health", (req, res) => {
 // API routes
 app.use("/api/movie-events", movieEventRoutes);
 
+// Debug logging
 console.log(`🔍 NODE_ENV: ${process.env.NODE_ENV}`);
 console.log(`📂 Current working directory: ${process.cwd()}`);
 console.log(`📂 __dirname: ${__dirname}`);
 
-const fs = require("fs");
 try {
   console.log(`📋 Root contents:`, fs.readdirSync("./"));
-  if (fs.existsSync("./client")) {
-    console.log(`📋 Client dir exists, contents:`, fs.readdirSync("./client"));
-    if (fs.existsSync("./client/dist")) {
-      console.log(`📋 Client/dist contents:`, fs.readdirSync("./client/dist"));
-    }
+  if (fs.existsSync("./client-build")) {
+    console.log(
+      `📋 Client-build dir exists, contents:`,
+      fs.readdirSync("./client-build")
+    );
+  } else {
+    console.log(`❌ Client-build directory does not exist`);
   }
 } catch (error) {
   console.error(`❌ Error checking directories:`, error);
 }
 
+// Production static file serving
 if (process.env.NODE_ENV === "production") {
   const staticPath = path.join(__dirname, "../client-build");
   console.log(`📁 Static path: ${staticPath}`);
 
-  // Serve static files from React build
-  app.use(express.static(staticPath));
+  try {
+    if (fs.existsSync(staticPath)) {
+      console.log(`✅ Static directory exists at: ${staticPath}`);
+      console.log(`📋 Static dir contents:`, fs.readdirSync(staticPath));
 
-  // More specific catch-all - exclude API routes
-  app.get(/^(?!\/api).*$/, (req, res) => {
-    res.sendFile(path.join(staticPath, "index.html"));
-  });
+      // Serve static files from React build
+      app.use(express.static(staticPath));
+
+      // Catch-all handler for client-side routing - exclude API routes
+      app.get(/^(?!\/api).*$/, (req, res) => {
+        const indexPath = path.join(staticPath, "index.html");
+        console.log(`📄 Serving index.html from: ${indexPath}`);
+        res.sendFile(indexPath);
+      });
+    } else {
+      console.log(`❌ Static directory does not exist at: ${staticPath}`);
+
+      // Fallback route if static files aren't found
+      app.get("/", (req, res) => {
+        res.send(`
+          <html>
+            <body>
+              <h1>Server is running!</h1>
+              <p>Static files not found. Check deployment.</p>
+              <p>API available at: <a href="/api/movie-events">/api/movie-events</a></p>
+              <p>Health check: <a href="/health">/health</a></p>
+            </body>
+          </html>
+        `);
+      });
+    }
+  } catch (error) {
+    console.error(`❌ Error setting up static files:`, error);
+  }
 }
-// if (process.env.NODE_ENV === "production") {
-//   const fs = require("fs");
-//   const staticPath = path.join(__dirname, "../../client/dist");
-
-//   console.log(`📁 Static path resolved to: ${staticPath}`);
-//   console.log(`📂 Current working directory: ${process.cwd()}`);
-//   console.log(`📂 __dirname: ${__dirname}`);
-
-//   // Check what's actually in the current directory structure
-//   try {
-//     console.log(
-//       `📋 Root contents:`,
-//       fs.readdirSync(path.join(__dirname, "../.."))
-//     );
-
-//     if (fs.existsSync(path.join(__dirname, "../../client"))) {
-//       console.log(
-//         `📋 Client dir contents:`,
-//         fs.readdirSync(path.join(__dirname, "../../client"))
-//       );
-
-//       if (fs.existsSync(staticPath)) {
-//         console.log(`✅ Static directory exists at: ${staticPath}`);
-//         console.log(`📋 Static dir contents:`, fs.readdirSync(staticPath));
-//       } else {
-//         console.log(`❌ Static directory does not exist at: ${staticPath}`);
-//       }
-//     } else {
-//       console.log(`❌ Client directory does not exist`);
-//     }
-//   } catch (error) {
-//     console.error(`❌ Error checking directories:`, error);
-//   }
-
-//   // Serve static files from React build
-//   app.use(express.static(staticPath));
-
-//   // More specific catch-all - exclude API routes
-//   app.get(/^(?!\/api).*$/, (req, res) => {
-//     const indexPath = path.join(staticPath, "index.html");
-//     console.log(`📄 Attempting to serve index.html from: ${indexPath}`);
-
-//     if (fs.existsSync(indexPath)) {
-//       console.log(`✅ index.html found, serving...`);
-//       res.sendFile(indexPath);
-//     } else {
-//       console.log(`❌ index.html not found at: ${indexPath}`);
-//       res.status(404).send("Static files not found");
-//     }
-//   });
-// }
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
