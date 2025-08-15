@@ -32,17 +32,37 @@ app.get("/health", (req, res) => {
 app.use("/api/movie-events", movieEventRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  const staticPath = path.join(__dirname, "../../client/dist");
-  console.log(`📁 Looking for static files at: ${staticPath}`);
-
-  // Check if the directory exists
   const fs = require("fs");
-  if (fs.existsSync(staticPath)) {
-    console.log(`✅ Static directory exists`);
-    console.log(`📋 Contents:`, fs.readdirSync(staticPath));
-  } else {
-    console.log(`❌ Static directory does not exist`);
-    console.log(`📋 Current directory contents:`, fs.readdirSync(__dirname));
+  const staticPath = path.join(__dirname, "../../client/dist");
+
+  console.log(`📁 Static path resolved to: ${staticPath}`);
+  console.log(`📂 Current working directory: ${process.cwd()}`);
+  console.log(`📂 __dirname: ${__dirname}`);
+
+  // Check what's actually in the current directory structure
+  try {
+    console.log(
+      `📋 Root contents:`,
+      fs.readdirSync(path.join(__dirname, "../.."))
+    );
+
+    if (fs.existsSync(path.join(__dirname, "../../client"))) {
+      console.log(
+        `📋 Client dir contents:`,
+        fs.readdirSync(path.join(__dirname, "../../client"))
+      );
+
+      if (fs.existsSync(staticPath)) {
+        console.log(`✅ Static directory exists at: ${staticPath}`);
+        console.log(`📋 Static dir contents:`, fs.readdirSync(staticPath));
+      } else {
+        console.log(`❌ Static directory does not exist at: ${staticPath}`);
+      }
+    } else {
+      console.log(`❌ Client directory does not exist`);
+    }
+  } catch (error) {
+    console.error(`❌ Error checking directories:`, error);
   }
 
   // Serve static files from React build
@@ -51,8 +71,15 @@ if (process.env.NODE_ENV === "production") {
   // More specific catch-all - exclude API routes
   app.get(/^(?!\/api).*$/, (req, res) => {
     const indexPath = path.join(staticPath, "index.html");
-    console.log(`📄 Serving index.html from: ${indexPath}`);
-    res.sendFile(indexPath);
+    console.log(`📄 Attempting to serve index.html from: ${indexPath}`);
+
+    if (fs.existsSync(indexPath)) {
+      console.log(`✅ index.html found, serving...`);
+      res.sendFile(indexPath);
+    } else {
+      console.log(`❌ index.html not found at: ${indexPath}`);
+      res.status(404).send("Static files not found");
+    }
   });
 }
 
