@@ -32,41 +32,42 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 # Set working directory
 WORKDIR /app
 
-# Copy root package files
+# Copy package files for workspace resolution
 COPY package*.json ./
-
-# Install root dependencies
-RUN npm ci
-
-# Copy server package files and install dependencies (including devDependencies for build)
-COPY server/package*.json ./server/
-RUN cd server && npm ci
-
-# Copy client package files and install dependencies (including devDependencies for build)
 COPY client/package*.json ./client/
-RUN cd client && npm ci
+COPY server/package*.json ./server/
+
+# Install all dependencies from root (this handles workspaces properly)
+RUN npm install
 
 # Copy all source code
 COPY . .
 
-# Generate Prisma client
+# Generate Prisma client first
 RUN cd server && npx prisma generate
+
+# Debug: List client directory contents and check node_modules
+RUN echo "=== CLIENT DIRECTORY CONTENTS ===" && \
+    ls -la client/ && \
+    echo "=== CLIENT NODE_MODULES ===" && \
+    ls -la client/node_modules/ | head -20 && \
+    echo "=== CHECKING VITE ===" && \
+    which vite || echo "vite not found globally" && \
+    cd client && npx vite --version && \
+    echo "=== CHECKING ROLLUP ===" && \
+    cd client && npm ls rollup
 
 # Build the server
 RUN cd server && npm run build
 
-# Build the client
-RUN cd client && npm run build
+# Build the client with detailed error output
+RUN cd client && npm run build 2>&1
 
 # Copy client build to server's static directory (if needed)
 # RUN cp -r client/dist server/dist/public
 
 # Expose port
 EXPOSE 3021
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node healthcheck.js || exit 1
 
 # Start the server
 CMD ["npm", "start"]
