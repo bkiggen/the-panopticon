@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "npm run build:server && npm run build:client",
-    "build:client": "cd client && npm ci && npm run build",
-    "build:server": "cd server && npm ci && npx prisma generate && npm run build",
-    "start": "cd server && npx prisma migrate deploy && npm start"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

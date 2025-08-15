@@ -27,12 +27,12 @@ export const Showtimes = () => {
 
   return (
     <Box sx={{ paddingBottom: "80px", marginTop: "40px" }}>
-      <Controls
+      {/* <Controls
         data={events}
-        onFilteredDataChange={(fetchData: MovieEvent[]) =>
-          fetchEvents(fetchData)
-        }
-      />
+        onFilteredDataChange={(fetchData: MovieEvent[]) => {
+          // fetchEvents(fetchData);
+        }}
+      /> */}
       <Table data={events} />
     </Box>
   );

@@ -7,49 +7,79 @@ import {
 import { Admin } from "./pages/Admin";
 import { Showtimes } from "./pages/Showtimes";
 import { Header } from "./components/Header";
-
-const routesConstants = {
-  HOME: "/",
-  ADMIN: "/admin",
-};
+import PayphoneAuth from "./pages/Auth/Payphone";
+import useSessionStore from "./stores/sessionStore";
+import { routeConstants } from "./routing/routeConstants";
 
 const useAuth = () => {
-  const isAuthenticated = true; // TODO
+  const isAuthenticated = useSessionStore((state) => state.isAuthenticated);
   return { isAuthenticated };
 };
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
+
+  if (!isAuthenticated) {
+    return <Navigate to={routeConstants.AUTH} replace />;
+  }
+
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  );
 };
 
 const App = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
-    <div>
-      <Header />
-      <Router>
-        <Routes>
-          {/* Home route shows Showtimes */}
-          <Route path={routesConstants.HOME} element={<Showtimes />} />
+    <Router>
+      <Routes>
+        {/* Auth route - only show if not authenticated */}
+        <Route
+          path={routeConstants.AUTH}
+          element={
+            isAuthenticated ? (
+              <Navigate to={routeConstants.HOME} replace />
+            ) : (
+              <PayphoneAuth />
+            )
+          }
+        />
 
-          {/* Protected admin route */}
-          <Route
-            path={routesConstants.ADMIN}
-            element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
+        {/* Protected routes with header */}
+        <Route
+          path={routeConstants.HOME}
+          element={
+            <AuthenticatedLayout>
+              <Showtimes />
+            </AuthenticatedLayout>
+          }
+        />
 
-          {/* Catch all - redirect to home */}
-          <Route
-            path="*"
-            element={<Navigate to={routesConstants.HOME} replace />}
-          />
-        </Routes>
-      </Router>
-    </div>
+        <Route
+          path={routeConstants.ADMIN}
+          element={
+            <AuthenticatedLayout>
+              <Admin />
+            </AuthenticatedLayout>
+          }
+        />
+
+        {/* Catch all - redirect based on auth status */}
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={isAuthenticated ? routeConstants.HOME : routeConstants.AUTH}
+              replace
+            />
+          }
+        />
+      </Routes>
+    </Router>
   );
 };
 
