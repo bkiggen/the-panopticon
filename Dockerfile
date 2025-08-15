@@ -37,6 +37,11 @@ COPY client/package*.json ./client/
 RUN cd client && npm ci
 
 COPY client/ ./client/
+# Build client with environment variables available
+ARG VITE_AUTH_CODE
+ARG VITE_API_URL
+ENV VITE_AUTH_CODE=$VITE_AUTH_CODE
+ENV VITE_API_URL=$VITE_API_URL
 RUN cd client && npm run build
 
 # Copy and build server
