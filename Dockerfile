@@ -46,14 +46,6 @@ RUN cd server && npm ci
 COPY server/ ./server/
 RUN cd server && npx prisma generate && npm run build
 
-# Debug: Check the directory structure
-RUN echo "=== DIRECTORY STRUCTURE ===" && \
-    ls -la && \
-    echo "=== CLIENT DIST ===" && \
-    ls -la client/dist/ && \
-    echo "=== SERVER DIST ===" && \
-    ls -la server/dist/
-
 # Copy the root package.json for the start script
 COPY package.json ./
 
