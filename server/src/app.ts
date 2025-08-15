@@ -31,6 +31,23 @@ app.get("/health", (req, res) => {
 // API routes
 app.use("/api/movie-events", movieEventRoutes);
 
+console.log(`🔍 NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`📂 Current working directory: ${process.cwd()}`);
+console.log(`📂 __dirname: ${__dirname}`);
+
+const fs = require("fs");
+try {
+  console.log(`📋 Root contents:`, fs.readdirSync("./"));
+  if (fs.existsSync("./client")) {
+    console.log(`📋 Client dir exists, contents:`, fs.readdirSync("./client"));
+    if (fs.existsSync("./client/dist")) {
+      console.log(`📋 Client/dist contents:`, fs.readdirSync("./client/dist"));
+    }
+  }
+} catch (error) {
+  console.error(`❌ Error checking directories:`, error);
+}
+
 if (process.env.NODE_ENV === "production") {
   const fs = require("fs");
   const staticPath = path.join(__dirname, "../../client/dist");
