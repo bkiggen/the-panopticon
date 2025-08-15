@@ -14,7 +14,7 @@ dotenv.config();
 
 const app = express();
 const prisma = new PrismaClient();
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT || "3000", 10);
 
 // Middleware
 app.use(helmet());
@@ -32,12 +32,27 @@ app.get("/health", (req, res) => {
 app.use("/api/movie-events", movieEventRoutes);
 
 if (process.env.NODE_ENV === "production") {
+  const staticPath = path.join(__dirname, "../../client/dist");
+  console.log(`📁 Looking for static files at: ${staticPath}`);
+
+  // Check if the directory exists
+  const fs = require("fs");
+  if (fs.existsSync(staticPath)) {
+    console.log(`✅ Static directory exists`);
+    console.log(`📋 Contents:`, fs.readdirSync(staticPath));
+  } else {
+    console.log(`❌ Static directory does not exist`);
+    console.log(`📋 Current directory contents:`, fs.readdirSync(__dirname));
+  }
+
   // Serve static files from React build
-  app.use(express.static(path.join(__dirname, "../../client/dist")));
+  app.use(express.static(staticPath));
 
   // More specific catch-all - exclude API routes
   app.get(/^(?!\/api).*$/, (req, res) => {
-    res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+    const indexPath = path.join(staticPath, "index.html");
+    console.log(`📄 Serving index.html from: ${indexPath}`);
+    res.sendFile(indexPath);
   });
 }
 
@@ -47,10 +62,10 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`🎬 Movie events: http://localhost:${PORT}/api/movie-events`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+  console.log(`📊 Health check: http://0.0.0.0:${PORT}/health`);
+  console.log(`🎬 Movie events: http://0.0.0.0:${PORT}/api/movie-events`);
 });
 
 export { prisma };
