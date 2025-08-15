@@ -46,17 +46,17 @@ RUN cd server && npm ci
 COPY server/ ./server/
 RUN cd server && npx prisma generate && npm run build
 
+# Copy client build files to where server can access them
+# Since server runs from /app/server, we need client files accessible from there
+RUN mkdir -p server/client-build && cp -r client/dist/* server/client-build/
+
 # Copy the root package.json for the start script
 COPY package.json ./
 
-# Create a simple test to verify structure
+# Verify the structure
 RUN echo "=== FINAL STRUCTURE CHECK ===" && \
-    pwd && \
-    ls -la && \
-    echo "=== CLIENT DIST ===" && \
-    ls -la client/dist/ && \
-    echo "=== SERVER DIST ===" && \
-    ls -la server/dist/
+    echo "Server directory:" && ls -la server/ && \
+    echo "Client build in server:" && ls -la server/client-build/
 
 # Expose port
 EXPOSE 3021

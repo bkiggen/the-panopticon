@@ -47,18 +47,17 @@ try {
 } catch (error) {
   console.error(`❌ Error checking directories:`, error);
 }
+
 if (process.env.NODE_ENV === "production") {
-  // Simple test route
-  app.get("/", (req, res) => {
-    res.send(`
-      <html>
-        <body>
-          <h1>Server is running!</h1>
-          <p>API available at: <a href="/api/movie-events">/api/movie-events</a></p>
-          <p>Health check: <a href="/health">/health</a></p>
-        </body>
-      </html>
-    `);
+  const staticPath = path.join(__dirname, "../client-build");
+  console.log(`📁 Static path: ${staticPath}`);
+
+  // Serve static files from React build
+  app.use(express.static(staticPath));
+
+  // More specific catch-all - exclude API routes
+  app.get(/^(?!\/api).*$/, (req, res) => {
+    res.sendFile(path.join(staticPath, "index.html"));
   });
 }
 // if (process.env.NODE_ENV === "production") {
