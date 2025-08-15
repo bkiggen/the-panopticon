@@ -32,39 +32,22 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 # Set working directory
 WORKDIR /app
 
-# Copy package files for workspace resolution
-COPY package*.json ./
+# Copy and build client first
 COPY client/package*.json ./client/
+RUN cd client && npm ci
+
+COPY client/ ./client/
+RUN cd client && npm run build
+
+# Copy and build server
 COPY server/package*.json ./server/
+RUN cd server && npm ci
 
-# Install all dependencies from root (this handles workspaces properly)
-RUN npm install
+COPY server/ ./server/
+RUN cd server && npx prisma generate && npm run build
 
-# Copy all source code
-COPY . .
-
-# Generate Prisma client first
-RUN cd server && npx prisma generate
-
-# Debug: List client directory contents and check node_modules
-RUN echo "=== CLIENT DIRECTORY CONTENTS ===" && \
-    ls -la client/ && \
-    echo "=== CLIENT NODE_MODULES ===" && \
-    ls -la client/node_modules/ | head -20 && \
-    echo "=== CHECKING VITE ===" && \
-    which vite || echo "vite not found globally" && \
-    cd client && npx vite --version && \
-    echo "=== CHECKING ROLLUP ===" && \
-    cd client && npm ls rollup
-
-# Build the server
-RUN cd server && npm run build
-
-# Build the client with detailed error output
-RUN cd client && npm run build 2>&1
-
-# Copy client build to server's static directory (if needed)
-# RUN cp -r client/dist server/dist/public
+# Copy the root package.json for the start script
+COPY package.json ./
 
 # Expose port
 EXPOSE 3021
