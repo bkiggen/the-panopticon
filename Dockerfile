@@ -46,6 +46,10 @@ RUN cd server && npm ci
 COPY server/ ./server/
 RUN cd server && npx prisma generate && npm run build
 
+# The client build should be accessible from server/dist as ../../client/dist
+# So we keep the client build in its original location
+# (It's already built and in the right place: ./client/dist)
+
 # Copy the root package.json for the start script
 COPY package.json ./
 
