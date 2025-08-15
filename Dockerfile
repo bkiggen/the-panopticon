@@ -49,6 +49,15 @@ RUN cd server && npx prisma generate && npm run build
 # Copy the root package.json for the start script
 COPY package.json ./
 
+# Create a simple test to verify structure
+RUN echo "=== FINAL STRUCTURE CHECK ===" && \
+    pwd && \
+    ls -la && \
+    echo "=== CLIENT DIST ===" && \
+    ls -la client/dist/ && \
+    echo "=== SERVER DIST ===" && \
+    ls -la server/dist/
+
 # Expose port
 EXPOSE 3021
 
