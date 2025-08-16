@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import useMovieEventStore from "@/stores/movieEventStore";
-import type { MovieEvent } from "@prismaTypes";
 import { Table } from "./Table";
 import { Controls } from "./Controls";
-import { Pagination } from "@/components/Pagination"; // Import the new component
+import type { MovieEventFilters } from "@/services/movieEventService";
+import { Pagination } from "@/components/Pagination";
 
 export const Showtimes = () => {
   const {
@@ -44,13 +44,16 @@ export const Showtimes = () => {
         pageSize={pageSize}
         onPageChange={goToPage}
         loading={loading}
+        leftContent={
+          <Controls
+            data={events}
+            onFiltersChange={(filters: MovieEventFilters) => {
+              console.log("🚀 ~ filters:", filters);
+              fetchEvents(filters);
+            }}
+          />
+        }
       />
-      {/* <Controls
-        data={events}
-        onFilteredDataChange={(fetchData: MovieEvent[]) => {
-          // fetchEvents(fetchData);
-        }}
-      /> */}
       <Table data={events} />
     </Box>
   );

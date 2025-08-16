@@ -30,7 +30,6 @@ export const Table = ({ data }: TableProps) => {
   const desktopColumns: GridColDef[] = [
     {
       field: "imageUrl",
-      headerName: "",
       width: 80,
       sortable: false,
       filterable: false,
@@ -72,7 +71,6 @@ export const Table = ({ data }: TableProps) => {
     },
     {
       field: "title",
-      headerName: "Movie Title",
       width: 250,
       flex: 2,
       renderCell: (params: GridRenderCellParams) => {
@@ -103,7 +101,6 @@ export const Table = ({ data }: TableProps) => {
     },
     {
       field: "date",
-      headerName: "Date",
       width: 120,
       type: "date",
       valueGetter: (params: any) => {
@@ -128,7 +125,6 @@ export const Table = ({ data }: TableProps) => {
     },
     {
       field: "times",
-      headerName: "Showtimes",
       width: 200,
       flex: 2,
       sortable: false,
@@ -165,7 +161,6 @@ export const Table = ({ data }: TableProps) => {
     },
     {
       field: "theatre",
-      headerName: "Theatre",
       width: 130,
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
@@ -179,7 +174,6 @@ export const Table = ({ data }: TableProps) => {
     },
     {
       field: "format",
-      headerName: "Format",
       width: 100,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
@@ -192,7 +186,6 @@ export const Table = ({ data }: TableProps) => {
     },
     {
       field: "accessibility",
-      headerName: "Accessibility",
       width: 100,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
@@ -224,8 +217,7 @@ export const Table = ({ data }: TableProps) => {
   const mobileColumns: GridColDef[] = [
     {
       field: "movieInfo",
-      headerName: "Movie",
-      flex: 1,
+      flex: 2,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => {
         const hasValidImage =
@@ -251,7 +243,6 @@ export const Table = ({ data }: TableProps) => {
             )}
             <Box
               sx={{
-                flex: 1,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -281,7 +272,6 @@ export const Table = ({ data }: TableProps) => {
     },
     {
       field: "details",
-      headerName: "Details",
       flex: 1,
       sortable: false,
       align: "right",
@@ -371,21 +361,14 @@ export const Table = ({ data }: TableProps) => {
       <DataGrid
         rows={data || []}
         columns={isMobile ? mobileColumns : desktopColumns}
-        initialState={{
-          sorting: {
-            sortModel: [{ field: "date", sort: "asc" }],
-          },
-          pagination: {
-            paginationModel: { pageSize: 50, page: 0 },
-          },
-        }}
-        sx={{
-          "& .MuiDataGrid-columnHeaders": {
-            display: isMobile ? "none" : "flex",
-          },
-        }}
         rowHeight={isMobile ? 160 : 80}
         hideFooter
+        sx={{
+          "& .MuiDataGrid-scrollbar ": {
+            display: "none",
+          },
+        }}
+        slots={{ columnHeaders: () => null }}
         checkboxSelection={false}
         disableRowSelectionOnClick
         disableColumnMenu

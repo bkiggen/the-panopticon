@@ -1,230 +1,230 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   Box,
   TextField,
   Autocomplete,
   Chip,
   Button,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Badge,
+  Tooltip,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Typography,
 } from "@mui/material";
-import { Clear as ClearIcon } from "@mui/icons-material";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import {
+  Clear as ClearIcon,
+  FilterAlt as FilterAltIcon,
+  Close as CloseIcon,
+} from "@mui/icons-material";
 import type { MovieEvent } from "@prismaTypes";
+import type { MovieEventFilters } from "@/services/movieEventService";
 
 interface ControlsProps {
   data: MovieEvent[] | null;
-  onFilteredDataChange: (filteredData: MovieEvent[]) => void;
+  onFiltersChange: (filters: MovieEventFilters) => void;
+  initialFilters?: MovieEventFilters;
 }
 
-export const Controls = ({ data, onFilteredDataChange }: ControlsProps) => {
-  // Filter states
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
-  const [selectedTheatres, setSelectedTheatres] = useState<string[]>([]);
-  const [selectedFormats, setSelectedFormats] = useState<string[]>([]);
-  const [selectedAccessibility, setSelectedAccessibility] = useState<string[]>(
-    []
+export const Controls = ({
+  data,
+  onFiltersChange,
+  initialFilters = {},
+}: ControlsProps) => {
+  const [open, setOpen] = useState(false);
+
+  // All available options
+  const allFormats = ["Digital", "35mm", "70mm", "VHS"];
+  const allAccessibility = ["Open Captions"];
+
+  // Filter states - initialize with any provided initial filters
+  const [searchTerm, setSearchTerm] = useState(initialFilters.search || "");
+  const [selectedTheatres, setSelectedTheatres] = useState<string[]>(
+    initialFilters.theatres || []
   );
-  const [selectedDiscounts, setSelectedDiscounts] = useState<string[]>([]);
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
-  const [timeFilter, setTimeFilter] = useState("");
+  // For checkboxes: if no initial filters provided, default to all selected
+  const [selectedFormats, setSelectedFormats] = useState<string[]>(
+    initialFilters.formats || allFormats
+  );
+  const [selectedAccessibility, setSelectedAccessibility] = useState<string[]>(
+    initialFilters.accessibility || allAccessibility
+  );
+  const [dateFrom, setDateFrom] = useState(initialFilters.startDate || "");
+  const [dateTo, setDateTo] = useState(initialFilters.endDate || "");
+  const [timeFilter, setTimeFilter] = useState(initialFilters.timeFilter || "");
 
   // Extract unique values for filter options
   const filterOptions = useMemo(() => {
     if (!data)
       return {
-        movies: [],
         theatres: [],
-        formats: [],
-        accessibility: [],
-        discounts: [],
+        formats: allFormats,
+        accessibility: allAccessibility,
       };
 
-    const movies = [...new Set(data.map((event) => event.title))].sort();
     const theatres = [...new Set(data.map((event) => event.theatre))].sort();
-    const formats = [...new Set(data.map((event) => event.format))].sort();
 
-    const accessibility = [
-      ...new Set(data.flatMap((event) => event.accessibility || [])),
-    ].sort();
-
-    const discounts = [
-      ...new Set(data.flatMap((event) => event.discount || [])),
-    ].sort();
-
-    return { movies, theatres, formats, accessibility, discounts };
+    return { theatres, formats: allFormats, accessibility: allAccessibility };
   }, [data]);
 
-  // Filter the data based on current filter states
-  const filteredData = useMemo(() => {
-    if (!data) return [];
+  // Handle format checkbox change
+  const handleFormatChange = (format: string, checked: boolean) => {
+    if (checked) {
+      setSelectedFormats((prev) => [...prev, format]);
+    } else {
+      setSelectedFormats((prev) => prev.filter((f) => f !== format));
+    }
+  };
 
-    return data.filter((event) => {
-      // Search term filter (title)
-      if (
-        searchTerm &&
-        !event.title.toLowerCase().includes(searchTerm.toLowerCase())
-      ) {
-        return false;
-      }
+  // Handle accessibility checkbox change
+  const handleAccessibilityChange = (
+    accessibility: string,
+    checked: boolean
+  ) => {
+    if (checked) {
+      setSelectedAccessibility((prev) => [...prev, accessibility]);
+    } else {
+      setSelectedAccessibility((prev) =>
+        prev.filter((a) => a !== accessibility)
+      );
+    }
+  };
 
-      // Movie selection filter
-      if (selectedMovies.length > 0 && !selectedMovies.includes(event.title)) {
-        return false;
-      }
+  // Build current filters object
+  const getCurrentFilters = (): MovieEventFilters => {
+    const filters: MovieEventFilters = {};
 
-      // Theatre filter
-      if (
-        selectedTheatres.length > 0 &&
-        !selectedTheatres.includes(event.theatre)
-      ) {
-        return false;
-      }
+    if (searchTerm) filters.search = searchTerm;
+    if (selectedTheatres.length > 0) filters.theatres = selectedTheatres;
 
-      // Format filter
-      if (
-        selectedFormats.length > 0 &&
-        !selectedFormats.includes(event.format)
-      ) {
-        return false;
-      }
+    // Only include format filter if not all formats are selected
+    if (
+      selectedFormats.length > 0 &&
+      selectedFormats.length < allFormats.length
+    ) {
+      filters.formats = selectedFormats;
+    }
 
-      // Accessibility filter
-      if (selectedAccessibility.length > 0) {
-        const hasAccessibility = selectedAccessibility.some((filter) =>
-          event.accessibility?.includes(filter)
-        );
-        if (!hasAccessibility) return false;
-      }
+    // Only include accessibility filter if not all accessibility options are selected
+    if (
+      selectedAccessibility.length > 0 &&
+      selectedAccessibility.length < allAccessibility.length
+    ) {
+      filters.accessibility = selectedAccessibility;
+    }
 
-      // Discount filter
-      if (selectedDiscounts.length > 0) {
-        const hasDiscount = selectedDiscounts.some((filter) =>
-          event.discount?.includes(filter)
-        );
-        if (!hasDiscount) return false;
-      }
+    if (dateFrom) filters.startDate = dateFrom;
+    if (dateTo) filters.endDate = dateTo;
+    if (timeFilter) filters.timeFilter = timeFilter;
 
-      // Date range filter
-      if (dateFrom) {
-        const eventDate = new Date(event.date);
-        const fromDate = new Date(dateFrom);
-        if (eventDate < fromDate) return false;
-      }
-      if (dateTo) {
-        const eventDate = new Date(event.date);
-        const toDate = new Date(dateTo);
-        if (eventDate > toDate) return false;
-      }
-
-      // Time filter
-      if (timeFilter) {
-        const hasTimeInRange = event.times.some((time) => {
-          const hour = parseInt(time.split(":")[0]);
-          switch (timeFilter) {
-            case "morning":
-              return hour >= 6 && hour < 12;
-            case "afternoon":
-              return hour >= 12 && hour < 18;
-            case "evening":
-              return hour >= 18 && hour < 24;
-            case "latenight":
-              return hour >= 0 && hour < 6;
-            default:
-              return true;
-          }
-        });
-        if (!hasTimeInRange) return false;
-      }
-
-      return true;
-    });
-  }, [
-    data,
-    searchTerm,
-    selectedMovies,
-    selectedTheatres,
-    selectedFormats,
-    selectedAccessibility,
-    selectedDiscounts,
-    dateFrom,
-    dateTo,
-    timeFilter,
-  ]);
-
-  // Update parent component when filtered data changes
-  useEffect(() => {
-    onFilteredDataChange(filteredData);
-  }, [filteredData, onFilteredDataChange]);
+    return filters;
+  };
 
   // Clear all filters
   const clearAllFilters = () => {
     setSearchTerm("");
-    setSelectedMovies([]);
     setSelectedTheatres([]);
-    setSelectedFormats([]);
-    setSelectedAccessibility([]);
-    setSelectedDiscounts([]);
+    setSelectedFormats(allFormats); // Reset to all selected
+    setSelectedAccessibility(allAccessibility); // Reset to all selected
     setDateFrom("");
     setDateTo("");
     setTimeFilter("");
+    // Immediately apply cleared filters
+    onFiltersChange({});
   };
 
-  const hasActiveFilters =
-    searchTerm ||
-    selectedMovies.length > 0 ||
-    selectedTheatres.length > 0 ||
-    selectedFormats.length > 0 ||
-    selectedAccessibility.length > 0 ||
-    selectedDiscounts.length > 0 ||
-    dateFrom ||
-    dateTo ||
-    timeFilter;
+  // Apply current filters (called whenever search changes or modal applies)
+  const applyFilters = () => {
+    const filters = getCurrentFilters();
+    onFiltersChange(filters);
+  };
+
+  // Apply filters when modal closes
+  const applyModalFilters = () => {
+    applyFilters();
+    setOpen(false);
+  };
+
+  // Handle search input change
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    // Apply filters immediately when search changes
+    setTimeout(() => {
+      const filters = getCurrentFilters();
+      onFiltersChange(filters);
+    }, 300); // Debounce for 300ms
+  };
+
+  // Count active filters (excluding format/accessibility if all are selected)
+  const activeFilterCount = [
+    searchTerm,
+    selectedTheatres.length > 0,
+    selectedFormats.length < allFormats.length, // Only count if some are deselected
+    selectedAccessibility.length < allAccessibility.length, // Only count if some are deselected
+    dateFrom,
+    dateTo,
+    timeFilter,
+  ].filter(Boolean).length;
+
+  const hasActiveFilters = activeFilterCount > 0;
 
   return (
-    <Accordion sx={{ border: "none", boxShadow: "none" }}>
-      <AccordionSummary expandIcon={<FilterAltIcon />}></AccordionSummary>
-      <AccordionDetails sx={{ backgroundColor: "white", pt: 0 }}>
-        <Box sx={{ mb: 3 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
-            }}
+    <>
+      {/* Search and Filter Controls */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Tooltip title="Filter events">
+          <IconButton
+            onClick={() => setOpen(true)}
+            color={hasActiveFilters ? "primary" : "default"}
           >
-            {hasActiveFilters && (
-              <Button
-                variant="outlined"
-                startIcon={<ClearIcon />}
-                onClick={clearAllFilters}
-                size="small"
-              >
-                Clear All Filters
-              </Button>
-            )}
-          </Box>
+            <Badge badgeContent={activeFilterCount} color="primary">
+              <FilterAltIcon />
+            </Badge>
+          </IconButton>
+        </Tooltip>
+        <TextField
+          label="Search Movies"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder="Type movie title..."
+          sx={{ minWidth: 250 }}
+        />
+      </Box>
 
+      {/* Filter Modal */}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: { minHeight: "60vh" },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            pb: 1,
+          }}
+        >
+          Filter Events
+          <IconButton onClick={() => setOpen(false)} size="small">
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: 2 }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            {/* Row 1: Search and Time */}
-            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-              <Box sx={{ flex: 1, minWidth: 200 }}>
-                <TextField
-                  fullWidth
-                  label="Search Movies"
-                  variant="outlined"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Type movie title..."
-                />
-              </Box>
-            </Box>
-
-            {/* Row 2: Date Range */}
+            {/* Row 1: Date Range */}
             <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
               <Box sx={{ flex: 1, minWidth: 200 }}>
                 <TextField
@@ -248,33 +248,8 @@ export const Controls = ({ data, onFilteredDataChange }: ControlsProps) => {
               </Box>
             </Box>
 
-            {/* Row 3: Movie and Theatre Selection */}
+            {/* Row 2: Theatres */}
             <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-              <Box sx={{ flex: 1, minWidth: 250 }}>
-                <Autocomplete
-                  multiple
-                  options={filterOptions.movies}
-                  value={selectedMovies}
-                  onChange={(_, newValue) => setSelectedMovies(newValue)}
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                      <Chip
-                        variant="outlined"
-                        label={option}
-                        {...getTagProps({ index })}
-                        key={option}
-                      />
-                    ))
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select Movies"
-                      placeholder="Choose movies..."
-                    />
-                  )}
-                />
-              </Box>
               <Box sx={{ flex: 1, minWidth: 250 }}>
                 <Autocomplete
                   multiple
@@ -302,63 +277,80 @@ export const Controls = ({ data, onFilteredDataChange }: ControlsProps) => {
               </Box>
             </Box>
 
-            {/* Row 4: Format, Accessibility, Discounts */}
-            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-              <Box sx={{ flex: 1, minWidth: 180 }}>
-                <Autocomplete
-                  multiple
-                  options={filterOptions.formats}
-                  value={selectedFormats}
-                  onChange={(_, newValue) => setSelectedFormats(newValue)}
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                      <Chip
-                        variant="outlined"
-                        label={option}
-                        {...getTagProps({ index })}
-                        key={option}
-                      />
-                    ))
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Format"
-                      placeholder="Select formats..."
+            {/* Row 3: Format and Accessibility Checkboxes */}
+            <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+              {/* Format Checkboxes */}
+              <Box sx={{ flex: 1, minWidth: 200 }}>
+                <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+                  Format
+                </Typography>
+                <FormGroup>
+                  {filterOptions.formats.map((format) => (
+                    <FormControlLabel
+                      key={format}
+                      control={
+                        <Checkbox
+                          checked={selectedFormats.includes(format)}
+                          onChange={(e) =>
+                            handleFormatChange(format, e.target.checked)
+                          }
+                          size="small"
+                        />
+                      }
+                      label={format}
                     />
-                  )}
-                />
+                  ))}
+                </FormGroup>
               </Box>
-              <Box sx={{ flex: 1, minWidth: 180 }}>
-                <Autocomplete
-                  multiple
-                  options={filterOptions.accessibility}
-                  value={selectedAccessibility}
-                  onChange={(_, newValue) => setSelectedAccessibility(newValue)}
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                      <Chip
-                        variant="outlined"
-                        color="success"
-                        label={option}
-                        {...getTagProps({ index })}
-                        key={option}
-                      />
-                    ))
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Accessibility"
-                      placeholder="Select features..."
+
+              {/* Accessibility Checkboxes */}
+              <Box sx={{ flex: 1, minWidth: 200 }}>
+                <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+                  Accessibility
+                </Typography>
+                <FormGroup>
+                  {filterOptions.accessibility.map((accessibility) => (
+                    <FormControlLabel
+                      key={accessibility}
+                      control={
+                        <Checkbox
+                          checked={selectedAccessibility.includes(
+                            accessibility
+                          )}
+                          onChange={(e) =>
+                            handleAccessibilityChange(
+                              accessibility,
+                              e.target.checked
+                            )
+                          }
+                          size="small"
+                          color="success"
+                        />
+                      }
+                      label={accessibility}
                     />
-                  )}
-                />
+                  ))}
+                </FormGroup>
               </Box>
             </Box>
           </Box>
-        </Box>
-      </AccordionDetails>
-    </Accordion>
+        </DialogContent>
+
+        <DialogActions sx={{ px: 3, pb: 3 }}>
+          {hasActiveFilters && (
+            <Button
+              variant="outlined"
+              startIcon={<ClearIcon />}
+              onClick={clearAllFilters}
+            >
+              Clear All Filters
+            </Button>
+          )}
+          <Button variant="contained" onClick={applyModalFilters}>
+            Apply Filters
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };

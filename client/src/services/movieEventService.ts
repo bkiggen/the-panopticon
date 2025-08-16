@@ -4,14 +4,16 @@ import type { MovieEvent } from "@prismaTypes";
 const API_BASE = import.meta.env.PROD
   ? "/api" // Same domain in production
   : import.meta.env.VITE_API_URL || "http://localhost:3021/api";
-
 export interface MovieEventFilters {
-  theatre?: string;
+  search?: string;
+  theatres?: string[];
+  formats?: string[];
+  accessibility?: string[];
+  discounts?: string[];
   startDate?: string;
   endDate?: string;
-  search?: string;
+  timeFilter?: string;
 }
-
 /**
  * Pure API service - no state management, just HTTP calls
  */
@@ -26,17 +28,25 @@ export class MovieEventService {
   ): Promise<{ events: MovieEvent[]; total: number; totalPages: number }> {
     const params = new URLSearchParams();
 
-    if (filters.theatre) params.append("theatre", filters.theatre);
+    // Add all filter parameters
+    if (filters.search) params.append("search", filters.search);
+    if (filters.theatres?.length)
+      params.append("theatres", filters.theatres.join(","));
+    if (filters.formats?.length)
+      params.append("formats", filters.formats.join(","));
+    if (filters.accessibility?.length)
+      params.append("accessibility", filters.accessibility.join(","));
+    if (filters.discounts?.length)
+      params.append("discounts", filters.discounts.join(","));
     if (filters.startDate) params.append("startDate", filters.startDate);
     if (filters.endDate) params.append("endDate", filters.endDate);
-    if (filters.search) params.append("search", filters.search);
+    if (filters.timeFilter) params.append("timeFilter", filters.timeFilter);
 
     // Add pagination parameters
     params.append("page", page.toString());
     params.append("limit", limit.toString());
 
     const url = `${API_BASE}/movie-events?${params.toString()}`;
-
     const response = await fetch(url);
 
     if (!response.ok) {

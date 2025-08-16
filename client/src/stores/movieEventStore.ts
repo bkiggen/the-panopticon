@@ -100,7 +100,6 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
   setPageSize: (pageSize) => set({ pageSize }),
   clearError: () => set({ error: null }),
 
-  // Thunks (business logic)
   fetchEvents: async (filters = {}, page, limit) => {
     const state = get();
     const currentPage = page ?? state.currentPage;
@@ -111,22 +110,13 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
       state.clearError();
       state.setFilters(filters);
 
-      // Call the pure API service with pagination
       const result = await MovieEventService.getAll(
         filters,
         currentPage,
         pageSize
       );
 
-      // Transform/sort the data (business logic)
-      const sortedEvents = result.events.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateA.getTime() - dateB.getTime();
-      });
-
-      // Update state with events and pagination
-      state.setEvents(sortedEvents);
+      state.setEvents(result.events);
       state.setPagination(
         currentPage,
         pageSize,
