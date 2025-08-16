@@ -206,9 +206,7 @@ class HollywoodBrowserScraper {
         theatre: this.theatreName,
         accessibility: null,
         discount: features.includes("Special Guest") ? ["Special Guest"] : null,
-        rating: "",
         duration: "",
-        movieUrl: "",
       };
     });
   }

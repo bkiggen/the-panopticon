@@ -1,5 +1,16 @@
+// @ts-nocheck
 import puppeteer from "puppeteer";
-import { promises as fs } from "fs";
+import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+// Load environment variables
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
+const prisma = new PrismaClient();
 
 class LaurelhurstScraper {
   constructor() {
@@ -107,7 +118,7 @@ class LaurelhurstScraper {
           const duration = this.extractDuration(ratingTime);
 
           events.push({
-            date: formattedDate,
+            date: new Date(formattedDate),
             title: cleanedTitle,
             originalTitle: movie.title,
             times,
@@ -115,18 +126,15 @@ class LaurelhurstScraper {
             imageUrl: this.decodeHtmlEntities(movie.posterURL) || "",
             ariaLabel: "",
             theatre: this.theatreName,
-            accessibility: accessibility.length > 0 ? accessibility : null,
-            discount: null, // Laurelhurst doesn't seem to have specific discount indicators in showtimes
-            rating,
-            duration,
-            movieUrl: this.decodeHtmlEntities(movie.movieUrl) || "",
+            accessibility: accessibility.length > 0 ? accessibility : [],
+            discount: [],
           });
         });
       });
 
       // Sort events by date and then by title
       return events.sort((a, b) => {
-        const dateCompare = a.date.localeCompare(b.date);
+        const dateCompare = a.date.getTime() - b.date.getTime();
         if (dateCompare !== 0) return dateCompare;
         return a.title.localeCompare(b.title);
       });
@@ -138,6 +146,34 @@ class LaurelhurstScraper {
       }
     }
   }
+
+  async saveToDatabase(events: any[]) {
+    await prisma.movieEvent.deleteMany({
+      where: {
+        theatre: this.theatreName,
+      },
+    });
+
+    // Save new events
+    let savedCount = 0;
+    for (const event of events) {
+      try {
+        await prisma.movieEvent.create({
+          data: event,
+        });
+        savedCount++;
+      } catch (error: any) {
+        console.error(`✗ Failed to save ${event.title}:`, {
+          error: error.message,
+          code: error.code,
+          meta: error.meta,
+          eventData: JSON.stringify(event, null, 2),
+        });
+      }
+    }
+
+    return savedCount;
+  }
 }
 
 // Run the scraper
@@ -146,21 +182,20 @@ async function run() {
   try {
     console.log("Scraping Laurelhurst Theater movie listings...");
     const movieData = await scraper.scrapeMovies();
-
-    console.log(`\nFound ${movieData.length} total events`);
-
-    // Save to results directory
-    const filename = `./results/laurelhurst.json`;
-    await fs.writeFile(filename, JSON.stringify(movieData, null, 2));
-    console.log(`\nData saved to: ${filename}`);
-
-    // Also log the data
-    console.log("\n--- LAURELHURST THEATER DATA ---");
-    console.log(JSON.stringify(movieData, null, 2));
+    if (movieData.length > 0) {
+      // Save to database
+      const savedCount = await scraper.saveToDatabase(movieData);
+      // Show summary
+      console.log("\n📈 Summary:");
+      console.log(`- Events scraped: ${movieData.length}`);
+      console.log(`- Events saved: ${savedCount}`);
+      console.log(`- Theatre: ${scraper.theatreName}`);
+    } else {
+      console.log("⚠️  No events found to save");
+    }
   } catch (error) {
     console.error("Error:", error.message);
   }
 }
 
-// Execute the scraper
-run();
+export { LaurelhurstScraper, run as runLaurelhurstScraper };

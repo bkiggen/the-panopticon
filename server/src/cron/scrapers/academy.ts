@@ -1,5 +1,16 @@
+// @ts-nocheck
 import puppeteer from "puppeteer";
-import { promises as fs } from "fs";
+import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+// Load environment variables
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
+const prisma = new PrismaClient();
 
 class HumanLikeAcademyScraper {
   constructor() {
@@ -283,7 +294,6 @@ class HumanLikeAcademyScraper {
               if (!titleEl) return;
 
               const title = titleEl.textContent.trim();
-              const movieUrl = titleEl.href || "";
 
               const posterEl = movieContainer.querySelector("img");
               const posterUrl = posterEl?.src || "";
@@ -322,8 +332,6 @@ class HumanLikeAcademyScraper {
                   title,
                   originalTitle: title,
                   posterUrl,
-                  movieUrl,
-                  rating,
                   duration,
                   times,
                   hasSpecialScreening: hasSpecial,
@@ -354,11 +362,9 @@ class HumanLikeAcademyScraper {
               imageUrl: movie.posterUrl,
               ariaLabel: "",
               theatre: this.theatreName,
-              accessibility: accessibility.length > 0 ? accessibility : null,
-              discount: discount.length > 0 ? discount : null,
-              rating: movie.rating,
+              accessibility: accessibility.length > 0 ? accessibility : [],
+              discount: discount.length > 0 ? discount : [],
               duration: movie.duration,
-              movieUrl: movie.movieUrl,
             });
           });
         } catch (pageError) {
@@ -397,20 +403,53 @@ class HumanLikeAcademyScraper {
       }
     }
   }
+
+  async saveToDatabase(events: any[]) {
+    // First, delete existing Cinema 21 events to avoid duplicates
+    await prisma.movieEvent.deleteMany({
+      where: {
+        theatre: this.theatreName,
+      },
+    });
+
+    // Save new events
+    let savedCount = 0;
+    for (const event of events) {
+      try {
+        await prisma.movieEvent.create({
+          data: event,
+        });
+        savedCount++;
+      } catch (error: any) {
+        console.error(`✗ Failed to save ${event.title}:`, {
+          error: error.message,
+          code: error.code,
+          meta: error.meta,
+          eventData: JSON.stringify(event, null, 2),
+        });
+      }
+    }
+
+    return savedCount;
+  }
 }
 
 // Run the scraper
 async function run() {
   const scraper = new HumanLikeAcademyScraper();
   try {
-    console.log("🎭 Starting human-like Academy Theater scraper...");
     const movieData = await scraper.scrapeMovies();
-
-    console.log(`\n🎉 Successfully scraped ${movieData.length} events`);
-
-    const filename = `./results/academy.json`;
-    await fs.writeFile(filename, JSON.stringify(movieData, null, 2));
-    console.log(`💾 Data saved to: ${filename}`);
+    if (movieData.length > 0) {
+      // Save to database
+      const savedCount = await scraper.saveToDatabase(movieData);
+      // Show summary
+      console.log("\n📈 Summary:");
+      console.log(`- Events scraped: ${movieData.length}`);
+      console.log(`- Events saved: ${savedCount}`);
+      console.log(`- Theatre: ${scraper.theatreName}`);
+    } else {
+      console.log("⚠️  No events found to save");
+    }
 
     // Show sample data
     if (movieData.length > 0) {
@@ -422,4 +461,4 @@ async function run() {
   }
 }
 
-run();
+export { HumanLikeAcademyScraper, run as runAcademyScraper };

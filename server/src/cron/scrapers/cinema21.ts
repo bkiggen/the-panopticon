@@ -91,9 +91,6 @@ class Cinema21Scraper {
           const titleEl = movieEl.querySelector(
             ".times-tickets-single-movie__heading"
           );
-          const ratingEl = movieEl.querySelector(
-            ".times-tickets-single-movie__classification-rating"
-          );
           const durationEl = movieEl.querySelector(
             ".times-tickets-single-movie__duration"
           );
@@ -107,10 +104,8 @@ class Cinema21Scraper {
           if (!titleEl) return;
 
           const title = titleEl.textContent?.trim() || "";
-          const rating = ratingEl?.textContent?.trim() || "Not Rated";
           const duration = durationEl?.textContent?.trim() || "";
           const posterUrl = posterEl?.src || "";
-          const movieUrl = linkEl?.href || "";
 
           const showtimes: any[] = [];
 
@@ -181,10 +176,8 @@ class Cinema21Scraper {
           if (title && showtimes.length > 0) {
             movies.push({
               title,
-              rating,
               duration,
               posterUrl,
-              movieUrl,
               showtimes,
             });
           }

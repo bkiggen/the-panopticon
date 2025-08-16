@@ -24,11 +24,11 @@ model MovieEvent {
   format             String
   imageUrl           String
   ariaLabel          String
-  genres            String[]  // Array of strings for genres
-  description       String?   // Optional text field
-  trailerUrl        String?   // Optional URL
-  imdbId            String?   // Optional IMDB identifier
-  rottenTomatoesId  String?   // Optional Rotten Tomatoes identifier
+  genres             String[]  // Array of strings for genres - remove...
+  description        String?   // Optional text field
+  trailerUrl         String?   // Optional URL
+  imdbId             String?   // Optional IMDB identifier
+  rottenTomatoesId   String?   // Optional Rotten Tomatoes identifier
   theatre            String
   accessibility      String[]
   discount           String[]

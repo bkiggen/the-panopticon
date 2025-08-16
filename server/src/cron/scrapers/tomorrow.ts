@@ -1,5 +1,16 @@
+// @ts-nocheck
 import puppeteer from "puppeteer";
-import { promises as fs } from "fs";
+import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+// Load environment variables
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
+const prisma = new PrismaClient();
 
 class TomorrowTheaterScraper {
   constructor() {
@@ -53,13 +64,7 @@ class TomorrowTheaterScraper {
         timeout: 10000,
       });
 
-      await page.screenshot({
-        path: "./results/tomorrow_debug.png",
-        fullPage: true,
-      });
-
       const html = await page.content();
-      await fs.writeFile("./results/tomorrow_debug.html", html);
 
       const rawData = await page.evaluate(() => {
         const shows = [];
@@ -105,7 +110,7 @@ class TomorrowTheaterScraper {
       for (const show of rawData) {
         console.log("🚀 ~ TomorrowTheaterScraper ~ scrapeMovies ~ show:", show);
         events.push({
-          date: this.parseDateText(show.showtimes[0]),
+          date: new Date(this.parseDateText(show.showtimes[0])),
           title: show.title,
           originalTitle: show.title,
           times: show.showtimes,
@@ -115,11 +120,7 @@ class TomorrowTheaterScraper {
           theatre: this.theatreName,
           accessibility: show.tags.includes("Open Captions")
             ? ["Open Captions"]
-            : null,
-          discount: null, // No specific discount info available
-          rating: "Not Rated", // No rating info available
-          duration: show.runtime || "Unknown",
-          movieUrl: show.url || "",
+            : [],
         });
       }
 
@@ -130,6 +131,35 @@ class TomorrowTheaterScraper {
       if (browser) await browser.close();
     }
   }
+
+  async saveToDatabase(events: any[]) {
+    // First, delete existing Cinema 21 events to avoid duplicates
+    await prisma.movieEvent.deleteMany({
+      where: {
+        theatre: this.theatreName,
+      },
+    });
+
+    // Save new events
+    let savedCount = 0;
+    for (const event of events) {
+      try {
+        await prisma.movieEvent.create({
+          data: event,
+        });
+        savedCount++;
+      } catch (error: any) {
+        console.error(`✗ Failed to save ${event.title}:`, {
+          error: error.message,
+          code: error.code,
+          meta: error.meta,
+          eventData: JSON.stringify(event, null, 2),
+        });
+      }
+    }
+
+    return savedCount;
+  }
 }
 
 // Run the scraper
@@ -139,16 +169,20 @@ async function run() {
     console.log("Scraping Tomorrow Theater movie listings...");
     const movieData = await scraper.scrapeMovies();
 
-    console.log(`\nFound ${movieData.length} total events`);
-
-    const filename = `./results/tomorrow_theater.json`;
-    await fs.writeFile(filename, JSON.stringify(movieData, null, 2));
-    console.log(`\nData saved to: ${filename}`);
-    console.log("\n--- TOMORROW THEATER DATA ---");
-    console.log(JSON.stringify(movieData, null, 2));
+    if (movieData.length > 0) {
+      // Save to database
+      const savedCount = await scraper.saveToDatabase(movieData);
+      // Show summary
+      console.log("\n📈 Summary:");
+      console.log(`- Events scraped: ${movieData.length}`);
+      console.log(`- Events saved: ${savedCount}`);
+      console.log(`- Theatre: ${scraper.theatreName}`);
+    } else {
+      console.log("⚠️  No events found to save");
+    }
   } catch (error) {
     console.error("Error:", error.message);
   }
 }
 
-run();
+export { TomorrowTheaterScraper, run as runTomorrowTheaterScraper };
