@@ -10,6 +10,7 @@ import { PrismaClient } from "@prisma/client";
 
 // Import routes
 import movieEventRoutes from "./routes/movieEvents";
+import adminRoutes from "./routes/admin";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.get("/health", (req, res) => {
 
 // API routes
 app.use("/api/movie-events", movieEventRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Debug logging
 console.log(`🔍 NODE_ENV: ${process.env.NODE_ENV}`);

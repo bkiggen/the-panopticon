@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import useMovieEventStore from "@/stores/movieEventStore";
-import type { MovieEvent } from "@prismaTypes";
+// import type { MovieEvent } from "@prismaTypes";
 import { Table } from "./Table";
-import { Controls } from "./Controls";
+// import { Controls } from "./Controls";
 
 export const Showtimes = () => {
   const { events, loading, fetchEvents } = useMovieEventStore();

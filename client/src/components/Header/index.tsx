@@ -1,10 +1,4 @@
-// import useSessionStore from "@/stores/sessionStore";
-
 export const Header = () => {
-  // const { logout } = useSessionStore();
-
-  // logout();
-
   return (
     <header
       style={{

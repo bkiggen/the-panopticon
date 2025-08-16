@@ -333,7 +333,5 @@ async function run() {
   }
 }
 
-// Execute the scraper
-if (require.main === module) {
-  run();
-}
+export { Cinema21Scraper };
+export { run as runCinema21Scraper };
