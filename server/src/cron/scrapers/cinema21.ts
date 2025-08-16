@@ -3,7 +3,9 @@ import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 
 // Load environment variables
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 const prisma = new PrismaClient();
 
@@ -71,7 +73,6 @@ class Cinema21Scraper {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
       );
 
-      console.log("Navigating to Cinema 21...");
       await page.goto(this.baseUrl, { waitUntil: "networkidle2" });
 
       await page.waitForSelector(".times-tickets-single-movie", {
@@ -260,15 +261,12 @@ class Cinema21Scraper {
   }
 
   async saveToDatabase(events: any[]) {
-    console.log(`\nSaving ${events.length} events to database...`);
-
     // First, delete existing Cinema 21 events to avoid duplicates
     await prisma.movieEvent.deleteMany({
       where: {
         theatre: this.theatreName,
       },
     });
-    console.log(`Cleared existing ${this.theatreName} events`);
 
     // Save new events
     let savedCount = 0;
@@ -278,17 +276,16 @@ class Cinema21Scraper {
           data: event,
         });
         savedCount++;
-        console.log(
-          `✓ Saved: ${event.title} on ${event.date.toISOString().split("T")[0]}`
-        );
       } catch (error: any) {
-        console.error(`✗ Failed to save ${event.title}:`, error.message);
+        console.error(`✗ Failed to save ${event.title}:`, {
+          error: error.message,
+          code: error.code,
+          meta: error.meta,
+          eventData: JSON.stringify(event, null, 2),
+        });
       }
     }
 
-    console.log(
-      `\n✅ Successfully saved ${savedCount}/${events.length} events to database`
-    );
     return savedCount;
   }
 }
@@ -298,9 +295,7 @@ async function run() {
   const scraper = new Cinema21Scraper();
 
   try {
-    console.log("🎬 Scraping Cinema 21 movie listings...");
     const movieData = await scraper.scrapeMovies();
-    console.log(`📊 Found ${movieData.length} total events`);
 
     if (movieData.length > 0) {
       // Save to database
@@ -311,16 +306,6 @@ async function run() {
       console.log(`- Events scraped: ${movieData.length}`);
       console.log(`- Events saved: ${savedCount}`);
       console.log(`- Theatre: ${scraper.theatreName}`);
-
-      // Show sample data
-      console.log("\n🎯 Sample events saved:");
-      movieData.slice(0, 3).forEach((event, index) => {
-        console.log(
-          `${index + 1}. ${event.title} - ${
-            event.date.toISOString().split("T")[0]
-          } (${event.times.length} showtimes)`
-        );
-      });
     } else {
       console.log("⚠️  No events found to save");
     }
