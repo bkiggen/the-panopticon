@@ -19,7 +19,11 @@ export class MovieEventService {
   /**
    * Get all movie events with optional filters
    */
-  static async getAll(filters: MovieEventFilters = {}): Promise<MovieEvent[]> {
+  static async getAll(
+    filters: MovieEventFilters = {},
+    page: number = 1,
+    limit: number = 10
+  ): Promise<{ events: MovieEvent[]; total: number; totalPages: number }> {
     const params = new URLSearchParams();
 
     if (filters.theatre) params.append("theatre", filters.theatre);
@@ -27,9 +31,11 @@ export class MovieEventService {
     if (filters.endDate) params.append("endDate", filters.endDate);
     if (filters.search) params.append("search", filters.search);
 
-    const url = `${API_BASE}/movie-events${
-      params.toString() ? `?${params.toString()}` : ""
-    }`;
+    // Add pagination parameters
+    params.append("page", page.toString());
+    params.append("limit", limit.toString());
+
+    const url = `${API_BASE}/movie-events?${params.toString()}`;
 
     const response = await fetch(url);
 

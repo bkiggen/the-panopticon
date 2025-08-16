@@ -3,10 +3,13 @@ import * as movieEventService from "../services/movieEventService";
 
 export const getMovieEvents = async (req: Request, res: Response) => {
   try {
-    const movieEvents = await movieEventService.getAllMovieEvents();
-    res.json(movieEvents);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch movie events" });
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const result = await movieEventService.getAllMovieEvents(page, limit);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };
 

@@ -15,7 +15,6 @@ export const Table = ({ data }: TableProps) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<MovieEvent | null>(null);
-  console.log("🚀 ~ Table ~ selectedEvent:", selectedEvent);
 
   const handleCellClick = (event: MovieEvent) => {
     setSelectedEvent(event);

@@ -1,10 +1,26 @@
 import { prisma } from "../app";
 import { MovieEvent, Prisma } from "@prisma/client";
 
-export const getAllMovieEvents = async (): Promise<MovieEvent[]> => {
-  return await prisma.movieEvent.findMany({
-    orderBy: { date: "asc" },
-  });
+export const getAllMovieEvents = async (
+  page: number = 1,
+  limit: number = 10
+): Promise<{ events: MovieEvent[]; total: number; totalPages: number }> => {
+  const skip = (page - 1) * limit;
+
+  const [events, total] = await Promise.all([
+    prisma.movieEvent.findMany({
+      skip,
+      take: limit,
+      orderBy: { date: "asc" },
+    }),
+    prisma.movieEvent.count(),
+  ]);
+
+  return {
+    events,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 };
 
 export const getMovieEventById = async (

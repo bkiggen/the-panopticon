@@ -14,6 +14,12 @@ interface MovieEventState {
   error: string | null;
   filters: MovieEventFilters;
 
+  // Pagination state
+  currentPage: number;
+  pageSize: number;
+  totalEvents: number;
+  totalPages: number;
+
   // Computed getters
   theatres: string[];
   eventsByTheatre: Record<string, MovieEvent[]>;
@@ -24,10 +30,22 @@ interface MovieEventState {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setFilters: (filters: MovieEventFilters) => void;
+  setPagination: (
+    page: number,
+    pageSize: number,
+    total: number,
+    totalPages: number
+  ) => void;
+  setCurrentPage: (page: number) => void;
+  setPageSize: (pageSize: number) => void;
   clearError: () => void;
 
   // Thunks (asynchronous business logic)
-  fetchEvents: (filters?: MovieEventFilters) => Promise<void>;
+  fetchEvents: (
+    filters?: MovieEventFilters,
+    page?: number,
+    limit?: number
+  ) => Promise<void>;
   fetchEventById: (id: number) => Promise<void>;
   createEvent: (
     data: Omit<MovieEvent, "id" | "createdAt" | "updatedAt">
@@ -35,6 +53,8 @@ interface MovieEventState {
   updateEvent: (id: number, data: Partial<MovieEvent>) => Promise<void>;
   deleteEvent: (id: number) => Promise<void>;
   refreshEvents: () => Promise<void>;
+  goToPage: (page: number) => Promise<void>;
+  changePageSize: (pageSize: number) => Promise<void>;
 }
 
 const useMovieEventStore = create<MovieEventState>((set, get) => ({
@@ -44,6 +64,12 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
   loading: false,
   error: null,
   filters: {},
+
+  // Pagination initial state
+  currentPage: 1,
+  pageSize: 50,
+  totalEvents: 0,
+  totalPages: 0,
 
   // Computed getters
   get theatres() {
@@ -68,29 +94,45 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   setFilters: (filters) => set({ filters }),
+  setPagination: (currentPage, pageSize, totalEvents, totalPages) =>
+    set({ currentPage, pageSize, totalEvents, totalPages }),
+  setCurrentPage: (currentPage) => set({ currentPage }),
+  setPageSize: (pageSize) => set({ pageSize }),
   clearError: () => set({ error: null }),
 
   // Thunks (business logic)
-  fetchEvents: async (filters = {}) => {
+  fetchEvents: async (filters = {}, page, limit) => {
     const state = get();
+    const currentPage = page ?? state.currentPage;
+    const pageSize = limit ?? state.pageSize;
 
     try {
       state.setLoading(true);
       state.clearError();
       state.setFilters(filters);
 
-      // Call the pure API service
-      const events = await MovieEventService.getAll(filters);
+      // Call the pure API service with pagination
+      const result = await MovieEventService.getAll(
+        filters,
+        currentPage,
+        pageSize
+      );
 
       // Transform/sort the data (business logic)
-      const sortedEvents = events.sort((a, b) => {
+      const sortedEvents = result.events.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return dateA.getTime() - dateB.getTime();
       });
 
-      // Update state
+      // Update state with events and pagination
       state.setEvents(sortedEvents);
+      state.setPagination(
+        currentPage,
+        pageSize,
+        result.total,
+        result.totalPages
+      );
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to fetch events";
@@ -127,17 +169,10 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
       state.setLoading(true);
       state.clearError();
 
-      const newEvent = await MovieEventService.create(data);
+      await MovieEventService.create(data);
 
-      // Update local state optimistically
-      const currentEvents = state.events;
-      const updatedEvents = [...currentEvents, newEvent].sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateA.getTime() - dateB.getTime();
-      });
-
-      state.setEvents(updatedEvents);
+      // Refresh the current page to show updated data
+      await state.refreshEvents();
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to create event";
@@ -190,10 +225,8 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
 
       await MovieEventService.delete(id);
 
-      // Update local state
-      const currentEvents = state.events;
-      const updatedEvents = currentEvents.filter((event) => event.id !== id);
-      state.setEvents(updatedEvents);
+      // Refresh the current page to show updated data
+      await state.refreshEvents();
 
       // Clear selected event if it's the one being deleted
       if (state.selectedEvent?.id === id) {
@@ -212,7 +245,19 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
 
   refreshEvents: async () => {
     const state = get();
-    await state.fetchEvents(state.filters);
+    await state.fetchEvents(state.filters, state.currentPage, state.pageSize);
+  },
+
+  // New pagination methods
+  goToPage: async (page: number) => {
+    const state = get();
+    await state.fetchEvents(state.filters, page, state.pageSize);
+  },
+
+  changePageSize: async (pageSize: number) => {
+    const state = get();
+    // Reset to page 1 when changing page size
+    await state.fetchEvents(state.filters, 1, pageSize);
   },
 }));
 
