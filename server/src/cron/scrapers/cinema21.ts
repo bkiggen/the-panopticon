@@ -2,6 +2,8 @@ import puppeteer from "puppeteer";
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 
+dotenv.config();
+
 // Load environment variables
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
@@ -293,14 +295,11 @@ class Cinema21Scraper {
 // Run the scraper
 async function run() {
   const scraper = new Cinema21Scraper();
-
   try {
     const movieData = await scraper.scrapeMovies();
-
     if (movieData.length > 0) {
       // Save to database
       const savedCount = await scraper.saveToDatabase(movieData);
-
       // Show summary
       console.log("\n📈 Summary:");
       console.log(`- Events scraped: ${movieData.length}`);
