@@ -63,6 +63,9 @@ RUN echo "=== FINAL STRUCTURE CHECK ===" && \
     echo "Server directory:" && ls -la server/ && \
     echo "Client build in server:" && ls -la server/client-build/
 
+# Run database migrations on startup (not during build)
+# We'll do this in the start command instead
+
 # Expose port
 EXPOSE 3021
 
