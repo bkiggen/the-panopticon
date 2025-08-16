@@ -8,10 +8,9 @@ export const runScrapers = async (req: Request, res: Response) => {
   try {
     console.log("🎬 Starting manual Cinema 21 scrape...");
 
-    // Run the Cinema 21 scraper
-    // await runCinema21Scraper();
-    // await runAcademyScraper();
-    // await runLaurelhurstScraper();
+    await runCinema21Scraper();
+    await runAcademyScraper();
+    await runLaurelhurstScraper();
     await runTomorrowTheaterScraper();
 
     res.json({ success: true, message: "Cinema 21 scraping completed" });
