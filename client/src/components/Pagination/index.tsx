@@ -76,10 +76,6 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   const visiblePages = getVisiblePages();
 
-  if (totalPages <= 1) {
-    return null; // Don't show pagination if there's only one page
-  }
-
   return (
     <Box
       sx={{

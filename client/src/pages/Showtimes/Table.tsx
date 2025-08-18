@@ -161,44 +161,31 @@ export const Table = ({ data }: TableProps) => {
     },
     {
       field: "theatre",
-      width: 130,
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => (
-        <Chip
-          label={params.value}
-          size="small"
-          color="primary"
-          variant="filled"
-        />
-      ),
-    },
-    {
-      field: "format",
-      width: 100,
-      renderCell: (params: GridRenderCellParams) => (
-        <Chip
-          label={params.value}
-          size="small"
-          color="info"
-          variant="outlined"
-        />
-      ),
-    },
-    {
-      field: "accessibility",
-      width: 100,
-      sortable: false,
+      flex: 2,
       renderCell: (params: GridRenderCellParams) => (
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "flex-end",
             flexWrap: "wrap",
             gap: 0.5,
             height: "100%",
           }}
         >
-          {params.value?.map((feature: string, index: number) => (
+          <Chip
+            label={params.row.theatre}
+            size="small"
+            color="success"
+            variant="filled"
+          />
+          <Chip
+            label={params.row.format}
+            size="small"
+            color="info"
+            variant="outlined"
+          />
+          {params.row.accessibility?.map((feature: string, index: number) => (
             <Chip
               key={index}
               label={feature}

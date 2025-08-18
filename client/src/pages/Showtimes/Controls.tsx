@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -24,6 +24,7 @@ import {
 } from "@mui/icons-material";
 import type { MovieEvent } from "@prismaTypes";
 import type { MovieEventFilters } from "@/services/movieEventService";
+import { useDebounce } from "@/hooks/useDebonce";
 
 interface ControlsProps {
   data: MovieEvent[] | null;
@@ -44,6 +45,7 @@ export const Controls = ({
 
   // Filter states - initialize with any provided initial filters
   const [searchTerm, setSearchTerm] = useState(initialFilters.search || "");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [selectedTheatres, setSelectedTheatres] = useState<string[]>(
     initialFilters.theatres || []
   );
@@ -58,6 +60,10 @@ export const Controls = ({
   const [dateTo, setDateTo] = useState(initialFilters.endDate || "");
   const [timeFilter, setTimeFilter] = useState(initialFilters.timeFilter || "");
 
+  useEffect(() => {
+    onFiltersChange(getCurrentFilters());
+  }, [debouncedSearchTerm]);
+
   // Extract unique values for filter options
   const filterOptions = useMemo(() => {
     if (!data)
@@ -67,7 +73,12 @@ export const Controls = ({
         accessibility: allAccessibility,
       };
 
-    const theatres = [...new Set(data.map((event) => event.theatre))].sort();
+    const theatres = [
+      "Academy Theater",
+      "Cinema 21",
+      "Laurelhurst Theater",
+      "Tomorrow Theater",
+    ];
 
     return { theatres, formats: allFormats, accessibility: allAccessibility };
   }, [data]);
@@ -99,7 +110,7 @@ export const Controls = ({
   const getCurrentFilters = (): MovieEventFilters => {
     const filters: MovieEventFilters = {};
 
-    if (searchTerm) filters.search = searchTerm;
+    if (debouncedSearchTerm) filters.search = debouncedSearchTerm;
     if (selectedTheatres.length > 0) filters.theatres = selectedTheatres;
 
     // Only include format filter if not all formats are selected
@@ -127,7 +138,6 @@ export const Controls = ({
 
   // Clear all filters
   const clearAllFilters = () => {
-    setSearchTerm("");
     setSelectedTheatres([]);
     setSelectedFormats(allFormats); // Reset to all selected
     setSelectedAccessibility(allAccessibility); // Reset to all selected
@@ -150,19 +160,12 @@ export const Controls = ({
     setOpen(false);
   };
 
-  // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    // Apply filters immediately when search changes
-    setTimeout(() => {
-      const filters = getCurrentFilters();
-      onFiltersChange(filters);
-    }, 300); // Debounce for 300ms
   };
 
   // Count active filters (excluding format/accessibility if all are selected)
   const activeFilterCount = [
-    searchTerm,
     selectedTheatres.length > 0,
     selectedFormats.length < allFormats.length, // Only count if some are deselected
     selectedAccessibility.length < allAccessibility.length, // Only count if some are deselected
@@ -208,22 +211,8 @@ export const Controls = ({
           sx: { minHeight: "60vh" },
         }}
       >
-        <DialogTitle
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            pb: 1,
-          }}
-        >
-          Filter Events
-          <IconButton onClick={() => setOpen(false)} size="small">
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
         <DialogContent sx={{ pt: 2 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3, pt: 2 }}>
             {/* Row 1: Date Range */}
             <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
               <Box sx={{ flex: 1, minWidth: 200 }}>

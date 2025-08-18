@@ -5,8 +5,21 @@ export const getMovieEvents = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
+    const filters: movieEventService.MovieEventFilters = {
+      search: req.query.search as string,
+      theatres: (req.query.theatres as string)?.split(",") || [],
+      formats: (req.query.formats as string)?.split(",") || [],
+      accessibility: (req.query.accessibility as string)?.split(",") || [],
+      startDate: req.query.startDate as string,
+      endDate: req.query.endDate as string,
+      timeFilter: req.query.timeFilter as string,
+    };
 
-    const result = await movieEventService.getAllMovieEvents(page, limit);
+    const result = await movieEventService.getAllMovieEvents(
+      filters,
+      page,
+      limit
+    );
     res.json(result);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
