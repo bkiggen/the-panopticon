@@ -34,7 +34,7 @@ WORKDIR /app
 
 # Copy and build client first
 COPY client/package*.json ./client/
-RUN cd client && npm ci
+RUN cd client && npm i
 
 COPY client/ ./client/
 # Build client with environment variables available
@@ -46,7 +46,7 @@ RUN cd client && npm run build
 
 # Copy and build server
 COPY server/package*.json ./server/
-RUN cd server && npm ci
+RUN cd server && npm i
 
 COPY server/ ./server/
 RUN cd server && npx prisma generate && npm run build
