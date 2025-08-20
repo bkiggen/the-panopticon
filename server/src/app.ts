@@ -7,12 +7,15 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 import { PrismaClient } from "@prisma/client";
-
-// Import routes
+import { initializeCronJobs } from "./services/cronService";
+import { fetchMovieDataFromOmdb } from "./services/omdbService";
 import movieEventRoutes from "./routes/movieEvents";
 import adminRoutes from "./routes/admin";
 
 dotenv.config();
+
+initializeCronJobs();
+fetchMovieDataFromOmdb();
 
 const app = express();
 const prisma = new PrismaClient();
