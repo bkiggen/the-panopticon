@@ -40,10 +40,11 @@ COPY client/package*.json ./client/
 COPY server/package*.json ./server/
 
 # Install all dependencies from root (handles workspaces)
-RUN npm install
+# Use --no-optional to avoid Rollup native binary issues
+RUN npm install --no-optional
 
-# Fix Rollup native binary issue - force install the correct binary
-RUN cd client && npm rebuild rollup
+# Then install Rollup's Linux binary specifically
+RUN npm install @rollup/rollup-linux-x64-gnu --workspace=client
 
 # Copy source code
 COPY client/ ./client/
