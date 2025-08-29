@@ -1,5 +1,5 @@
 {
-  "name": "panopticon",
+  "name": "client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,10 +16,8 @@
     "@mui/material": "^7.2.0",
     "@mui/x-data-grid": "^8.9.2",
     "@mui/x-date-pickers": "^8.9.2",
-    "@prisma/client": "^6.13.0",
     "@types/react-router-dom": "^5.3.3",
     "lucide-react": "^0.536.0",
-    "puppeteer": "^24.15.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.7.1",

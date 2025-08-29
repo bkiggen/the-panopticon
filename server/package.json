@@ -6,10 +6,9 @@
     "dev": "nodemon src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
-    "railway:build": "npm run build",
-    "railway:start": "npm run start",
     "db:migrate": "npx prisma migrate dev",
     "db:generate": "npx prisma generate",
+    "db:push": "npx prisma db push",
     "db:studio": "npx prisma studio",
     "db:seed": "npx prisma db seed",
     "cinema21": "npx ts-node src/cron/scrapers/cinema21.ts"

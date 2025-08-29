@@ -32,42 +32,43 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 # Set working directory
 WORKDIR /app
 
-# Copy and build client first
-COPY client/package*.json ./client/
-RUN cd client && npm i
+# Copy root package files (for workspace management)
+COPY package*.json ./
 
+# Copy workspace package files
+COPY client/package*.json ./client/
+COPY server/package*.json ./server/
+
+# Install all dependencies from root (handles workspaces)
+RUN npm install
+
+# Copy source code
 COPY client/ ./client/
+COPY server/ ./server/
+
 # Build client with environment variables available
 ARG VITE_AUTH_CODE
 ARG VITE_API_URL
 ENV VITE_AUTH_CODE=$VITE_AUTH_CODE
 ENV VITE_API_URL=$VITE_API_URL
-RUN cd client && npm run build
 
-# Copy and build server
-COPY server/package*.json ./server/
-RUN cd server && npm i
+# Build client using workspace-aware command
+RUN npm run build:client
 
-COPY server/ ./server/
-RUN cd server && npx prisma generate && npm run build
+# Build server (generate Prisma client and compile TypeScript)
+RUN npm run build:server
 
 # Copy client build files to where server can access them
-# Since server runs from /app/server, we need client files accessible from there
 RUN mkdir -p server/client-build && cp -r client/dist/* server/client-build/
-
-# Copy the root package.json for the start script
-COPY package.json ./
 
 # Verify the structure
 RUN echo "=== FINAL STRUCTURE CHECK ===" && \
+    echo "Root directory:" && ls -la && \
     echo "Server directory:" && ls -la server/ && \
     echo "Client build in server:" && ls -la server/client-build/
-
-# Run database migrations on startup (not during build)
-# We'll do this in the start command instead
 
 # Expose port
 EXPOSE 3021
 
-# Start the server
+# Start the server using workspace-aware command
 CMD ["npm", "start"]
