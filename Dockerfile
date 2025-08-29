@@ -42,6 +42,9 @@ COPY server/package*.json ./server/
 # Install all dependencies from root (handles workspaces)
 RUN npm install
 
+# Fix Rollup native binary issue - force install the correct binary
+RUN cd client && npm rebuild rollup
+
 # Copy source code
 COPY client/ ./client/
 COPY server/ ./server/
