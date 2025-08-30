@@ -1,57 +1,87 @@
-// src/services/movieEventService.ts
-import type { MovieEvent } from "@prismaTypes";
+import { ApiClient } from "./api/client";
+import { API_CONFIG } from "./api/config";
 
-const API_BASE = import.meta.env.PROD
-  ? "/api" // Same domain in production
-  : import.meta.env.VITE_API_URL || "http://localhost:3021/api";
-export interface MovieEventFilters {
-  search?: string;
-  theatres?: string[];
-  formats?: string[];
-  accessibility?: string[];
-  discounts?: string[];
-  startDate?: string;
-  endDate?: string;
-  timeFilter?: string;
-}
-/**
- * Pure API service - no state management, just HTTP calls
- */
 export class MovieEventService {
   /**
-   * Get all movie events with optional filters
+   * Get all movie events (public endpoint)
    */
-  static async getAll(
-    filters: MovieEventFilters = {},
-    page: number = 1,
-    limit: number = 10
-  ): Promise<{ events: MovieEvent[]; total: number; totalPages: number }> {
-    const params = new URLSearchParams();
+  static async getAll(filters?: any): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) {
+          if (Array.isArray(value)) {
+            queryParams.append(key, value.join(","));
+          } else {
+            queryParams.append(key, String(value));
+          }
+        }
+      });
+    }
 
-    // Add all filter parameters
-    if (filters.search) params.append("search", filters.search);
-    if (filters.theatres?.length)
-      params.append("theatres", filters.theatres.join(","));
-    if (filters.formats?.length)
-      params.append("formats", filters.formats.join(","));
-    if (filters.accessibility?.length)
-      params.append("accessibility", filters.accessibility.join(","));
-    if (filters.discounts?.length)
-      params.append("discounts", filters.discounts.join(","));
-    if (filters.startDate) params.append("startDate", filters.startDate);
-    if (filters.endDate) params.append("endDate", filters.endDate);
-    if (filters.timeFilter) params.append("timeFilter", filters.timeFilter);
-
-    // Add pagination parameters
-    params.append("page", page.toString());
-    params.append("limit", limit.toString());
-
-    const url = `${API_BASE}/movie-events?${params.toString()}`;
-    const response = await fetch(url);
+    const endpoint = `${API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BASE}${
+      queryParams.toString() ? `?${queryParams.toString()}` : ""
+    }`;
+    const response = await ApiClient.get(endpoint, false);
 
     if (!response.ok) {
+      throw new Error(`Failed to fetch movie events: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Get movie event by ID (public endpoint)
+   */
+  static async getById(id: number): Promise<any> {
+    const response = await ApiClient.get(
+      API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BY_ID(id),
+      false
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch movie event: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Create a new movie event (requires admin auth)
+   */
+  static async create(data: any): Promise<any> {
+    const response = await ApiClient.post(
+      API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BASE,
+      data,
+      true
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to create movie event: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Create multiple movie events in bulk (requires admin auth)
+   */
+  static async createBulk(
+    data: any[]
+  ): Promise<{ message: string; count: number }> {
+    const response = await ApiClient.post(
+      API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BULK,
+      data,
+      true
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
       throw new Error(
-        `Failed to fetch movie events: ${response.status} ${response.statusText}`
+        `Failed to create movie events: ${response.status} ${
+          response.statusText
+        }. ${errorData.details || errorData.error || ""}`
       );
     }
 
@@ -59,82 +89,33 @@ export class MovieEventService {
   }
 
   /**
-   * Get a single movie event by ID
+   * Update movie event (requires admin auth)
    */
-  static async getById(id: number): Promise<MovieEvent> {
-    const response = await fetch(`${API_BASE}/movie-events/${id}`);
+  static async update(id: number, data: any): Promise<any> {
+    const response = await ApiClient.put(
+      API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BY_ID(id),
+      data,
+      true
+    );
 
     if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error("Movie event not found");
-      }
-      throw new Error(
-        `Failed to fetch movie event: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Failed to update movie event: ${response.statusText}`);
     }
 
     return response.json();
   }
 
   /**
-   * Create a new movie event
-   */
-  static async create(
-    data: Omit<MovieEvent, "id" | "createdAt" | "updatedAt">
-  ): Promise<MovieEvent> {
-    const response = await fetch(`${API_BASE}/movie-events`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to create movie event: ${response.status} ${response.statusText}`
-      );
-    }
-
-    return response.json();
-  }
-
-  /**
-   * Update a movie event
-   */
-  static async update(
-    id: number,
-    data: Partial<MovieEvent>
-  ): Promise<MovieEvent> {
-    const response = await fetch(`${API_BASE}/movie-events/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to update movie event: ${response.status} ${response.statusText}`
-      );
-    }
-
-    return response.json();
-  }
-
-  /**
-   * Delete a movie event
+   * Delete movie event (requires admin auth)
    */
   static async delete(id: number): Promise<void> {
-    const response = await fetch(`${API_BASE}/movie-events/${id}`, {
-      method: "DELETE",
-    });
+    const response = await ApiClient.delete(
+      API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BY_ID(id),
+      true
+    );
 
     if (!response.ok) {
-      throw new Error(
-        `Failed to delete movie event: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Failed to delete movie event: ${response.statusText}`);
     }
   }
 }

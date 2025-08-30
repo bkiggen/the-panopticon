@@ -135,6 +135,41 @@ export const createMovieEvent = async (
   });
 };
 
+export const createMovieEvents = async (
+  movieEventsData: Prisma.MovieEventCreateInput[]
+) => {
+  try {
+    const transformedData = movieEventsData.map((event) => ({
+      date: new Date(event.date),
+      title: event.title,
+      originalTitle: event.originalTitle,
+      times: event.times || [],
+      format: event.format,
+      imageUrl: event.imageUrl,
+      ariaLabel: event.ariaLabel || "",
+      theatre: event.theatre,
+      accessibility: event.accessibility || [],
+      discount: event.discount || [],
+      description: event.description,
+      genres: event.genres || [],
+      imdbId: event.imdbId,
+      rottenTomatoesId: event.rottenTomatoesId,
+      trailerUrl: event.trailerUrl,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+
+    const result = await prisma.movieEvent.createMany({
+      data: transformedData,
+    });
+
+    return result;
+  } catch (error: any) {
+    console.error("Error creating movie events:", error);
+    throw new Error(`Failed to create movie events: ${error.message}`);
+  }
+};
+
 export const updateMovieEvent = async (
   id: number,
   data: Prisma.MovieEventUpdateInput

@@ -1,52 +1,38 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-interface User {
-  id?: string;
-  name?: string;
-  email?: string;
-}
+import { API_CONFIG } from "@/services/api/config";
 
 interface SessionState {
-  // State
   isAuthenticated: boolean;
-
-  // Actions
-  login: () => void;
-  logout: () => void;
-
-  // Helper getters
-  getIsAuthenticated: () => boolean;
+  user: {
+    id: string;
+    email: string;
+    isAdmin: boolean;
+  } | null;
+  setAuthenticated: (authenticated: boolean) => void;
+  setUser: (user: SessionState["user"]) => void;
+  clearSession: () => void;
 }
 
 const useSessionStore = create<SessionState>()(
   persist(
-    (set, get) => ({
-      // State
+    (set) => ({
       isAuthenticated: false,
+      user: null,
 
-      // Actions
-      login: () => {
-        set({
-          isAuthenticated: true,
-        });
-      },
+      setAuthenticated: (authenticated: boolean) =>
+        set({ isAuthenticated: authenticated }),
 
-      logout: () => {
-        set({
-          isAuthenticated: false,
-        });
-      },
-      getIsAuthenticated: () => get().isAuthenticated,
+      setUser: (user: SessionState["user"]) =>
+        set({ user, isAuthenticated: !!user }),
+
+      clearSession: () => set({ isAuthenticated: false, user: null }),
     }),
     {
-      name: "session-storage",
-      partialize: (state) => ({
-        isAuthenticated: state.isAuthenticated,
-      }),
+      name: API_CONFIG.STORAGE_KEYS.SESSION,
+      partialize: (state) => ({ isAuthenticated: state.isAuthenticated }),
     }
   )
 );
 
 export default useSessionStore;
-export type { User, SessionState };

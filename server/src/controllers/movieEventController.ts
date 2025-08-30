@@ -50,6 +50,35 @@ export const createMovieEvent = async (req: Request, res: Response) => {
   }
 };
 
+export const createMovieEvents = async (req: Request, res: Response) => {
+  try {
+    // Validate that request body is an array
+    if (!Array.isArray(req.body)) {
+      return res.status(400).json({
+        error: "Request body must be an array of movie events",
+      });
+    }
+
+    // Validate that array is not empty
+    if (req.body.length === 0) {
+      return res.status(400).json({
+        error: "Array cannot be empty",
+      });
+    }
+
+    const movieEvents = await movieEventService.createMovieEvents(req.body);
+    res.status(201).json({
+      message: `Successfully created ${movieEvents.count} movie events`,
+      data: movieEvents,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      error: "Failed to create movie events",
+      details: error.message,
+    });
+  }
+};
+
 export const updateMovieEvent = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);

@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,17 +8,78 @@ import {
 import { Admin } from "./pages/Admin";
 import { Showtimes } from "./pages/Showtimes";
 import { Header } from "./components/Header";
-import PayphoneAuth from "./pages/Auth/Payphone";
+import AdminLogin from "@/pages/Admin/Login";
+import { AuthService } from "./services/authService";
 import useSessionStore from "./stores/sessionStore";
 import { routeConstants } from "./routing/routeConstants";
+import { Box, CircularProgress } from "@mui/material";
 
 const useAuth = () => {
   const isAuthenticated = useSessionStore((state) => state.isAuthenticated);
-  return { isAuthenticated };
+  const setAuthenticated = useSessionStore((state) => state.setAuthenticated);
+  const [isValidating, setIsValidating] = useState(true);
+
+  // Check token validity on app load
+  useEffect(() => {
+    const checkAuth = async () => {
+      setIsValidating(true);
+
+      if (!AuthService.isAuthenticated()) {
+        // No token stored, definitely not authenticated
+        setAuthenticated(false);
+        setIsValidating(false);
+        return;
+      }
+
+      // Token exists, validate with server
+      const isValid = await AuthService.validateToken();
+      setAuthenticated(isValid);
+      setIsValidating(false);
+    };
+
+    checkAuth();
+  }, [setAuthenticated]);
+
+  const logout = useCallback(() => {
+    AuthService.logout();
+    setAuthenticated(false);
+  }, [setAuthenticated]);
+
+  return {
+    isAuthenticated,
+    isValidating,
+    logout,
+  };
 };
 
-const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
+// Layout for public routes (no auth required)
+const PublicLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  );
+};
+
+// Layout for admin routes (auth required)
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, isValidating } = useAuth();
+
+  // Show loading while validating token
+  if (isValidating) {
+    console.log("AdminLayout - showing loading");
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Navigate to={routeConstants.AUTH} replace />;
@@ -34,49 +96,49 @@ const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
 const App = () => {
   const { isAuthenticated } = useAuth();
 
+  const handleLoginSuccess = () => {
+    useSessionStore.getState().setAuthenticated(true);
+  };
+
   return (
     <Router>
       <Routes>
-        {/* Auth route - only show if not authenticated */}
+        {/* Public route - Showtimes (no auth required) */}
+        <Route
+          path={routeConstants.HOME}
+          element={
+            <PublicLayout>
+              <Showtimes />
+            </PublicLayout>
+          }
+        />
+
+        {/* Auth route - Admin login */}
         <Route
           path={routeConstants.AUTH}
           element={
             isAuthenticated ? (
-              <Navigate to={routeConstants.HOME} replace />
+              <Navigate to={routeConstants.ADMIN} replace />
             ) : (
-              <PayphoneAuth />
+              <AdminLogin onLoginSuccess={handleLoginSuccess} />
             )
           }
         />
 
-        {/* Protected routes with header */}
-        <Route
-          path={routeConstants.HOME}
-          element={
-            <AuthenticatedLayout>
-              <Showtimes />
-            </AuthenticatedLayout>
-          }
-        />
-
+        {/* Protected admin route */}
         <Route
           path={routeConstants.ADMIN}
           element={
-            <AuthenticatedLayout>
+            <AdminLayout>
               <Admin />
-            </AuthenticatedLayout>
+            </AdminLayout>
           }
         />
 
-        {/* Catch all - redirect based on auth status */}
+        {/* Catch all - redirect to home */}
         <Route
           path="*"
-          element={
-            <Navigate
-              to={isAuthenticated ? routeConstants.HOME : routeConstants.AUTH}
-              replace
-            />
-          }
+          element={<Navigate to={routeConstants.HOME} replace />}
         />
       </Routes>
     </Router>

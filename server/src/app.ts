@@ -11,6 +11,7 @@ import { initializeCronJobs } from "./services/cronService";
 import { fetchMovieDataFromOmdb } from "./services/omdbService";
 import movieEventRoutes from "./routes/movieEvents";
 import adminRoutes from "./routes/admin";
+import authRoutes from "./routes/authRoutes";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.get("/health", (req, res) => {
 // API routes
 app.use("/api/movie-events", movieEventRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/auth", authRoutes);
 
 // Debug logging
 console.log(`🔍 NODE_ENV: ${process.env.NODE_ENV}`);

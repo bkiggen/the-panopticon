@@ -8,15 +8,17 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  name           String?
+  hashedPassword String   
+  isAdmin        Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model MovieEvent {
-  id                 Int       @id @default(autoincrement())
+  id                 Int        @id @default(autoincrement())
   date               DateTime  
   title              String
   originalTitle      String
@@ -24,11 +26,11 @@ model MovieEvent {
   format             String
   imageUrl           String
   ariaLabel          String
-  genres             String[]  // Array of strings for genres - remove...
-  description        String?   // Optional text field
-  trailerUrl         String?   // Optional URL
-  imdbId             String?   // Optional IMDB identifier
-  rottenTomatoesId   String?   // Optional Rotten Tomatoes identifier
+  genres             String[]  // Scraped data
+  description        String?   // Scraped data
+  trailerUrl         String?   // Scraped data
+  imdbId             String?   // Scraped data
+  rottenTomatoesId   String?   // Scraped data
   theatre            String
   accessibility      String[]
   discount           String[]
@@ -36,21 +38,23 @@ model MovieEvent {
   approvedAt         DateTime?
   scrapedAt          DateTime? 
   movieDataId        Int?
+  movieData          MovieData? @relation(fields: [movieDataId], references: [id])
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 }
 
 model MovieData {
-  id                 Int       @id @default(autoincrement())
+  id                 Int          @id @default(autoincrement())
   title              String
   originalTitle      String
-  description        String?
+  description        String?      // OMDB data
   imageUrl           String?
-  trailerUrl         String?
-  omdbId             String?   @unique // Might want unique constraint
-  imdbId             String?   @unique // Might want unique constraint
-  rottenTomatoesId   String?   @unique // Might want unique constraint
-  genres             String[]
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  trailerUrl         String?      // OMDB data
+  omdbId             String?      @unique
+  imdbId             String?      @unique // OMDB data
+  rottenTomatoesId   String?      @unique
+  genres             String[]     // OMDB data
+  movieEvents        MovieEvent[] // One-to-many relationship
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
 }

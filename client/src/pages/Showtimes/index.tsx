@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import useMovieEventStore from "@/stores/movieEventStore";
 import { Table } from "./Table";
@@ -21,6 +21,14 @@ export const Showtimes = () => {
   useEffect(() => {
     fetchEvents();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleFiltersChange = useCallback(
+    (filters: MovieEventFilters) => {
+      console.log("🚀 ~ filters:", filters);
+      fetchEvents(filters);
+    },
+    [fetchEvents]
+  );
 
   if (loading && events.length === 0) {
     return (
@@ -45,13 +53,7 @@ export const Showtimes = () => {
         onPageChange={goToPage}
         loading={loading}
         leftContent={
-          <Controls
-            data={events}
-            onFiltersChange={(filters: MovieEventFilters) => {
-              console.log("🚀 ~ filters:", filters);
-              fetchEvents(filters);
-            }}
-          />
+          <Controls data={events} onFiltersChange={handleFiltersChange} />
         }
       />
       <Table data={events} />

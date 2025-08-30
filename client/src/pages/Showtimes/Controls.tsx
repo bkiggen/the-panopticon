@@ -7,7 +7,6 @@ import {
   Button,
   IconButton,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   Badge,
@@ -20,7 +19,6 @@ import {
 import {
   Clear as ClearIcon,
   FilterAlt as FilterAltIcon,
-  Close as CloseIcon,
 } from "@mui/icons-material";
 import type { MovieEvent } from "@prismaTypes";
 import type { MovieEventFilters } from "@/services/movieEventService";
@@ -39,9 +37,9 @@ export const Controls = ({
 }: ControlsProps) => {
   const [open, setOpen] = useState(false);
 
-  // All available options
-  const allFormats = ["Digital", "35mm", "70mm", "VHS"];
-  const allAccessibility = ["Open Captions"];
+  // All available options - memoized to prevent recreation
+  const allFormats = useMemo(() => ["Digital", "35mm", "70mm", "VHS"], []);
+  const allAccessibility = useMemo(() => ["Open Captions"], []);
 
   // Filter states - initialize with any provided initial filters
   const [searchTerm, setSearchTerm] = useState(initialFilters.search || "");
@@ -49,7 +47,6 @@ export const Controls = ({
   const [selectedTheatres, setSelectedTheatres] = useState<string[]>(
     initialFilters.theatres || []
   );
-  // For checkboxes: if no initial filters provided, default to all selected
   const [selectedFormats, setSelectedFormats] = useState<string[]>(
     initialFilters.formats || allFormats
   );
@@ -60,9 +57,8 @@ export const Controls = ({
   const [dateTo, setDateTo] = useState(initialFilters.endDate || "");
   const [timeFilter, setTimeFilter] = useState(initialFilters.timeFilter || "");
 
-  useEffect(() => {
-    onFiltersChange(getCurrentFilters());
-  }, [debouncedSearchTerm]);
+  // Track if this is the initial load to prevent calling onFiltersChange on mount
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   // Extract unique values for filter options
   const filterOptions = useMemo(() => {
@@ -78,10 +74,52 @@ export const Controls = ({
       "Cinema 21",
       "Laurelhurst Theater",
       "Tomorrow Theater",
+      "Hollywood Theater",
+      "Bagdad Theater",
+      "Cinemagic",
+      "Living Room Theaters",
+      "Clinton Street Theater",
+      "Movie Madness",
     ];
 
     return { theatres, formats: allFormats, accessibility: allAccessibility };
-  }, [data]);
+  }, [data, allFormats, allAccessibility]);
+
+  // Build current filters object
+  const getCurrentFilters = (): MovieEventFilters => {
+    const filters: MovieEventFilters = {};
+    if (debouncedSearchTerm) filters.search = debouncedSearchTerm;
+    if (selectedTheatres.length > 0) filters.theatres = selectedTheatres;
+    // Only include format filter if not all formats are selected
+    if (
+      selectedFormats.length > 0 &&
+      selectedFormats.length < allFormats.length
+    ) {
+      filters.formats = selectedFormats;
+    }
+    // Only include accessibility filter if not all accessibility options are selected
+    if (
+      selectedAccessibility.length > 0 &&
+      selectedAccessibility.length < allAccessibility.length
+    ) {
+      filters.accessibility = selectedAccessibility;
+    }
+    if (dateFrom) filters.startDate = dateFrom;
+    if (dateTo) filters.endDate = dateTo;
+    if (timeFilter) filters.timeFilter = timeFilter;
+    return filters;
+  };
+
+  // Only trigger search filter changes after debounce and after initial load
+  useEffect(() => {
+    if (!hasInitialized) {
+      setHasInitialized(true);
+      return;
+    }
+
+    const filters = getCurrentFilters();
+    onFiltersChange(filters);
+  }, [debouncedSearchTerm]); // Only search triggers automatic filter changes
 
   // Handle format checkbox change
   const handleFormatChange = (format: string, checked: boolean) => {
@@ -106,41 +144,12 @@ export const Controls = ({
     }
   };
 
-  // Build current filters object
-  const getCurrentFilters = (): MovieEventFilters => {
-    const filters: MovieEventFilters = {};
-
-    if (debouncedSearchTerm) filters.search = debouncedSearchTerm;
-    if (selectedTheatres.length > 0) filters.theatres = selectedTheatres;
-
-    // Only include format filter if not all formats are selected
-    if (
-      selectedFormats.length > 0 &&
-      selectedFormats.length < allFormats.length
-    ) {
-      filters.formats = selectedFormats;
-    }
-
-    // Only include accessibility filter if not all accessibility options are selected
-    if (
-      selectedAccessibility.length > 0 &&
-      selectedAccessibility.length < allAccessibility.length
-    ) {
-      filters.accessibility = selectedAccessibility;
-    }
-
-    if (dateFrom) filters.startDate = dateFrom;
-    if (dateTo) filters.endDate = dateTo;
-    if (timeFilter) filters.timeFilter = timeFilter;
-
-    return filters;
-  };
-
   // Clear all filters
   const clearAllFilters = () => {
+    setSearchTerm("");
     setSelectedTheatres([]);
-    setSelectedFormats(allFormats); // Reset to all selected
-    setSelectedAccessibility(allAccessibility); // Reset to all selected
+    setSelectedFormats(allFormats);
+    setSelectedAccessibility(allAccessibility);
     setDateFrom("");
     setDateTo("");
     setTimeFilter("");
@@ -148,15 +157,10 @@ export const Controls = ({
     onFiltersChange({});
   };
 
-  // Apply current filters (called whenever search changes or modal applies)
+  // Apply current filters when modal closes
   const applyFilters = () => {
     const filters = getCurrentFilters();
     onFiltersChange(filters);
-  };
-
-  // Apply filters when modal closes
-  const applyModalFilters = () => {
-    applyFilters();
     setOpen(false);
   };
 
@@ -166,9 +170,10 @@ export const Controls = ({
 
   // Count active filters (excluding format/accessibility if all are selected)
   const activeFilterCount = [
+    debouncedSearchTerm,
     selectedTheatres.length > 0,
-    selectedFormats.length < allFormats.length, // Only count if some are deselected
-    selectedAccessibility.length < allAccessibility.length, // Only count if some are deselected
+    selectedFormats.length < allFormats.length,
+    selectedAccessibility.length < allAccessibility.length,
     dateFrom,
     dateTo,
     timeFilter,
@@ -335,7 +340,7 @@ export const Controls = ({
               Clear All Filters
             </Button>
           )}
-          <Button variant="contained" onClick={applyModalFilters}>
+          <Button variant="contained" onClick={applyFilters}>
             Apply Filters
           </Button>
         </DialogActions>

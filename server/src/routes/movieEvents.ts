@@ -1,5 +1,6 @@
 import express from "express";
 import * as movieEventController from "../controllers/movieEventController";
+import { adminAuth } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -10,12 +11,15 @@ router.get("/", movieEventController.getMovieEvents);
 router.get("/:id", movieEventController.getMovieEventById);
 
 // POST /api/movie-events
-router.post("/", movieEventController.createMovieEvent);
+router.post("/", adminAuth, movieEventController.createMovieEvent);
+
+// POST /api/movie-events/bulk
+router.post("/bulk", movieEventController.createMovieEvents);
 
 // PUT /api/movie-events/:id
-router.put("/:id", movieEventController.updateMovieEvent);
+router.put("/:id", adminAuth, movieEventController.updateMovieEvent);
 
 // DELETE /api/movie-events/:id
-router.delete("/:id", movieEventController.deleteMovieEvent);
+router.delete("/:id", adminAuth, movieEventController.deleteMovieEvent);
 
 export default router;
