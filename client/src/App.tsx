@@ -6,11 +6,24 @@ import { createAppTheme, ThemeMode } from "./utils/theme";
 import { ThemeToggle } from "./components/ThemeToggle";
 
 const App = () => {
-  const [themeMode, setThemeMode] = useState<ThemeMode>("light");
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem("themeMode") as ThemeMode;
+    const initialMode = saved || "dark";
+
+    if (!saved) {
+      localStorage.setItem("themeMode", initialMode);
+    }
+    return initialMode;
+  });
+
   const theme = createAppTheme(themeMode);
 
   const toggleTheme = () => {
-    setThemeMode((prev) => (prev === "light" ? "dark" : "light"));
+    setThemeMode((prev) => {
+      const newMode = prev === "light" ? "dark" : "light";
+      localStorage.setItem("themeMode", newMode);
+      return newMode;
+    });
   };
 
   return (

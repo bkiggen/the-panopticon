@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/authService";
 import useSessionStore from "@/stores/sessionStore";
@@ -7,6 +7,8 @@ import { routeConstants } from "@/routing/routeConstants";
 export const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated, clearSession } = useSessionStore();
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark";
 
   const handleLogout = () => {
     AuthService.logout();
@@ -15,10 +17,12 @@ export const Header = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: "white" }}>
+    <Box sx={{ backgroundColor: isDarkMode ? "black" : "white" }}>
       <header
         style={{
-          backgroundImage: `url(/panopticon.png)`,
+          backgroundImage: isDarkMode
+            ? `url(/panopticon-dark.png)`
+            : `url(/panopticon.png)`,
           backgroundRepeat: "repeat-x",
           backgroundPosition: "-100px 0",
           backgroundSize: "300px auto",
