@@ -88,9 +88,10 @@ export class MovieEventService {
   /**
    * Create multiple movie events in bulk (requires admin auth)
    */
-  static async createBulk(
-    data: any[]
-  ): Promise<{ message: string; count: number }> {
+  static async createBulk(data: {
+    movieData: any[];
+    isScraped: boolean;
+  }): Promise<{ message: string; count: number }> {
     const response = await ApiClient.post(
       API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BULK,
       data,

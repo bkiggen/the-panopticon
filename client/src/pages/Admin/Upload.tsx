@@ -8,6 +8,8 @@ import {
   Paper,
   CircularProgress,
   Chip,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import { Upload, CheckCircle, Error } from "@mui/icons-material";
 import { MovieEventService } from "@/services/movieEventService";
@@ -22,6 +24,7 @@ interface BulkUploadResult {
 const BulkMovieEventUpload: React.FC = () => {
   const [jsonInput, setJsonInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isScraped, setIsScraped] = useState(true);
   const [result, setResult] = useState<BulkUploadResult | null>(null);
   const [validationError, setValidationError] = useState<string>("");
 
@@ -59,7 +62,8 @@ const BulkMovieEventUpload: React.FC = () => {
 
       setValidationError("");
       return true;
-    } catch (error) {
+    } catch (error: any) {
+      console.error("JSON validation error:", error);
       setValidationError("Invalid JSON format");
       return false;
     }
@@ -80,7 +84,10 @@ const BulkMovieEventUpload: React.FC = () => {
 
     try {
       const data = JSON.parse(jsonInput);
-      const response = await MovieEventService.createBulk(data);
+      const response = await MovieEventService.createBulk({
+        movieData: data,
+        isScraped,
+      });
 
       setResult({
         success: true,
@@ -130,7 +137,7 @@ const BulkMovieEventUpload: React.FC = () => {
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Paste your JSON array of movie events below to upload multiple events
-          at once.
+          at once. Ensure all events are at the same theatre in a given upload.
         </Typography>
       </Box>
 
@@ -167,6 +174,15 @@ const BulkMovieEventUpload: React.FC = () => {
         <Button variant="outlined" onClick={handleClear} disabled={isLoading}>
           Clear
         </Button>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isScraped}
+              onChange={(e) => setIsScraped(e.target.checked)}
+            />
+          }
+          label="Mark as scraped"
+        />
       </Box>
 
       {result && (
@@ -195,22 +211,6 @@ const BulkMovieEventUpload: React.FC = () => {
           </Box>
         </Alert>
       )}
-
-      <Box sx={{ mt: 3, p: 2, bgcolor: "grey.50", borderRadius: 1 }}>
-        <Typography variant="subtitle2" gutterBottom>
-          Required Fields:
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          date, title, originalTitle, format, imageUrl, theatre
-        </Typography>
-        <Typography variant="subtitle2" sx={{ mt: 1 }} gutterBottom>
-          Optional Fields:
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          times, ariaLabel, accessibility, discount, description, genres,
-          imdbId, rottenTomatoesId, trailerUrl
-        </Typography>
-      </Box>
     </Paper>
   );
 };

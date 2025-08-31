@@ -23,6 +23,7 @@ import {
 import type { MovieEvent } from "@prismaTypes";
 import type { MovieEventFilters } from "@/services/movieEventService";
 import { useDebounce } from "@/hooks/useDebonce";
+import { theatreInfo } from "@/lib/theatreInfo";
 
 interface ControlsProps {
   data: MovieEvent[] | null;
@@ -69,18 +70,7 @@ export const Controls = ({
         accessibility: allAccessibility,
       };
 
-    const theatres = [
-      "Academy Theater",
-      "Cinema 21",
-      "Laurelhurst Theater",
-      "Tomorrow Theater",
-      "Hollywood Theater",
-      "Bagdad Theater",
-      "Cinemagic",
-      "Living Room Theaters",
-      "Clinton Street Theater",
-      "Movie Madness",
-    ];
+    const theatres = Object.keys(theatreInfo);
 
     return { theatres, formats: allFormats, accessibility: allAccessibility };
   }, [data, allFormats, allAccessibility]);

@@ -44,6 +44,51 @@ export const createAppTheme = (mode: ThemeMode) => {
           },
         },
       },
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            // fontFamily: "'Antonio', sans-serif",
+          },
+          h1: { fontFamily: "'Antonio', sans-serif" },
+          h2: { fontFamily: "'Antonio', sans-serif" },
+          h3: { fontFamily: "'Antonio', sans-serif" },
+          h4: { fontFamily: "'Antonio', sans-serif" },
+          h5: { fontFamily: "'Antonio', sans-serif" },
+          h6: { fontFamily: "'Antonio', sans-serif" },
+          body1: { fontFamily: "'Lato', sans-serif" },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            fontFamily: "'Lato', sans-serif",
+            textTransform: "none",
+          },
+        },
+      },
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            fontFamily: "'Lato', sans-serif",
+            "& .MuiInputBase-input": {
+              fontFamily: "'Lato', sans-serif",
+            },
+            "& .MuiInputLabel-root": {
+              fontFamily: "'Lato', sans-serif",
+            },
+          },
+        },
+      },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            fontFamily: "'Lato', sans-serif",
+            "& .MuiChip-label": {
+              fontFamily: "'Lato', sans-serif",
+            },
+          },
+        },
+      },
     },
   });
 };

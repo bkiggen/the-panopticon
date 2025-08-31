@@ -136,7 +136,8 @@ export const createMovieEvent = async (
 };
 
 export const createMovieEvents = async (
-  movieEventsData: Prisma.MovieEventCreateInput[]
+  movieEventsData: Prisma.MovieEventCreateInput[],
+  isScraped: boolean
 ) => {
   try {
     const transformedData = movieEventsData.map((event) => ({
@@ -153,11 +154,22 @@ export const createMovieEvents = async (
       description: event.description,
       genres: event.genres || [],
       imdbId: event.imdbId,
+      scrapedAt: isScraped ? new Date() : null,
       rottenTomatoesId: event.rottenTomatoesId,
       trailerUrl: event.trailerUrl,
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
+
+    if (isScraped) {
+      // Delete existing events that were scraped before to avoid duplicates
+      await prisma.movieEvent.deleteMany({
+        where: {
+          scrapedAt: { not: null },
+          theatre: transformedData[0].theatre,
+        },
+      });
+    }
 
     const result = await prisma.movieEvent.createMany({
       data: transformedData,

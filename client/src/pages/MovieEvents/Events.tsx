@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import type { MovieEvent } from "@prismaTypes";
+import { theatreInfo } from "@/lib/theatreInfo";
 
 interface MovieEventCardsProps {
   data: MovieEvent[] | null;
@@ -45,6 +46,15 @@ export const Events = ({ data }: MovieEventCardsProps) => {
 
   const hasValidImage = (imageUrl: string) => {
     return imageUrl && !imageUrl.includes("wp-content");
+  };
+
+  const handleTheatreClick = (event: React.MouseEvent, theatre: string) => {
+    event.stopPropagation();
+
+    const theatreWebsite = theatreInfo[theatre]?.website;
+    if (theatreWebsite) {
+      window.open(theatreWebsite, "_blank");
+    }
   };
 
   if (!data || data.length === 0) {
@@ -190,6 +200,7 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                     label={event.theatre}
                     color="primary"
                     variant="filled"
+                    onClick={(e) => handleTheatreClick(e, event.theatre)}
                     sx={{
                       fontWeight: "medium",
                       maxWidth: "100%",
