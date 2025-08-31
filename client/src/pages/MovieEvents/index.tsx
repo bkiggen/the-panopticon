@@ -1,12 +1,13 @@
 import { useCallback, useEffect } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import useMovieEventStore from "@/stores/movieEventStore";
-import { Table } from "./Table";
+// import { Table } from "./Table";
+import { Events } from "./Events";
 import { Controls } from "./Controls";
 import type { MovieEventFilters } from "@/../../models/MovieEventFilters";
 import { Pagination } from "@/components/Pagination";
 
-export const Showtimes = () => {
+export const MovieEvents = () => {
   const {
     events,
     totalEvents,
@@ -24,7 +25,6 @@ export const Showtimes = () => {
 
   const handleFiltersChange = useCallback(
     (filters: MovieEventFilters) => {
-      console.log("🚀 ~ filters:", filters);
       fetchEvents(filters);
     },
     [fetchEvents]
@@ -44,7 +44,15 @@ export const Showtimes = () => {
   }
 
   return (
-    <Box sx={{ paddingBottom: "80px", marginTop: "40px" }}>
+    <Box
+      sx={{
+        paddingBottom: "80px",
+        marginTop: "40px",
+        width: "90%",
+        maxWidth: "1200px",
+        marginX: "auto",
+      }}
+    >
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
@@ -56,7 +64,9 @@ export const Showtimes = () => {
           <Controls data={events} onFiltersChange={handleFiltersChange} />
         }
       />
-      <Table data={events} />
+      <Box sx={{ padding: "16px 0" }}>
+        <Events data={events} />
+      </Box>
     </Box>
   );
 };

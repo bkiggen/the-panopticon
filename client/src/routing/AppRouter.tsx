@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Admin } from "@/pages/Admin";
-import { Showtimes } from "@/pages/Showtimes";
+import { MovieEvents } from "@/pages/MovieEvents";
 import { Header } from "@/components/Header";
 import AdminLogin from "@/pages/Admin/Login";
 import { AuthService } from "@/services/authService";
@@ -102,12 +102,12 @@ const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        {/* Public route - Showtimes (no auth required) */}
+        {/* Public route - MovieEvents (no auth required) */}
         <Route
           path={routeConstants.HOME}
           element={
             <PublicLayout>
-              <Showtimes />
+              <MovieEvents />
             </PublicLayout>
           }
         />

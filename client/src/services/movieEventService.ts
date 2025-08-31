@@ -1,12 +1,34 @@
 import { ApiClient } from "./api/client";
 import { API_CONFIG } from "./api/config";
 
+export interface MovieEventFilters {
+  search?: string;
+  theatres?: string[];
+  formats?: string[];
+  accessibility?: string[];
+  startDate?: string;
+  endDate?: string;
+  timeFilter?: string;
+}
+
 export class MovieEventService {
   /**
    * Get all movie events (public endpoint)
    */
-  static async getAll(filters?: any): Promise<any> {
+  static async getAll(
+    filters?: MovieEventFilters,
+    page?: number,
+    limit?: number
+  ): Promise<any> {
     const queryParams = new URLSearchParams();
+
+    if (page) {
+      queryParams.append("page", page.toString());
+    }
+    if (limit) {
+      queryParams.append("limit", limit.toString());
+    }
+
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
         if (value) {
@@ -18,7 +40,6 @@ export class MovieEventService {
         }
       });
     }
-
     const endpoint = `${API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BASE}${
       queryParams.toString() ? `?${queryParams.toString()}` : ""
     }`;
