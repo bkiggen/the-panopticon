@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/authService";
 import useSessionStore from "@/stores/sessionStore";
 import { routeConstants } from "@/routing/routeConstants";
+import { SponsorBox } from "./SponsorBox";
 export const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated, clearSession } = useSessionStore();
@@ -73,6 +74,7 @@ export const Header = () => {
             height: "90px",
           }}
         />
+        <SponsorBox />
       </Box>
     </>
   );
