@@ -13,6 +13,9 @@
     "db:seed": "npx prisma db seed",
     "cinema21": "npx ts-node src/cron/scrapers/cinema21.ts"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
