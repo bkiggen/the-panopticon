@@ -68,7 +68,6 @@ export const Events = ({ data }: MovieEventCardsProps) => {
               cursor: "pointer",
               transition: "all 0.2s ease-in-out",
               boxShadow: "none",
-              border: `1px solid ${theme.palette.divider}`,
               "&:hover": {
                 boxShadow: theme.shadows[4],
                 backgroundColor: theme.palette.action.hover,

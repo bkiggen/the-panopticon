@@ -28,5 +28,22 @@ export const createAppTheme = (mode: ThemeMode) => {
         secondary: mode === "light" ? "#666666" : "#b0b0b0",
       },
     },
+    components: {
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            backgroundColor: mode === "light" ? "#ffffffff" : "#1a1a1a",
+            boxShadow: mode === "light" ? "0 2px 8px rgba(0,0,0,0.1)" : "none",
+            border: mode === "light" ? "1px solid #444444" : "none",
+            outline: "none",
+            transition: "all 0.2s ease-in-out",
+            "&:hover": {
+              boxShadow:
+                mode === "light" ? "0 4px 16px rgba(0,0,0,0.15)" : "none",
+            },
+          },
+        },
+      },
+    },
   });
 };

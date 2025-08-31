@@ -86,8 +86,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         gap: 2,
         py: 2,
         px: 2,
-        borderTop: "1px solid",
-        borderColor: "divider",
+        borderRadius: 1,
         backgroundColor: "background.paper",
       }}
     >
