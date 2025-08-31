@@ -15,7 +15,7 @@ export const Header = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ backgroundColor: "white" }}>
       <header
         style={{
           backgroundImage: `url(/panopticon.png)`,
