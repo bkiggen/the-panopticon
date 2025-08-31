@@ -13,6 +13,11 @@ export function initializeCronJobs(): void {
           "Scrapers completed successfully at",
           new Date().toISOString()
         );
+        await fetchMovieDataFromOmdb();
+        console.log(
+          "OMDb data fetch completed successfully at",
+          new Date().toISOString()
+        );
       } catch (error: any) {
         console.error("Scraper job failed:", error.message);
       }

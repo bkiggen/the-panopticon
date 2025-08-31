@@ -1,26 +1,17 @@
 import { Box, Button } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/authService";
 import useSessionStore from "@/stores/sessionStore";
 import { routeConstants } from "@/routing/routeConstants";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { isAuthenticated, clearSession } = useSessionStore();
 
   const handleLogout = () => {
     AuthService.logout();
     clearSession();
     navigate(routeConstants.HOME);
-  };
-
-  const handleAdminClick = () => {
-    if (isAuthenticated) {
-      navigate(routeConstants.ADMIN);
-    } else {
-      navigate(routeConstants.AUTH);
-    }
   };
 
   return (

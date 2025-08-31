@@ -9,6 +9,9 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
   try {
     // 1. Get all movieEvent titles from database
     const movieEvents = await prisma.movieEvent.findMany({
+      where: {
+        movieDataId: null,
+      },
       select: {
         title: true,
       },
