@@ -10,7 +10,6 @@ router.post("/login", authController.login);
 // Protected routes
 router.get("/validate", authenticateToken, authController.validateToken);
 
-// Admin creation route (you might want to remove this in production or add extra security)
-router.post("/create-admin", authController.createAdmin);
+// router.post("/create-admin", authController.createAdmin);
 
 export default router;
