@@ -99,6 +99,9 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                 }}
                 image={event.imageUrl}
                 alt={event.title}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
               />
             )}
 
