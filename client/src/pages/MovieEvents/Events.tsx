@@ -5,9 +5,6 @@ import {
   CardMedia,
   Chip,
   Typography,
-  Modal,
-  Paper,
-  Button,
   useTheme,
   useMediaQuery,
   Stack,
@@ -17,6 +14,8 @@ import type { MovieEvent } from "@prismaTypes";
 import { theatreInfo } from "@/lib/theatreInfo";
 import { FormatChip } from "@/components/FormatChip";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
+import { formatDate, hasValidImage } from "@/utils/general";
+import { EventModal } from "./EventModal";
 
 interface MovieEventCardsProps {
   data: MovieEvent[] | null;
@@ -36,19 +35,6 @@ export const Events = ({ data }: MovieEventCardsProps) => {
   const handleModalClose = () => {
     setModalOpen(false);
     setSelectedEvent(null);
-  };
-
-  const formatDate = (date: string | Date) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      weekday: isMobile ? "short" : "long",
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    });
-  };
-
-  const hasValidImage = (imageUrl: string) => {
-    return imageUrl && !imageUrl.includes("wp-content");
   };
 
   const handleTheatreClick = (event: React.MouseEvent, theatre: string) => {
@@ -147,7 +133,7 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                     color="text.secondary"
                     sx={{ mb: isMobile ? 2 : 0 }}
                   >
-                    {formatDate(event.date)}
+                    {formatDate(event.date, isMobile)}
                   </Typography>
                 </Box>
 
@@ -165,30 +151,26 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                       display: "flex",
                       flexWrap: "wrap",
                       gap: 0.5,
-                      maxHeight: isMobile ? "none" : "60px",
                       overflow: "hidden",
                     }}
                   >
-                    {event.times
-                      .slice(0, isMobile ? 4 : 6)
-                      .map((time, index) => (
-                        <Chip
-                          key={index}
-                          label={time}
-                          size="small"
-                          variant="outlined"
-                          sx={{ fontSize: "0.75rem" }}
-                        />
-                      ))}
-                    {event.times.length > (isMobile ? 4 : 6) && (
+                    {event.times.map((time, index) => (
                       <Chip
-                        label={`+${event.times.length - (isMobile ? 4 : 6)}`}
+                        key={index}
+                        label={time}
                         size="small"
                         variant="outlined"
-                        color="secondary"
+                        clickable
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(
+                            theatreInfo[event.theatre]?.website,
+                            "_blank"
+                          );
+                        }}
                         sx={{ fontSize: "0.75rem" }}
                       />
-                    )}
+                    ))}
                   </Box>
                 </Box>
 
@@ -241,111 +223,11 @@ export const Events = ({ data }: MovieEventCardsProps) => {
           </Card>
         ))}
       </Stack>
-
-      {/* Modal for movie details */}
-      <Modal
+      <EventModal
         open={modalOpen}
         onClose={handleModalClose}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Paper
-          sx={{
-            width: "90%",
-            maxWidth: 600,
-            maxHeight: "90%",
-            overflow: "auto",
-            p: 4,
-            outline: "none",
-          }}
-        >
-          {selectedEvent && hasValidImage(selectedEvent.imageUrl) && (
-            <Box sx={{ mb: 3, textAlign: "center" }}>
-              <img
-                src={selectedEvent.imageUrl}
-                alt={selectedEvent.title}
-                style={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  maxHeight: 400,
-                  objectFit: "contain",
-                }}
-              />
-            </Box>
-          )}
-
-          <Typography variant="h4" gutterBottom>
-            {selectedEvent?.title}
-          </Typography>
-
-          <Typography variant="h6" color="text.secondary" gutterBottom>
-            {selectedEvent && formatDate(selectedEvent.date)}
-          </Typography>
-
-          {/* All showtimes */}
-          <Box sx={{ my: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Showtimes
-            </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {selectedEvent?.times.map((time, index) => (
-                <Chip key={index} label={time} variant="outlined" />
-              ))}
-            </Box>
-          </Box>
-
-          {/* Theater and format info */}
-          <Box sx={{ my: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Details
-            </Typography>
-            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-              <Chip
-                label={selectedEvent?.theatre}
-                color="primary"
-                variant="filled"
-              />
-              <Chip
-                label={selectedEvent?.format}
-                color="info"
-                variant="outlined"
-              />
-            </Stack>
-
-            {selectedEvent?.accessibility &&
-              selectedEvent.accessibility.length > 0 && (
-                <Box>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Accessibility Features
-                  </Typography>
-                  <Stack direction="row" spacing={1}>
-                    {selectedEvent.accessibility.map((feature, index) => (
-                      <Chip
-                        key={index}
-                        label={feature}
-                        color="success"
-                        variant="outlined"
-                        size="small"
-                        avatar={
-                          <HeadphonesIcon sx={{ "*": { color: "#4caf50" } }} />
-                        }
-                      />
-                    ))}
-                  </Stack>
-                </Box>
-              )}
-          </Box>
-
-          <Box sx={{ mt: 4, display: "flex", justifyContent: "flex-end" }}>
-            <Button onClick={handleModalClose} variant="contained">
-              Close
-            </Button>
-          </Box>
-        </Paper>
-      </Modal>
+        selectedEvent={selectedEvent}
+      />
     </Box>
   );
 };
