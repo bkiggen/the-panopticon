@@ -8,7 +8,11 @@ interface ThemeToggleProps {
 
 export function ThemeToggle({ isDark, onToggle }: ThemeToggleProps) {
   return (
-    <IconButton onClick={onToggle} color="inherit">
+    <IconButton
+      onClick={onToggle}
+      color="inherit"
+      sx={{ position: "fixed", bottom: "0" }}
+    >
       {isDark ? <Brightness7 /> : <Brightness4 />}
     </IconButton>
   );

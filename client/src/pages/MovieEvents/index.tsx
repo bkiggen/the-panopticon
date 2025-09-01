@@ -32,12 +32,7 @@ export const MovieEvents = () => {
 
   if (loading && events.length === 0) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="200px"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center">
         <CircularProgress />
       </Box>
     );

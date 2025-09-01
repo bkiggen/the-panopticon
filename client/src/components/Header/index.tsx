@@ -31,6 +31,8 @@ export const Header = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            position: "sticky",
+            top: 0,
           }}
         >
           {/* Navigation buttons */}
