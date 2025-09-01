@@ -22,7 +22,7 @@ export const SponsorBox = () => {
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <Button sx={{ height: "20px", textTransform: "none", px: "6px" }}>
           <Link
-            href="https://example.com"
+            href="https://patreon.com/PanopticonPDX"
             target="_blank"
             rel="noopener"
             color="primary"
@@ -33,7 +33,7 @@ export const SponsorBox = () => {
         </Button>
         <Button sx={{ height: "20px", textTransform: "none", px: "6px" }}>
           <Link
-            href="https://example.com"
+            href="https://www.instagram.com/pictureshowcollections/"
             target="_blank"
             rel="noopener"
             color="primary"
