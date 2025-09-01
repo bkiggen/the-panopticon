@@ -3,19 +3,20 @@ import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  const email = process.env.ADMIN_EMAIL;
-  const password = process.env.ADMIN_PASSWORD;
-  const name = process.env.ADMIN_NAME;
+const createAdminUser = async (
+  email?: string,
+  password?: string,
+  name?: string
+) => {
+  const saltRounds = 12;
 
   if (!email || !password || !name) {
     console.error(
-      "❌ ADMIN_EMAIL, ADMIN_PASSWORD, and ADMIN_NAME must be set in environment variables"
+      "❌ ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME must be set in environment variables"
     );
     process.exit(1);
   }
 
-  const saltRounds = 12;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -33,6 +34,23 @@ async function main() {
   } else {
     console.log("ℹ️ Admin already exists");
   }
+};
+
+async function main() {
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
+  const name = process.env.ADMIN_NAME;
+  const email2 = process.env.ADMIN_EMAIL_2;
+  const password2 = process.env.ADMIN_PASSWORD_2;
+  const name2 = process.env.ADMIN_NAME_2;
+  const usersToSeed = [
+    { email, password, name },
+    { email: email2, password: password2, name: name2 },
+  ];
+
+  usersToSeed.forEach(async (user) => {
+    await createAdminUser(user.email, user.password, user.name);
+  });
 }
 
 main()
