@@ -15,6 +15,8 @@ import {
 import { useState } from "react";
 import type { MovieEvent } from "@prismaTypes";
 import { theatreInfo } from "@/lib/theatreInfo";
+import { FormatChip } from "@/components/FormatChip";
+import HeadphonesIcon from "@mui/icons-material/Headphones";
 
 interface MovieEventCardsProps {
   data: MovieEvent[] | null;
@@ -210,22 +212,15 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                       maxWidth: "100%",
                     }}
                   />
-
                   <Box
                     sx={{
                       display: "flex",
                       flexWrap: "wrap",
-                      gap: 0.5,
+                      gap: 1,
                       justifyContent: isMobile ? "flex-start" : "flex-end",
                     }}
                   >
-                    <Chip
-                      label={event.format}
-                      size="small"
-                      color="info"
-                      variant="outlined"
-                    />
-
+                    <FormatChip format={event.format} />
                     {event.accessibility?.map((feature, index) => (
                       <Chip
                         key={index}
@@ -234,6 +229,9 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                         color="success"
                         variant="outlined"
                         sx={{ fontSize: "0.7rem" }}
+                        avatar={
+                          <HeadphonesIcon sx={{ "*": { color: "#4caf50" } }} />
+                        }
                       />
                     ))}
                   </Box>
@@ -331,6 +329,9 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                         color="success"
                         variant="outlined"
                         size="small"
+                        avatar={
+                          <HeadphonesIcon sx={{ "*": { color: "#4caf50" } }} />
+                        }
                       />
                     ))}
                   </Stack>

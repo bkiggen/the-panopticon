@@ -1,5 +1,5 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/authService";
 import useSessionStore from "@/stores/sessionStore";
 import { routeConstants } from "@/routing/routeConstants";
@@ -7,6 +7,8 @@ import { SponsorBox } from "./SponsorBox";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { pathname: route } = location;
   const { isAuthenticated, clearSession } = useSessionStore();
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
@@ -36,6 +38,7 @@ export const Header = () => {
             <Button
               variant="text"
               onClick={() => navigate(routeConstants.HOME)}
+              sx={{ color: route === routeConstants.HOME ? "red" : "inherit" }}
               size="small"
             >
               <Typography variant="h6">Home</Typography>
@@ -43,6 +46,9 @@ export const Header = () => {
             <Button
               variant="text"
               onClick={() => navigate(routeConstants.ADMIN)}
+              sx={{
+                color: route === routeConstants.ADMIN ? "red" : "inherit",
+              }}
               size="small"
             >
               <Typography variant="h6">Admin</Typography>
