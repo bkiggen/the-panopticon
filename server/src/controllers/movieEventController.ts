@@ -1,20 +1,17 @@
 import { Request, Response } from "express";
 import * as movieEventService from "../services/movieEventService";
+import { startOfToday, format } from "date-fns";
 
 export const getMovieEvents = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
 
-    // Get today's date at start of day (00:00:00)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayISOString = today.toISOString().split("T")[0]; // YYYY-MM-DD format
+    const today = startOfToday();
 
-    // Handle startDate logic
     let startDate = req.query.startDate as string;
-    if (!startDate || new Date(startDate) < today) {
-      startDate = todayISOString;
+    if (!startDate) {
+      startDate = format(today, "yyyy-MM-dd");
     }
 
     const filters: movieEventService.MovieEventFilters = {
@@ -37,6 +34,7 @@ export const getMovieEvents = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 export const getMovieEventById = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);

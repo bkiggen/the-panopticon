@@ -41,6 +41,7 @@ export const Events = ({ data }: MovieEventCardsProps) => {
       weekday: isMobile ? "short" : "long",
       month: "short",
       day: "numeric",
+      timeZone: "UTC",
     });
   };
 
