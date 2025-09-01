@@ -5,12 +5,24 @@ export const getMovieEvents = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
+
+    // Get today's date at start of day (00:00:00)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayISOString = today.toISOString().split("T")[0]; // YYYY-MM-DD format
+
+    // Handle startDate logic
+    let startDate = req.query.startDate as string;
+    if (!startDate || new Date(startDate) < today) {
+      startDate = todayISOString;
+    }
+
     const filters: movieEventService.MovieEventFilters = {
       search: req.query.search as string,
       theatres: (req.query.theatres as string)?.split(",") || [],
       formats: (req.query.formats as string)?.split(",") || [],
       accessibility: (req.query.accessibility as string)?.split(",") || [],
-      startDate: req.query.startDate as string,
+      startDate: startDate,
       endDate: req.query.endDate as string,
       timeFilter: req.query.timeFilter as string,
     };
@@ -25,7 +37,6 @@ export const getMovieEvents = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 export const getMovieEventById = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);

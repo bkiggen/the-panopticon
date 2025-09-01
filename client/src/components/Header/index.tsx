@@ -11,9 +11,10 @@ export const Header = () => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
 
-  const handleLogout = () => {
-    AuthService.logout();
-    clearSession();
+  const handleLogout = async () => {
+    await AuthService.logout();
+    await clearSession();
+
     navigate(routeConstants.HOME);
   };
 
