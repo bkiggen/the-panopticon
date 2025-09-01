@@ -49,10 +49,10 @@ export const Controls = ({
     initialFilters.theatres || []
   );
   const [selectedFormats, setSelectedFormats] = useState<string[]>(
-    initialFilters.formats || allFormats
+    initialFilters.formats || []
   );
   const [selectedAccessibility, setSelectedAccessibility] = useState<string[]>(
-    initialFilters.accessibility || allAccessibility
+    initialFilters.accessibility || []
   );
   const [dateFrom, setDateFrom] = useState(initialFilters.startDate || "");
   const [dateTo, setDateTo] = useState(initialFilters.endDate || "");
@@ -81,17 +81,11 @@ export const Controls = ({
     if (debouncedSearchTerm) filters.search = debouncedSearchTerm;
     if (selectedTheatres.length > 0) filters.theatres = selectedTheatres;
     // Only include format filter if not all formats are selected
-    if (
-      selectedFormats.length > 0 &&
-      selectedFormats.length < allFormats.length
-    ) {
+    if (selectedFormats.length > 0) {
       filters.formats = selectedFormats;
     }
     // Only include accessibility filter if not all accessibility options are selected
-    if (
-      selectedAccessibility.length > 0 &&
-      selectedAccessibility.length < allAccessibility.length
-    ) {
+    if (selectedAccessibility.length > 0) {
       filters.accessibility = selectedAccessibility;
     }
     if (dateFrom) filters.startDate = dateFrom;
@@ -109,7 +103,7 @@ export const Controls = ({
 
     const filters = getCurrentFilters();
     onFiltersChange(filters);
-  }, [debouncedSearchTerm]); // Only search triggers automatic filter changes
+  }, [debouncedSearchTerm]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle format checkbox change
   const handleFormatChange = (format: string, checked: boolean) => {
@@ -162,8 +156,8 @@ export const Controls = ({
   const activeFilterCount = [
     debouncedSearchTerm,
     selectedTheatres.length > 0,
-    selectedFormats.length < allFormats.length,
-    selectedAccessibility.length < allAccessibility.length,
+    selectedFormats.length > 0,
+    selectedAccessibility.length > 0,
     dateFrom,
     dateTo,
     timeFilter,
