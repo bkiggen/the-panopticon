@@ -67,7 +67,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
 
   // Pagination initial state
   currentPage: 1,
-  pageSize: 50,
+  pageSize: 100,
   totalEvents: 0,
   totalPages: 0,
 

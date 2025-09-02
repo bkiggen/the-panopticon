@@ -7,7 +7,7 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
   console.log("Starting OMDB data fetch process...");
 
   try {
-    // 1. Get all movieEvent titles from database
+    // 1. Get all movieEvent titles from database that don't have movie data
     const movieEvents = await prisma.movieEvent.findMany({
       where: {
         movieDataId: null,
@@ -17,7 +17,7 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
       },
     });
 
-    console.log(`Found ${movieEvents.length} total movie events`);
+    console.log(`Found ${movieEvents.length} movie events without movie data`);
 
     // 2. Find unique titles
     const uniqueTitles = [...new Set(movieEvents.map((event) => event.title))];
@@ -51,6 +51,7 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
         ];
 
         let found = false;
+        let omdbData = null;
 
         for (let i = 0; i < searchStrategies.length && !found; i++) {
           const searchTitle = searchStrategies[i].trim();
@@ -64,6 +65,7 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
           const response = await axios.get(url);
 
           if (response.data.Response === "True") {
+            omdbData = response.data;
             results.push({
               originalTitle: title,
               searchTitle: searchTitle,
@@ -84,7 +86,66 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
           await new Promise((resolve) => setTimeout(resolve, 100));
         }
 
-        if (!found) {
+        // 5. Save to database if found
+        if (found && omdbData) {
+          try {
+            // Check if movie data already exists (avoid duplicates)
+            const existingMovieData = await prisma.movieData.findFirst({
+              where: {
+                imdbId: omdbData.imdbID,
+              },
+            });
+
+            let movieDataId;
+
+            if (existingMovieData) {
+              console.log(
+                `  📋 Using existing movie data for IMDB ID: ${omdbData.imdbID}`
+              );
+              movieDataId = existingMovieData.id;
+            } else {
+              // Create new movie data record
+              const movieDataRecord = await prisma.movieData.create({
+                data: {
+                  title: omdbData.Title,
+                  originalTitle: omdbData.Title, // or use a different field if available
+                  description: omdbData.Plot,
+                  imageUrl: omdbData.Poster !== "N/A" ? omdbData.Poster : null,
+                  trailerUrl: null, // OMDB doesn't provide trailer URLs
+                  omdbId: omdbData.imdbID, // Use imdbID as omdbId
+                  imdbId: omdbData.imdbID,
+                  rottenTomatoesId: null, // OMDB doesn't provide this
+                  genres: omdbData.Genre ? omdbData.Genre.split(", ") : [], // Convert comma-separated string to array
+                },
+              });
+
+              movieDataId = movieDataRecord.id;
+              console.log(
+                `  💾 Created new movie data record with ID: ${movieDataId}`
+              );
+            }
+
+            // 6. Associate movie events with this movie data
+            const updateResult = await prisma.movieEvent.updateMany({
+              where: {
+                title: title,
+                movieDataId: null,
+              },
+              data: {
+                movieDataId: movieDataId,
+              },
+            });
+
+            console.log(
+              `  🔗 Associated ${updateResult.count} movie events with movie data`
+            );
+          } catch (dbError: any) {
+            console.error(
+              `Error saving movie data for "${title}":`,
+              dbError.message
+            );
+          }
+        } else {
           console.log(`❌ No data found for: "${title}" with any strategy`);
         }
       } catch (error: any) {
@@ -92,12 +153,48 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
       }
     }
 
-    // 5. Console log results
-    console.log("\n=== OMDB SEARCH RESULTS ===");
-    console.log(JSON.stringify(results, null, 2));
+    // 7. Clean up orphaned movie data
+    console.log("\n=== CLEANING UP ORPHANED MOVIE DATA ===");
+
+    const orphanedMovieData = await prisma.movieData.findMany({
+      where: {
+        movieEvents: {
+          none: {},
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+
+    if (orphanedMovieData.length > 0) {
+      console.log(
+        `Found ${orphanedMovieData.length} orphaned movie data records`
+      );
+
+      const deleteResult = await prisma.movieData.deleteMany({
+        where: {
+          movieEvents: {
+            none: {},
+          },
+        },
+      });
+
+      console.log(
+        `🗑️ Deleted ${deleteResult.count} orphaned movie data records`
+      );
+    } else {
+      console.log("No orphaned movie data found");
+    }
+
+    // 8. Final summary
+    console.log("\n=== SUMMARY ===");
+    console.log(`Processed ${titlesToSearch.length} titles`);
     console.log(
-      `\nCompleted OMDB search. Found data for ${results.length}/${titlesToSearch.length} movies.`
+      `Successfully found and saved data for ${results.length} movies`
     );
+    console.log("OMDB data fetch process completed successfully!");
   } catch (error) {
     console.error("Error in OMDB data fetch process:", error);
     throw error;

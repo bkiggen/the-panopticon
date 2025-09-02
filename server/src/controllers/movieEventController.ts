@@ -5,7 +5,7 @@ import { startOfToday, format } from "date-fns";
 export const getMovieEvents = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
+    const limit = parseInt(req.query.limit as string) || 100;
 
     const today = startOfToday();
 

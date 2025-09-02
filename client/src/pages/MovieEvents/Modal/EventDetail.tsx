@@ -1,0 +1,177 @@
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Chip,
+  Typography,
+  Paper,
+  Stack,
+  useTheme,
+  CircularProgress,
+  useMediaQuery,
+} from "@mui/material";
+import HeadphonesIcon from "@mui/icons-material/Headphones";
+import { formatDate, hasValidImage } from "@/utils/general";
+import { MovieEventService } from "@/services/movieEventService";
+
+import type { MovieEvent } from "@prismaTypes";
+
+type EventModalProps = {
+  onClose: () => void;
+  selectedEvent: MovieEvent | null;
+};
+
+export const EventDetail = ({ onClose, selectedEvent }: EventModalProps) => {
+  const theme = useTheme();
+
+  const [loading, setLoading] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [allTitleEvents, setAllTitleEvents] = useState<MovieEvent[]>([]);
+
+  // Fetch all events with the same title when modal opens
+  useEffect(() => {
+    const fetchEventsByTitle = async () => {
+      if (!selectedEvent?.title || !open) return;
+
+      setLoading(true);
+      try {
+        const result = await MovieEventService.getAll(
+          { search: selectedEvent.title },
+          1,
+          100
+        );
+        setAllTitleEvents(result.events || []);
+      } catch (error) {
+        console.error("Failed to fetch events by title:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEventsByTitle();
+  }, [selectedEvent?.title, open]);
+
+  const groupedEvents = allTitleEvents.reduce((groups, event) => {
+    const key = `${event.date}-${event.theatre}`;
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(event);
+    return groups;
+  }, {} as Record<string, MovieEvent[]>);
+
+  return (
+    <Paper
+      sx={{
+        maxWidth: 600,
+        maxHeight: "90%",
+        overflow: "auto",
+        p: 4,
+        outline: "none",
+      }}
+    >
+      {selectedEvent && hasValidImage(selectedEvent.imageUrl) && (
+        <Box sx={{ mb: 3, textAlign: "center" }}>
+          <img
+            src={selectedEvent.imageUrl}
+            alt={selectedEvent.title}
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+              maxHeight: 400,
+              objectFit: "contain",
+            }}
+          />
+        </Box>
+      )}
+
+      <Typography variant="h4" gutterBottom>
+        {selectedEvent?.title}
+      </Typography>
+
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", my: 3 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          {/* All showings for this title */}
+          <Box sx={{ my: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              All Showings ({allTitleEvents.length} found)
+            </Typography>
+
+            {Object.entries(groupedEvents).map(([key, events]) => {
+              const event = events[0]; // Use first event for date/theatre info
+              const allTimes = events.flatMap((e) => e.times);
+
+              return (
+                <Box
+                  key={key}
+                  sx={{
+                    mb: 2,
+                    p: 2,
+                    bgcolor: "background.paper",
+                    border: 1,
+                    borderColor: "divider",
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    {formatDate(event.date, isMobile)} • {event.theatre}
+                  </Typography>
+
+                  <Stack direction="row" spacing={1} sx={{ mt: 1, mb: 1 }}>
+                    <Chip
+                      label={event.format}
+                      color="info"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Stack>
+
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {allTimes.map((time, index) => (
+                      <Chip
+                        key={index}
+                        label={time}
+                        variant="outlined"
+                        size="small"
+                      />
+                    ))}
+                  </Box>
+
+                  {event.accessibility && event.accessibility.length > 0 && (
+                    <Box sx={{ mt: 1 }}>
+                      <Stack direction="row" spacing={0.5}>
+                        {event.accessibility.map((feature, index) => (
+                          <Chip
+                            key={index}
+                            label={feature}
+                            color="success"
+                            variant="outlined"
+                            size="small"
+                            avatar={
+                              <HeadphonesIcon
+                                sx={{ "*": { color: "#4caf50" } }}
+                              />
+                            }
+                          />
+                        ))}
+                      </Stack>
+                    </Box>
+                  )}
+                </Box>
+              );
+            })}
+
+            {allTitleEvents.length === 0 && !loading && (
+              <Typography color="text.secondary">
+                No other showings found for this title.
+              </Typography>
+            )}
+          </Box>
+        </>
+      )}
+    </Paper>
+  );
+};

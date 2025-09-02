@@ -15,7 +15,7 @@ import { theatreInfo } from "@/lib/theatreInfo";
 import { FormatChip } from "@/components/FormatChip";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import { formatDate, hasValidImage } from "@/utils/general";
-import { EventModal } from "./EventModal";
+import { EventModal } from "./Modal";
 
 interface MovieEventCardsProps {
   data: MovieEvent[] | null;

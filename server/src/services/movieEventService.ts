@@ -14,7 +14,7 @@ export interface MovieEventFilters {
 export const getAllMovieEvents = async (
   filters: MovieEventFilters = {},
   page: number = 1,
-  limit: number = 10
+  limit: number = 100
 ): Promise<{ events: MovieEvent[]; total: number; totalPages: number }> => {
   const skip = (page - 1) * limit;
 
@@ -83,9 +83,12 @@ export const getAllMovieEvents = async (
   const [events, total] = await Promise.all([
     prisma.movieEvent.findMany({
       where,
+      include: {
+        movieData: true,
+      },
       skip,
       take: limit,
-      orderBy: { date: "asc" },
+      orderBy: [{ date: "asc" }, { theatre: "asc" }],
     }),
     prisma.movieEvent.count({ where }),
   ]);
