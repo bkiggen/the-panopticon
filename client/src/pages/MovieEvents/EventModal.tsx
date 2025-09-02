@@ -8,10 +8,14 @@ import {
   Stack,
   useMediaQuery,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
+import { useState, useEffect } from "react";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import { formatDate, hasValidImage } from "@/utils/general";
 import type { MovieEvent } from "@prismaTypes";
+import { MovieEventService } from "@/services/movieEventService";
+import CloseIcon from "@mui/icons-material/Close";
 
 type EventModalProps = {
   open: boolean;
@@ -26,6 +30,41 @@ export const EventModal = ({
 }: EventModalProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [allTitleEvents, setAllTitleEvents] = useState<MovieEvent[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch all events with the same title when modal opens
+  useEffect(() => {
+    const fetchEventsByTitle = async () => {
+      if (!selectedEvent?.title || !open) return;
+
+      setLoading(true);
+      try {
+        const result = await MovieEventService.getAll(
+          { search: selectedEvent.title },
+          1,
+          100
+        );
+        setAllTitleEvents(result.events || []);
+      } catch (error) {
+        console.error("Failed to fetch events by title:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEventsByTitle();
+  }, [selectedEvent?.title, open]);
+
+  // Group events by date and theatre for better display
+  const groupedEvents = allTitleEvents.reduce((groups, event) => {
+    const key = `${event.date}-${event.theatre}`;
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(event);
+    return groups;
+  }, {} as Record<string, MovieEvent[]>);
 
   return (
     <Modal
@@ -45,8 +84,13 @@ export const EventModal = ({
           overflow: "auto",
           p: 4,
           outline: "none",
+          position: "relative",
         }}
       >
+        <CloseIcon
+          onClick={onClose}
+          sx={{ position: "absolute", top: 16, right: 16, cursor: "pointer" }}
+        />
         {selectedEvent && hasValidImage(selectedEvent.imageUrl) && (
           <Box sx={{ mb: 3, textAlign: "center" }}>
             <img
@@ -66,69 +110,90 @@ export const EventModal = ({
           {selectedEvent?.title}
         </Typography>
 
-        <Typography variant="h6" color="text.secondary" gutterBottom>
-          {selectedEvent && formatDate(selectedEvent.date, isMobile)}
-        </Typography>
-
-        {/* All showtimes */}
-        <Box sx={{ my: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            Showtimes
-          </Typography>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-            {selectedEvent?.times.map((time, index) => (
-              <Chip key={index} label={time} variant="outlined" />
-            ))}
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", my: 3 }}>
+            <CircularProgress />
           </Box>
-        </Box>
+        ) : (
+          <>
+            {/* All showings for this title */}
+            <Box sx={{ my: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                All Showings ({allTitleEvents.length} found)
+              </Typography>
 
-        {/* Theater and format info */}
-        <Box sx={{ my: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            Details
-          </Typography>
-          <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-            <Chip
-              label={selectedEvent?.theatre}
-              color="primary"
-              variant="filled"
-            />
-            <Chip
-              label={selectedEvent?.format}
-              color="info"
-              variant="outlined"
-            />
-          </Stack>
+              {Object.entries(groupedEvents).map(([key, events]) => {
+                const event = events[0]; // Use first event for date/theatre info
+                const allTimes = events.flatMap((e) => e.times);
 
-          {selectedEvent?.accessibility &&
-            selectedEvent.accessibility.length > 0 && (
-              <Box>
-                <Typography variant="subtitle2" gutterBottom>
-                  Accessibility Features
+                return (
+                  <Box
+                    key={key}
+                    sx={{
+                      mb: 2,
+                      p: 2,
+                      bgcolor: "background.paper",
+                      border: 1,
+                      borderColor: "divider",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      {formatDate(event.date, isMobile)} • {event.theatre}
+                    </Typography>
+
+                    <Stack direction="row" spacing={1} sx={{ mt: 1, mb: 1 }}>
+                      <Chip
+                        label={event.format}
+                        color="info"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Stack>
+
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {allTimes.map((time, index) => (
+                        <Chip
+                          key={index}
+                          label={time}
+                          variant="outlined"
+                          size="small"
+                        />
+                      ))}
+                    </Box>
+
+                    {event.accessibility && event.accessibility.length > 0 && (
+                      <Box sx={{ mt: 1 }}>
+                        <Stack direction="row" spacing={0.5}>
+                          {event.accessibility.map((feature, index) => (
+                            <Chip
+                              key={index}
+                              label={feature}
+                              color="success"
+                              variant="outlined"
+                              size="small"
+                              avatar={
+                                <HeadphonesIcon
+                                  sx={{ "*": { color: "#4caf50" } }}
+                                />
+                              }
+                            />
+                          ))}
+                        </Stack>
+                      </Box>
+                    )}
+                  </Box>
+                );
+              })}
+
+              {allTitleEvents.length === 0 && !loading && (
+                <Typography color="text.secondary">
+                  No other showings found for this title.
                 </Typography>
-                <Stack direction="row" spacing={1}>
-                  {selectedEvent.accessibility.map((feature, index) => (
-                    <Chip
-                      key={index}
-                      label={feature}
-                      color="success"
-                      variant="outlined"
-                      size="small"
-                      avatar={
-                        <HeadphonesIcon sx={{ "*": { color: "#4caf50" } }} />
-                      }
-                    />
-                  ))}
-                </Stack>
-              </Box>
-            )}
-        </Box>
-
-        <Box sx={{ mt: 4, display: "flex", justifyContent: "flex-end" }}>
-          <Button onClick={onClose} variant="contained">
-            Close
-          </Button>
-        </Box>
+              )}
+            </Box>
+          </>
+        )}
       </Paper>
     </Modal>
   );
