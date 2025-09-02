@@ -108,9 +108,9 @@ export const Header = () => {
               ? `url(/panopticon-dark.png)`
               : `url(/panopticon.png)`,
             backgroundRepeat: "repeat-x",
-            backgroundPosition: "-100px 0",
+            backgroundPosition: "-100px -4px",
             backgroundSize: "300px auto",
-            height: "calc(90px - var(--scroll-progress, 0) * 48px)",
+            height: "calc(90px - var(--scroll-progress, 0) * 52px)",
             overflow: "hidden",
             willChange: "height",
           }}
