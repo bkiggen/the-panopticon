@@ -4,7 +4,6 @@ import {
   Typography,
   Modal,
   Paper,
-  Button,
   Stack,
   useMediaQuery,
   useTheme,
