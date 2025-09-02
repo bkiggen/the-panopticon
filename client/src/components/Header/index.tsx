@@ -1,5 +1,6 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { AuthService } from "@/services/authService";
 import useSessionStore from "@/stores/sessionStore";
 import { routeConstants } from "@/routing/routeConstants";
@@ -13,15 +14,44 @@ export const Header = () => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
 
+  // CSS custom property approach for smooth scroll
+  useEffect(() => {
+    const updateScrollProgress = () => {
+      const scrolled = window.scrollY;
+      const maxScroll = 200;
+      const progress = Math.min(scrolled / maxScroll, 1);
+      document.documentElement.style.setProperty(
+        "--scroll-progress",
+        progress.toString()
+      );
+    };
+
+    // Use requestAnimationFrame for smooth updates
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateScrollProgress();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    updateScrollProgress(); // Set initial value
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleLogout = async () => {
     await AuthService.logout();
     await clearSession();
-
     navigate(routeConstants.HOME);
   };
 
   return (
-    <>
+    <Box sx={{ zIndex: 1000, position: "sticky", top: 0 }}>
       {isAuthenticated && (
         <Box
           sx={{
@@ -31,8 +61,6 @@ export const Header = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            position: "sticky",
-            top: 0,
           }}
         >
           {/* Navigation buttons */}
@@ -71,21 +99,24 @@ export const Header = () => {
         </Box>
       )}
 
-      {/* Main header */}
+      {/* Main header with CSS custom property animation */}
       <Box sx={{ backgroundColor: isDarkMode ? "black" : "white" }}>
-        <header
-          style={{
+        <Box
+          component="header"
+          sx={{
             backgroundImage: isDarkMode
               ? `url(/panopticon-dark.png)`
               : `url(/panopticon.png)`,
             backgroundRepeat: "repeat-x",
             backgroundPosition: "-100px 0",
             backgroundSize: "300px auto",
-            height: "90px",
+            height: "calc(90px - var(--scroll-progress, 0) * 48px)",
+            overflow: "hidden",
+            willChange: "height",
           }}
         />
-        {!isAuthenticated && <SponsorBox />}
+        {route === routeConstants.ADMIN ? null : <SponsorBox />}
       </Box>
-    </>
+    </Box>
   );
 };

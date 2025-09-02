@@ -8,12 +8,14 @@ export const SponsorBox = () => {
   return (
     <Box
       sx={{
-        backgroundColor: isDarkMode ? "#1a1a1a" : "#f5f5f5",
+        backgroundColor: isDarkMode ? "black" : "#f5f5f5",
         py: 1,
         px: 2,
         display: "flex",
         justifyContent: "flex-start",
         alignItems: "center",
+        position: "sticky",
+        top: 0,
       }}
     >
       <Typography variant="body2" color="textSecondary" sx={{ mr: 1 }}>

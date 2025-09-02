@@ -132,8 +132,8 @@ export const Controls = ({
   const clearAllFilters = () => {
     setSearchTerm("");
     setSelectedTheatres([]);
-    setSelectedFormats(allFormats);
-    setSelectedAccessibility(allAccessibility);
+    setSelectedFormats([]);
+    setSelectedAccessibility([]);
     setDateFrom("");
     setDateTo("");
     setTimeFilter("");
