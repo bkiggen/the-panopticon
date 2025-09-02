@@ -1,4 +1,4 @@
-import { Box, Link, Button } from "@mui/material";
+import { Box, Link, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 export const SponsorBox = () => {
@@ -18,6 +18,9 @@ export const SponsorBox = () => {
         top: 0,
       }}
     >
+      <Typography variant="body2" color="textSecondary" sx={{ mr: 1 }}>
+        Sponsors:
+      </Typography>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <Button sx={{ height: "20px", textTransform: "none", px: "6px" }}>
           <Link
