@@ -41,6 +41,33 @@ export const Controls = ({
   // All available options - memoized to prevent recreation
   const allFormats = useMemo(() => ["Digital", "35mm", "70mm", "VHS"], []);
   const allAccessibility = useMemo(() => ["Open Captions"], []);
+  const allGenres = useMemo(
+    () => [
+      "Action",
+      "Adventure",
+      "Animation",
+      "Biography",
+      "Comedy",
+      "Crime",
+      "Documentary",
+      "Drama",
+      "Family",
+      "Fantasy",
+      "Film-Noir",
+      "History",
+      "Horror",
+      "Music",
+      "Musical",
+      "Mystery",
+      "Romance",
+      "Sci-Fi",
+      "Sport",
+      "Thriller",
+      "War",
+      "Western",
+    ],
+    []
+  );
 
   // Filter states - initialize with any provided initial filters
   const [searchTerm, setSearchTerm] = useState(initialFilters.search || "");
@@ -53,6 +80,9 @@ export const Controls = ({
   );
   const [selectedAccessibility, setSelectedAccessibility] = useState<string[]>(
     initialFilters.accessibility || []
+  );
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    initialFilters.genres || []
   );
   const [dateFrom, setDateFrom] = useState(initialFilters.startDate || "");
   const [dateTo, setDateTo] = useState(initialFilters.endDate || "");
@@ -68,12 +98,16 @@ export const Controls = ({
         theatres: [],
         formats: allFormats,
         accessibility: allAccessibility,
+        genres: allGenres,
       };
-
     const theatres = Object.keys(theatreInfo);
-
-    return { theatres, formats: allFormats, accessibility: allAccessibility };
-  }, [data, allFormats, allAccessibility]);
+    return {
+      theatres,
+      formats: allFormats,
+      accessibility: allAccessibility,
+      genres: allGenres,
+    };
+  }, [data, allFormats, allAccessibility, allGenres]);
 
   // Build current filters object
   const getCurrentFilters = (): MovieEventFilters => {
@@ -88,6 +122,10 @@ export const Controls = ({
     if (selectedAccessibility.length > 0) {
       filters.accessibility = selectedAccessibility;
     }
+    // Only include genre filter if genres are selected
+    if (selectedGenres.length > 0) {
+      filters.genres = selectedGenres;
+    }
     if (dateFrom) filters.startDate = dateFrom;
     if (dateTo) filters.endDate = dateTo;
     if (timeFilter) filters.timeFilter = timeFilter;
@@ -100,7 +138,6 @@ export const Controls = ({
       setHasInitialized(true);
       return;
     }
-
     const filters = getCurrentFilters();
     onFiltersChange(filters);
   }, [debouncedSearchTerm]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -134,6 +171,7 @@ export const Controls = ({
     setSelectedTheatres([]);
     setSelectedFormats([]);
     setSelectedAccessibility([]);
+    setSelectedGenres([]);
     setDateFrom("");
     setDateTo("");
     setTimeFilter("");
@@ -152,12 +190,13 @@ export const Controls = ({
     setSearchTerm(e.target.value);
   };
 
-  // Count active filters (excluding format/accessibility if all are selected)
+  // Count active filters (excluding format/accessibility/genres if all are selected)
   const activeFilterCount = [
     debouncedSearchTerm,
     selectedTheatres.length > 0,
     selectedFormats.length > 0,
     selectedAccessibility.length > 0,
+    selectedGenres.length > 0,
     dateFrom,
     dateTo,
     timeFilter,
@@ -255,7 +294,36 @@ export const Controls = ({
               </Box>
             </Box>
 
-            {/* Row 3: Format and Accessibility Checkboxes */}
+            {/* Row 3: Genres */}
+            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+              <Box sx={{ flex: 1, minWidth: 250 }}>
+                <Autocomplete
+                  multiple
+                  options={filterOptions.genres}
+                  value={selectedGenres}
+                  onChange={(_, newValue) => setSelectedGenres(newValue)}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip
+                        variant="outlined"
+                        label={option}
+                        {...getTagProps({ index })}
+                        key={option}
+                      />
+                    ))
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Select Genres"
+                      placeholder="Choose genres..."
+                    />
+                  )}
+                />
+              </Box>
+            </Box>
+
+            {/* Row 4: Format and Accessibility Checkboxes */}
             <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
               {/* Format Checkboxes */}
               <Box sx={{ flex: 1, minWidth: 200 }}>

@@ -9,6 +9,7 @@ export interface MovieEventFilters {
   startDate?: string;
   endDate?: string;
   timeFilter?: string;
+  genres?: string[];
 }
 
 export class MovieEventService {

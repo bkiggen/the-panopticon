@@ -19,6 +19,7 @@ export const getMovieEvents = async (req: Request, res: Response) => {
       theatres: (req.query.theatres as string)?.split(",") || [],
       formats: (req.query.formats as string)?.split(",") || [],
       accessibility: (req.query.accessibility as string)?.split(",") || [],
+      genres: (req.query.genres as string)?.split(",") || [],
       startDate: startDate,
       endDate: req.query.endDate as string,
       timeFilter: req.query.timeFilter as string,

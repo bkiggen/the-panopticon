@@ -6,6 +6,7 @@ export interface MovieEventFilters {
   theatres?: string[];
   formats?: string[];
   accessibility?: string[];
+  genres?: string[];
   startDate?: string;
   endDate?: string;
   timeFilter?: string;
@@ -20,6 +21,15 @@ export const getAllMovieEvents = async (
 
   // Build the where clause based on filters
   const where: any = {};
+
+  if (filters.genres && filters.genres.length > 0) {
+    where.movieData = {
+      ...where.movieData, // Preserve any existing movieData conditions
+      genres: {
+        hasSome: filters.genres,
+      },
+    };
+  }
 
   if (filters.search) {
     where.OR = [
