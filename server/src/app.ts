@@ -21,7 +21,24 @@ const prisma = new PrismaClient();
 const PORT = parseInt(process.env.PORT || "3000", 10);
 
 // Middleware
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": [
+          "'self'",
+          "data:",
+          "https://img.vwassets.com",
+          "https://m.media-amazon.com",
+          "https://hollywoodtheatre.org",
+          "https://www.laurelhurst.com",
+          "https://www.laurelhursttheater.com",
+        ],
+      },
+    },
+  })
+);
 app.use(cors());
 app.use(morgan("combined"));
 app.use(express.json());
