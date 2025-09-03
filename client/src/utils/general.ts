@@ -10,3 +10,10 @@ export const formatDate = (date: string | Date, isMobile: boolean) => {
 export const hasValidImage = (imageUrl: string) => {
   return imageUrl && !imageUrl.includes("wp-content");
 };
+
+export const getBestData = (eventValue: any, movieDataValue: any) => {
+  if (Array.isArray(eventValue) && eventValue.length === 0) {
+    eventValue = null;
+  }
+  return eventValue || movieDataValue || null;
+};

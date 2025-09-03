@@ -1,8 +1,9 @@
-import { Box, Typography, Paper, Chip, Stack } from "@mui/material";
-import type { MovieEvent } from "@prismaTypes";
+import { Box, Typography, Paper, Chip, Stack, Link } from "@mui/material";
+import type { MovieEventWithDataProps } from "@/types/types";
+import { getBestData } from "@/utils/general";
 
 type MovieDataProps = {
-  selectedEvent: (MovieEvent & { movieData: any }) | null;
+  selectedEvent: MovieEventWithDataProps;
 };
 
 export const MovieData = ({ selectedEvent }: MovieDataProps) => {
@@ -15,14 +16,6 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
   }
 
   const movieData = selectedEvent.movieData;
-
-  // Helper function to get the best available data (event first, then movieData fallback)
-  const getBestData = (eventValue: any, movieDataValue: any) => {
-    if (Array.isArray(eventValue) && eventValue.length === 0) {
-      eventValue = null;
-    }
-    return eventValue || movieDataValue || null;
-  };
 
   const displayTitle =
     getBestData(selectedEvent.originalTitle, movieData?.originalTitle) ||
@@ -50,22 +43,20 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
 
       {/* Movie poster from either source */}
       {displayImageUrl && (
-        <Box sx={{ mb: 3, textAlign: "center" }}>
-          <img
-            src={displayImageUrl}
-            alt={displayTitle}
-            style={{
-              maxWidth: "100%",
-              height: "auto",
-              maxHeight: 300,
-              objectFit: "contain",
-            }}
-          />
-        </Box>
+        <img
+          src={displayImageUrl}
+          alt={displayTitle}
+          style={{
+            maxWidth: "100%",
+            width: "100%",
+            height: "auto",
+            objectFit: "contain",
+          }}
+        />
       )}
 
       {/* Technical Details */}
-      <Paper sx={{ p: 3, mb: 3 }} elevation={1}>
+      <Paper sx={{ py: 3, mb: 3 }} elevation={1}>
         <Typography variant="h6" gutterBottom>
           Technical Details
         </Typography>
@@ -139,7 +130,7 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
       </Paper>
 
       {/* Movie Information */}
-      <Paper sx={{ p: 3, mb: 3 }} elevation={1}>
+      <Paper sx={{ py: 3, mb: 3 }} elevation={1}>
         <Typography variant="h6" gutterBottom>
           Synopsis
         </Typography>
@@ -172,7 +163,7 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
 
       {/* External Links */}
       {(selectedEvent.imdbId || movieData?.imdbId) && (
-        <Paper sx={{ p: 3 }} elevation={1}>
+        <Paper sx={{ py: 3 }} elevation={1}>
           <Typography variant="h6" gutterBottom>
             External Links
           </Typography>
@@ -215,7 +206,15 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
       {movieData && (
         <Box sx={{ mt: 2, textAlign: "center" }}>
           <Typography variant="caption" color="text.secondary">
-            Movie information enhanced with data from www.omdb.com
+            Movie information enhanced with data from{" "}
+            <a
+              href="https://www.omdbapi.com/"
+              style={{ cursor: "pointer", color: "white" }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              www.omdb.com
+            </a>
           </Typography>
         </Box>
       )}

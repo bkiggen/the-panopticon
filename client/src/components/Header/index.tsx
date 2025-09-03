@@ -13,6 +13,7 @@ export const Header = () => {
   const { isAuthenticated, clearSession } = useSessionStore();
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
+  const userIsPatreonMember = false; // TODO: Replace with real check
 
   // CSS custom property approach for smooth scroll
   useEffect(() => {
@@ -115,7 +116,9 @@ export const Header = () => {
             willChange: "height",
           }}
         />
-        {route === routeConstants.ADMIN ? null : <SponsorBox />}
+        {route === routeConstants.ADMIN || userIsPatreonMember ? null : (
+          <SponsorBox />
+        )}
       </Box>
     </Box>
   );

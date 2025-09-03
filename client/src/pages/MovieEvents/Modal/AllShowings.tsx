@@ -10,17 +10,16 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
-import { formatDate, hasValidImage } from "@/utils/general";
+import { formatDate } from "@/utils/general";
 import { MovieEventService } from "@/services/movieEventService";
 
 import type { MovieEvent } from "@prismaTypes";
 
 type EventModalProps = {
-  onClose: () => void;
   selectedEvent: MovieEvent | null;
 };
 
-export const EventDetail = ({ onClose, selectedEvent }: EventModalProps) => {
+export const AllShowings = ({ selectedEvent }: EventModalProps) => {
   const theme = useTheme();
 
   const [loading, setLoading] = useState(false);
@@ -67,23 +66,9 @@ export const EventDetail = ({ onClose, selectedEvent }: EventModalProps) => {
         overflow: "auto",
         p: 4,
         outline: "none",
+        boxShadow: "none",
       }}
     >
-      {selectedEvent && hasValidImage(selectedEvent.imageUrl) && (
-        <Box sx={{ mb: 3, textAlign: "center" }}>
-          <img
-            src={selectedEvent.imageUrl}
-            alt={selectedEvent.title}
-            style={{
-              maxWidth: "100%",
-              height: "auto",
-              maxHeight: 400,
-              objectFit: "contain",
-            }}
-          />
-        </Box>
-      )}
-
       <Typography variant="h4" gutterBottom>
         {selectedEvent?.title}
       </Typography>

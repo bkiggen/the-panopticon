@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Modal, Paper, Tabs, Tab, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import type { MovieEvent } from "@prismaTypes";
-import { EventDetail } from "./EventDetail";
-import { MovieData } from "./MovieData"; // You'll need to create this component
+import type { MovieEventWithDataProps } from "@/types/types";
+import { AllShowings } from "./AllShowings";
+import { MovieData } from "./MovieData";
 
 type EventModalProps = {
   open: boolean;
   onClose: () => void;
-  selectedEvent: MovieEvent | null;
+  selectedEvent: MovieEventWithDataProps;
 };
 
 export const EventModal = ({
@@ -61,15 +61,13 @@ export const EventModal = ({
             onChange={handleTabChange}
             aria-label="event tabs"
           >
-            <Tab label="Showtimes" />
+            <Tab label="All Showings" />
             <Tab label="Info" />
           </Tabs>
         </Box>
         {/* Tab Content */}
         <Box sx={{ flex: 1, overflow: "auto" }}>
-          {tabValue === 0 && (
-            <EventDetail onClose={onClose} selectedEvent={selectedEvent} />
-          )}
+          {tabValue === 0 && <AllShowings selectedEvent={selectedEvent} />}
           {tabValue === 1 && <MovieData selectedEvent={selectedEvent} />}
         </Box>
       </Paper>
