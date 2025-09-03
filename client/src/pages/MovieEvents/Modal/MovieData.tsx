@@ -26,7 +26,10 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
   );
   const displayGenres =
     getBestData(selectedEvent.genres, movieData?.genres) || [];
-  const displayImageUrl = movieData?.imageUrl;
+  const displayImageUrl = getBestData(
+    selectedEvent.imageUrl,
+    movieData?.imageUrl
+  );
   const displayTrailerUrl = getBestData(
     selectedEvent.trailerUrl,
     movieData?.trailerUrl
@@ -43,6 +46,7 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
         <img
           src={displayImageUrl}
           alt={displayTitle}
+          referrerPolicy="no-referrer"
           style={{
             maxWidth: "100%",
             width: "100%",
