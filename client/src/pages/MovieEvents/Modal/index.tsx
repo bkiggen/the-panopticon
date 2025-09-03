@@ -8,7 +8,7 @@ import { MovieData } from "./MovieData";
 type EventModalProps = {
   open: boolean;
   onClose: () => void;
-  selectedEvent: MovieEventWithDataProps;
+  selectedEvent: MovieEventWithDataProps | null;
 };
 
 export const EventModal = ({

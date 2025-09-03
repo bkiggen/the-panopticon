@@ -1,9 +1,9 @@
-import { Box, Typography, Paper, Chip, Stack, Link } from "@mui/material";
+import { Box, Typography, Paper, Chip, Stack } from "@mui/material";
 import type { MovieEventWithDataProps } from "@/types/types";
 import { getBestData } from "@/utils/general";
 
 type MovieDataProps = {
-  selectedEvent: MovieEventWithDataProps;
+  selectedEvent: MovieEventWithDataProps | null;
 };
 
 export const MovieData = ({ selectedEvent }: MovieDataProps) => {
@@ -26,10 +26,7 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
   );
   const displayGenres =
     getBestData(selectedEvent.genres, movieData?.genres) || [];
-  const displayImageUrl = getBestData(
-    selectedEvent.imageUrl,
-    movieData?.imageUrl
-  );
+  const displayImageUrl = movieData?.imageUrl;
   const displayTrailerUrl = getBestData(
     selectedEvent.trailerUrl,
     movieData?.trailerUrl

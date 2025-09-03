@@ -2,7 +2,6 @@ import {
   Box,
   Card,
   CardContent,
-  CardMedia,
   Chip,
   Typography,
   useTheme,
@@ -10,11 +9,10 @@ import {
   Stack,
 } from "@mui/material";
 import { useState } from "react";
-import type { MovieEvent } from "@prismaTypes";
 import { theatreInfo } from "@/lib/theatreInfo";
 import { FormatChip } from "@/components/FormatChip";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
-import { formatDate, hasValidImage } from "@/utils/general";
+import { formatDate } from "@/utils/general";
 import type { MovieEventWithDataProps } from "@/types/types";
 import { getBestData } from "@/utils/general";
 import { EventModal } from "./Modal";
@@ -27,9 +25,10 @@ export const Events = ({ data }: MovieEventCardsProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<MovieEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] =
+    useState<MovieEventWithDataProps | null>(null);
 
-  const handleCardClick = (event: MovieEvent) => {
+  const handleCardClick = (event: MovieEventWithDataProps) => {
     setSelectedEvent(event);
     setModalOpen(true);
   };
