@@ -11,13 +11,10 @@ import { initializeCronJobs } from "./services/cronService";
 import movieEventRoutes from "./routes/movieEvents";
 import adminRoutes from "./routes/admin";
 import authRoutes from "./routes/authRoutes";
-import { runTomorrowTheaterScraper } from "./cron/scrapers/tomorrow";
 
 dotenv.config();
 
 initializeCronJobs();
-
-runTomorrowTheaterScraper();
 
 const app = express();
 const prisma = new PrismaClient();
@@ -37,6 +34,7 @@ app.use(
           "https://hollywoodtheatre.org",
           "https://www.laurelhurst.com",
           "https://www.laurelhursttheater.com",
+          "https://ticketing.useast.veezi.com",
         ],
       },
     },

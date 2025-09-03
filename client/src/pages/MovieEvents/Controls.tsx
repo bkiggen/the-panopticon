@@ -100,7 +100,7 @@ export const Controls = ({
         accessibility: allAccessibility,
         genres: allGenres,
       };
-    const theatres = Object.keys(theatreInfo);
+    const theatres = Object.keys(theatreInfo).sort();
     return {
       theatres,
       formats: allFormats,

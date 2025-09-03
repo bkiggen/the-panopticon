@@ -4,6 +4,7 @@ import { runAcademyScraper } from "../cron/scrapers/academy";
 import { runLaurelhurstScraper } from "../cron/scrapers/laurelhurst";
 import { runTomorrowTheaterScraper } from "../cron/scrapers/tomorrow";
 import { fetchMovieDataFromOmdb } from "../services/omdbService";
+import { runStJohnsCinemaScraper } from "@/cron/scrapers/stJohns";
 
 export const runScrapers = async (req: Request, res: Response) => {
   try {
@@ -15,10 +16,10 @@ export const runScrapers = async (req: Request, res: Response) => {
     await runLaurelhurstScraper();
     // Tomorrow theater (not working)
     await runTomorrowTheaterScraper();
+    // St Johns
+    await runStJohnsCinemaScraper();
 
     // Clinton
-    // Hollywood
-    // St Johns
     // Living Room
     // 5th Ave Cinema
     // Movie Madness

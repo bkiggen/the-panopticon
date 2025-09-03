@@ -66,4 +66,16 @@ export const theatreInfo: Record<string, theatreInfo> = {
     phone: "(503) 234-4363",
     neighborhood: "Belmont",
   },
+  "St. Johns Cinema": {
+    website: "https://www.stjohnscinema.com",
+    address: "8720 N Lombard St, Portland, OR 97203",
+    phone: "(503) 283-5088",
+    neighborhood: "St. Johns",
+  },
+  "5th Avenue Cinema": {
+    website: "https://www.5thavenuecinema.com",
+    address: "510 SW Hall St, Portland, OR 97201",
+    phone: "(503) 222-1158",
+    neighborhood: "Downtown",
+  },
 };
