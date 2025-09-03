@@ -46,7 +46,6 @@ export const MovieData = ({ selectedEvent }: MovieDataProps) => {
         <img
           src={displayImageUrl}
           alt={displayTitle}
-          referrerPolicy="no-referrer"
           style={{
             maxWidth: "100%",
             width: "100%",
