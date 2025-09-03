@@ -1,6 +1,5 @@
 import cron from "node-cron";
 import axios from "axios";
-import { fetchMovieDataFromOmdb } from "./omdbService";
 
 export function initializeCronJobs(): void {
   if (process.env.NODE_ENV === "production") {
@@ -8,16 +7,6 @@ export function initializeCronJobs(): void {
       try {
         console.log("Running scheduled scrapers...");
         await sendScraperRequest();
-        await fetchMovieDataFromOmdb();
-        console.log(
-          "Scrapers completed successfully at",
-          new Date().toISOString()
-        );
-        await fetchMovieDataFromOmdb();
-        console.log(
-          "OMDb data fetch completed successfully at",
-          new Date().toISOString()
-        );
       } catch (error: any) {
         console.error("Scraper job failed:", error.message);
       }
