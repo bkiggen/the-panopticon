@@ -13,7 +13,7 @@ export const runScrapers = async (req: Request, res: Response) => {
     await runAcademyScraper();
     // Laurelhurst theater
     await runLaurelhurstScraper();
-    // Tomorrow theater
+    // Tomorrow theater (not working)
     await runTomorrowTheaterScraper();
 
     // Clinton

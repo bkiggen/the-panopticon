@@ -46,7 +46,7 @@ class TomorrowTheaterScraper {
     let browser;
     try {
       browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
       const page = await browser.newPage();
@@ -80,6 +80,10 @@ class TomorrowTheaterScraper {
           const tagEls = showEl.querySelectorAll(".pill");
           const showTimesEl = showEl.querySelectorAll(".showtimes .showtime");
 
+          // Get the date from the data-date attribute (Unix timestamp)
+          const dateElement = showEl.querySelector(".show-date[data-date]");
+          const unixTimestamp = dateElement?.getAttribute("data-date");
+
           const title = titleEl?.textContent.trim() ?? null;
           const url = titleEl?.href ?? null;
           const imageUrl = imageEl?.src ?? null;
@@ -96,21 +100,27 @@ class TomorrowTheaterScraper {
             imageUrl,
             runtime,
             description,
+            unixTimestamp: unixTimestamp ? parseInt(unixTimestamp) : null, // Add this
             showtimes: Array.from(showTimesEl).map((el) =>
               el.textContent.trim()
             ),
             tags,
           });
         });
-
         return shows;
       });
       // Post-process into flat events like in your Cinema21 format
       const events = [];
       for (const show of rawData) {
         console.log("🚀 ~ TomorrowTheaterScraper ~ scrapeMovies ~ show:", show);
+
+        // Convert Unix timestamp to proper date
+        const eventDate = show.unixTimestamp
+          ? new Date(show.unixTimestamp * 1000) // Unix timestamps are in seconds, JS needs milliseconds
+          : new Date(); // fallback to today
+
         events.push({
-          date: new Date(this.parseDateText(show.showtimes[0])),
+          date: eventDate,
           title: show.title,
           originalTitle: show.title,
           times: show.showtimes,
@@ -123,7 +133,6 @@ class TomorrowTheaterScraper {
             : [],
         });
       }
-
       return events;
     } catch (error) {
       throw new Error(`Failed to scrape Tomorrow Theater: ${error.message}`);

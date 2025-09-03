@@ -13,7 +13,7 @@ export const Header = () => {
   const { isAuthenticated, clearSession } = useSessionStore();
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
-  const userIsPatreonMember = false; // TODO: Replace with real check
+  const userIsPatreonMember = true; // TODO: Replace with real check
 
   // CSS custom property approach for smooth scroll
   useEffect(() => {
