@@ -11,13 +11,10 @@ import { initializeCronJobs } from "./services/cronService";
 import movieEventRoutes from "./routes/movieEvents";
 import adminRoutes from "./routes/admin";
 import authRoutes from "./routes/authRoutes";
-import { runCSTScraper } from "./cron/scrapers/clinton";
 
 dotenv.config();
 
 initializeCronJobs();
-
-runCSTScraper();
 
 const app = express();
 const prisma = new PrismaClient();
