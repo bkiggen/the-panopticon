@@ -61,14 +61,14 @@ export const EventModal = ({
             onChange={handleTabChange}
             aria-label="event tabs"
           >
-            <Tab label="All Showings" />
             <Tab label="Info" />
+            <Tab label="All Showings" />
           </Tabs>
         </Box>
         {/* Tab Content */}
         <Box sx={{ flex: 1, overflow: "auto" }}>
-          {tabValue === 0 && <AllShowings selectedEvent={selectedEvent} />}
-          {tabValue === 1 && <MovieData selectedEvent={selectedEvent} />}
+          {tabValue === 0 && <MovieData selectedEvent={selectedEvent} />}
+          {tabValue === 1 && <AllShowings selectedEvent={selectedEvent} />}
         </Box>
       </Paper>
     </Modal>

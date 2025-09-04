@@ -17,6 +17,7 @@
     "@mui/x-data-grid": "^8.9.2",
     "@mui/x-date-pickers": "^8.9.2",
     "@types/react-router-dom": "^5.3.3",
+    "gtag": "^1.0.1",
     "lucide-react": "^0.536.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
