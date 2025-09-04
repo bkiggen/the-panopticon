@@ -270,6 +270,7 @@ export const Controls = ({
               <Box sx={{ flex: 1, minWidth: 250 }}>
                 <Autocomplete
                   multiple
+                  disableCloseOnSelect
                   options={filterOptions.theatres}
                   value={selectedTheatres}
                   onChange={(_, newValue) => setSelectedTheatres(newValue)}
@@ -299,6 +300,7 @@ export const Controls = ({
               <Box sx={{ flex: 1, minWidth: 250 }}>
                 <Autocomplete
                   multiple
+                  disableCloseOnSelect
                   options={filterOptions.genres}
                   value={selectedGenres}
                   onChange={(_, newValue) => setSelectedGenres(newValue)}
