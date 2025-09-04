@@ -93,7 +93,7 @@ class HumanLikeAcademyScraper {
 
   async setupHumanBrowser() {
     const browser = await puppeteer.launch({
-      headless: false, // Keep visible to appear more human
+      headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",

@@ -1,6 +1,6 @@
 // @ts-nocheck
 // THIS IS UNRELIABLE
-// Cinemagic Theater Scraper - Fixed with Calendar Navigation
+// Cinemagic Scraper - Fixed with Calendar Navigation
 import puppeteer from "puppeteer";
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
@@ -21,7 +21,7 @@ class CinemagicScraper {
 
   constructor() {
     this.baseUrl = "https://tickets.thecinemagictheater.com/now-showing";
-    this.theatreName = "Cinemagic Theater";
+    this.theatreName = "Cinemagic";
   }
 
   // Helper function to parse date from various formats
@@ -246,7 +246,7 @@ class CinemagicScraper {
       console.log(`📊 Found ${allEvents.length} total events`);
       return allEvents.sort((a, b) => a.date.getTime() - b.date.getTime());
     } catch (error: any) {
-      throw new Error(`Failed to scrape Cinemagic Theater: ${error.message}`);
+      throw new Error(`Failed to scrape Cinemagic: ${error.message}`);
     } finally {
       if (browser) {
         await browser.close();
@@ -455,9 +455,7 @@ class CinemagicScraper {
 async function run() {
   const scraper = new CinemagicScraper();
   try {
-    console.log(
-      `🎬 Starting Cinemagic Theater scraper for ${DAYS_TO_SCRAPE} days...`
-    );
+    console.log(`🎬 Starting Cinemagic scraper for ${DAYS_TO_SCRAPE} days...`);
 
     const events = await scraper.scrapeEvents(DAYS_TO_SCRAPE);
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 import BulkMovieEventUpload from "./Upload";
-import { Scraper } from "./Scraper";
+import { Actions } from "./Actions";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -44,7 +44,7 @@ export const Admin = () => {
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} aria-label="admin tabs">
           <Tab label="Bulk Upload" {...a11yProps(0)} />
-          <Tab label="Trigger" {...a11yProps(1)} />
+          <Tab label="Actions" {...a11yProps(1)} />
         </Tabs>
       </Box>
 
@@ -53,7 +53,7 @@ export const Admin = () => {
       </TabPanel>
 
       <TabPanel value={value} index={1}>
-        <Scraper />
+        <Actions />
       </TabPanel>
     </Box>
   );

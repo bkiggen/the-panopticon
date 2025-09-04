@@ -113,3 +113,14 @@ export const deleteMovieEvent = async (req: Request, res: Response) => {
     res.status(400).json({ error: "Failed to delete movie event" });
   }
 };
+
+export const deleteAllMovieEvents = async (req: Request, res: Response) => {
+  try {
+    await movieEventService.deleteAllMovieEvents();
+    res
+      .status(200)
+      .json({ message: "All movie events and associated data deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete all movie events" });
+  }
+};

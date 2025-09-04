@@ -22,4 +22,11 @@ router.put("/:id", adminAuth, movieEventController.updateMovieEvent);
 // DELETE /api/movie-events/:id
 router.delete("/:id", adminAuth, movieEventController.deleteMovieEvent);
 
+// POST /api/movie-events/delete-all
+router.post(
+  "/delete-all",
+  adminAuth,
+  movieEventController.deleteAllMovieEvents
+);
+
 export default router;

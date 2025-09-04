@@ -12,6 +12,7 @@ interface MovieEventState {
   events: MovieEventWithDataProps[];
   selectedEvent: MovieEventWithDataProps | null;
   loading: boolean;
+  submitting: boolean;
   error: string | null;
   filters: MovieEventFilters;
 
@@ -29,6 +30,7 @@ interface MovieEventState {
   setEvents: (events: MovieEventWithDataProps[]) => void;
   setSelectedEvent: (event: MovieEventWithDataProps | null) => void;
   setLoading: (loading: boolean) => void;
+  setSubmitting: (submitting: boolean) => void;
   setError: (error: string | null) => void;
   setFilters: (filters: MovieEventFilters) => void;
   setPagination: (
@@ -63,6 +65,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
   events: [],
   selectedEvent: null,
   loading: false,
+  submitting: false,
   error: null,
   filters: {},
 
@@ -93,6 +96,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
   setEvents: (events) => set({ events }),
   setSelectedEvent: (selectedEvent) => set({ selectedEvent }),
   setLoading: (loading) => set({ loading }),
+  setSubmitting: (submitting) => set({ submitting }),
   setError: (error) => set({ error }),
   setFilters: (filters) => set({ filters }),
   setPagination: (currentPage, pageSize, totalEvents, totalPages) =>
@@ -157,7 +161,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
     const state = get();
 
     try {
-      state.setLoading(true);
+      state.setSubmitting(true);
       state.clearError();
 
       await MovieEventService.create(data);
@@ -171,7 +175,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
       console.error("Error creating event:", error);
       throw error; // Re-throw so component can handle it
     } finally {
-      state.setLoading(false);
+      state.setSubmitting(false);
     }
   },
 
@@ -179,7 +183,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
     const state = get();
 
     try {
-      state.setLoading(true);
+      state.setSubmitting(true);
       state.clearError();
 
       const updatedEvent = await MovieEventService.update(id, data);
@@ -203,7 +207,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
       console.error("Error updating event:", error);
       throw error;
     } finally {
-      state.setLoading(false);
+      state.setSubmitting(false);
     }
   },
 
@@ -211,7 +215,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
     const state = get();
 
     try {
-      state.setLoading(true);
+      state.setSubmitting(true);
       state.clearError();
 
       await MovieEventService.delete(id);
@@ -230,7 +234,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
       console.error("Error deleting event:", error);
       throw error;
     } finally {
-      state.setLoading(false);
+      state.setSubmitting(false);
     }
   },
 

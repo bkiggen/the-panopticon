@@ -141,4 +141,21 @@ export class MovieEventService {
       throw new Error(`Failed to delete movie event: ${response.statusText}`);
     }
   }
+
+  /**
+   * Delete all movie events (requires admin auth)
+   */
+  static async deleteAll(): Promise<void> {
+    const response = await ApiClient.post(
+      API_CONFIG.ENDPOINTS.MOVIE_EVENTS.DELETE_ALL,
+      {},
+      true
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to delete all movie events: ${response.statusText}`
+      );
+    }
+  }
 }

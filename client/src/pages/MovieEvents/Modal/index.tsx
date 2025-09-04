@@ -67,7 +67,9 @@ export const EventModal = ({
         </Box>
         {/* Tab Content */}
         <Box sx={{ flex: 1, overflow: "auto" }}>
-          {tabValue === 0 && <MovieData selectedEvent={selectedEvent} />}
+          {tabValue === 0 && (
+            <MovieData selectedEvent={selectedEvent} onClose={onClose} />
+          )}
           {tabValue === 1 && <AllShowings selectedEvent={selectedEvent} />}
         </Box>
       </Paper>

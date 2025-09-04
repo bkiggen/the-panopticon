@@ -9,6 +9,7 @@ export const API_CONFIG = {
     MOVIE_EVENTS: {
       BASE: "/movie-events",
       BULK: "/movie-events/bulk",
+      DELETE_ALL: "/movie-events/delete-all",
       BY_ID: (id: number) => `/movie-events/${id}`,
     },
   },

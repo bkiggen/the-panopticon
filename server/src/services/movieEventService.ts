@@ -210,3 +210,8 @@ export const deleteMovieEvent = async (id: number): Promise<MovieEvent> => {
     where: { id },
   });
 };
+
+export const deleteAllMovieEvents = async (): Promise<void> => {
+  await prisma.movieEvent.deleteMany({});
+  await prisma.movieData.deleteMany({});
+};

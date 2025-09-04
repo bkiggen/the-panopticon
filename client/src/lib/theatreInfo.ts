@@ -43,7 +43,7 @@ export const theatreInfo: Record<string, theatreInfo> = {
     neighborhood: "Hawthorne",
   },
   Cinemagic: {
-    website: "https://www.cinemagictheater.com",
+    website: "https://www.thecinemagictheater.com/",
     address: "2021 SE Hawthorne Blvd, Portland, OR 97214",
     phone: "(503) 231-7919",
     neighborhood: "Hawthorne",
@@ -55,7 +55,7 @@ export const theatreInfo: Record<string, theatreInfo> = {
     neighborhood: "Downtown",
   },
   "Clinton Street Theater": {
-    website: "https://clintonstreettheater.com",
+    website: "https://cstpdx.com/",
     address: "2522 SE Clinton St, Portland, OR 97202",
     phone: "(503) 238-8899",
     neighborhood: "Hosford-Abernethy",

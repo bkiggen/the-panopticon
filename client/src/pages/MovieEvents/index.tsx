@@ -97,6 +97,14 @@ export const MovieEvents = () => {
       <Box sx={{ padding: "16px 0" }}>
         <Events data={events} />
       </Box>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalEvents}
+        pageSize={pageSize}
+        onPageChange={goToPage}
+        loading={loading}
+      />
     </Box>
   );
 };
