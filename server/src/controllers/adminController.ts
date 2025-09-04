@@ -16,7 +16,7 @@ export const runScrapers = async (req: Request, res: Response) => {
     await runAcademyScraper();
     // Laurelhurst theater
     await runLaurelhurstScraper();
-    // Tomorrow theater (not working)
+    // Tomorrow theater
     await runTomorrowTheaterScraper();
     // St Johns
     await runStJohnsCinemaScraper();
