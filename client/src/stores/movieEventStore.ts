@@ -5,11 +5,12 @@ import {
   MovieEventService,
   type MovieEventFilters,
 } from "../services/movieEventService";
+import { MovieEventWithDataProps } from "@/types/types";
 
 interface MovieEventState {
   // State
-  events: MovieEvent[];
-  selectedEvent: MovieEvent | null;
+  events: MovieEventWithDataProps[];
+  selectedEvent: MovieEventWithDataProps | null;
   loading: boolean;
   error: string | null;
   filters: MovieEventFilters;
@@ -22,11 +23,11 @@ interface MovieEventState {
 
   // Computed getters
   theatres: string[];
-  eventsByTheatre: Record<string, MovieEvent[]>;
+  eventsByTheatre: Record<string, MovieEventWithDataProps[]>;
 
   // Actions (synchronous state updates)
-  setEvents: (events: MovieEvent[]) => void;
-  setSelectedEvent: (event: MovieEvent | null) => void;
+  setEvents: (events: MovieEventWithDataProps[]) => void;
+  setSelectedEvent: (event: MovieEventWithDataProps | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setFilters: (filters: MovieEventFilters) => void;
@@ -85,7 +86,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
       }
       acc[event.theatre].push(event);
       return acc;
-    }, {} as Record<string, MovieEvent[]>);
+    }, {} as Record<string, MovieEventWithDataProps[]>);
   },
 
   // Synchronous actions
@@ -174,7 +175,7 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
     }
   },
 
-  updateEvent: async (id: number, data: Partial<MovieEvent>) => {
+  updateEvent: async (id: number, data: Partial<MovieEventWithDataProps>) => {
     const state = get();
 
     try {
