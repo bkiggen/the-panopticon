@@ -38,6 +38,7 @@ app.use(
           "https://www.laurelhurst.com",
           "https://www.laurelhursttheater.com",
           "https://ticketing.useast.veezi.com",
+          "https://pdx.livingroomtheaters.com",
         ],
       },
     },
