@@ -6,9 +6,13 @@ export class AdminService {
   /**
    * Run all scrapers
    */
-  static async runScrapers(): Promise<void> {
+  static async runScrapers(scrapers?: string[]): Promise<void> {
     const response = await fetch(`${API_BASE}/admin/run-scrapers`, {
-      method: "GET",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ scrapers }),
     });
 
     if (!response.ok) {

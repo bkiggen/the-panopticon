@@ -11,34 +11,53 @@ import { runLivingRoomTheatersScraper } from "@/cron/scrapers/livingRoom";
 
 export const runScrapers = async (req: Request, res: Response) => {
   try {
-    // Cinema 21
-    await runCinema21Scraper();
-    // Academy Theatre
-    await runAcademyScraper();
-    // Laurelhurst theater
-    await runLaurelhurstScraper();
-    // Tomorrow theater
-    await runTomorrowTheaterScraper();
-    // St Johns
-    await runStJohnsCinemaScraper();
-    // Clinton
-    await runCSTScraper();
-    // Cinemagic (unreliable)
-    await runCinemagicScraper();
-    // Living Room
-    await runLivingRoomTheatersScraper();
+    const { scrapers } = req.body;
 
-    // 5th Ave Cinema
-    // Movie Madness
+    // Default to all scrapers if none specified
+    const scrapersToRun = scrapers || [
+      "cinema21",
+      "academy",
+      "laurelhurst",
+      "tomorrow",
+      "stJohns",
+      "clinton",
+      "cinemagic",
+      "livingRoom",
+      "omdb",
+    ];
 
-    // OMDb
-    await fetchMovieDataFromOmdb();
+    const scraperMap = {
+      cinema21: runCinema21Scraper,
+      academy: runAcademyScraper,
+      laurelhurst: runLaurelhurstScraper,
+      tomorrow: runTomorrowTheaterScraper,
+      stJohns: runStJohnsCinemaScraper,
+      clinton: runCSTScraper,
+      cinemagic: runCinemagicScraper,
+      livingRoom: runLivingRoomTheatersScraper,
+      omdb: fetchMovieDataFromOmdb,
+    };
 
-    console.log("Scrapers completed successfully at", new Date().toISOString());
+    console.log(`Running scrapers: ${scrapersToRun.join(", ")}`);
 
-    res.json({ success: true, message: "Jobs complete" });
+    for (const scraperName of scrapersToRun) {
+      if (scraperMap[scraperName as keyof typeof scraperMap]) {
+        console.log(`Running ${scraperName} scraper...`);
+        await scraperMap[scraperName as keyof typeof scraperMap]();
+      }
+    }
+
+    console.log(
+      "Selected scrapers completed successfully at",
+      new Date().toISOString()
+    );
+    res.json({
+      success: true,
+      message: "Selected scrapers complete",
+      scrapers: scrapersToRun,
+    });
   } catch (error: any) {
-    console.error("❌ Jobs failed:", error);
+    console.error("❌ Scrapers failed:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 };

@@ -5,7 +5,7 @@ const router = express.Router();
 
 const { runScrapers } = adminController;
 
-// GET /api/admin/run-scrapers
-router.get("/run-scrapers", runScrapers);
+// POST /api/admin/run-scrapers
+router.post("/run-scrapers", runScrapers);
 
 export default router;
