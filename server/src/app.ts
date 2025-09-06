@@ -11,9 +11,6 @@ import { initializeCronJobs } from "./services/cronService";
 import movieEventRoutes from "./routes/movieEvents";
 import adminRoutes from "./routes/admin";
 import authRoutes from "./routes/authRoutes";
-import { runLivingRoomTheatersScraper } from "./cron/scrapers/livingRoom";
-
-runLivingRoomTheatersScraper();
 
 dotenv.config();
 
