@@ -335,7 +335,6 @@ class CSTScraper {
           times: timeStr ? [timeStr] : [],
           format: "35mm/Digital", // CST shows various formats
           imageUrl: "", // CST doesn't provide images in calendar
-          ariaLabel: `${event.title} at ${this.theatreName}`,
           theatre: this.theatreName,
           accessibility,
           discount,

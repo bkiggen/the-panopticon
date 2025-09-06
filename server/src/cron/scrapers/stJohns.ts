@@ -146,7 +146,6 @@ class StJohnsCinemaScraper {
               times: showtime.times,
               format: "Digital", // Assuming digital format
               imageUrl: movie.imageUrl || "",
-              ariaLabel: "",
               theatre: this.theatreName,
               description: movie.description,
               accessibility: [], // No accessibility info visible in this format

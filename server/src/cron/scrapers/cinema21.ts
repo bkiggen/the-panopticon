@@ -230,7 +230,6 @@ class Cinema21Scraper {
             times,
             format: "Digital",
             imageUrl: movie.posterUrl || "",
-            ariaLabel: `${movie.title} at ${this.theatreName}`,
             theatre: this.theatreName,
             accessibility:
               accessibility.length > 0 ? [...new Set(accessibility)] : [],

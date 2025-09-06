@@ -51,7 +51,7 @@ interface MovieEventState {
   ) => Promise<void>;
   fetchEventById: (id: number) => Promise<void>;
   createEvent: (
-    data: Omit<MovieEvent, "id" | "createdAt" | "updatedAt">
+    data: any
   ) => Promise<void>;
   updateEvent: (id: number, data: Partial<MovieEvent>) => Promise<void>;
   deleteEvent: (id: number) => Promise<void>;

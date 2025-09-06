@@ -5,6 +5,8 @@ import { Events } from "./Events";
 import { Controls } from "./Controls";
 import type { MovieEventFilters } from "@/../../models/MovieEventFilters";
 import { Pagination } from "@/components/Pagination";
+import useSessionStore from "@/stores/sessionStore";
+import { CreateEvent } from "./CreateEvent";
 
 const FILTERS_STORAGE_KEY = "movieEventFilters";
 
@@ -19,7 +21,7 @@ export const MovieEvents = () => {
     fetchEvents,
     goToPage,
   } = useMovieEventStore();
-
+  const { isAuthenticated } = useSessionStore();
   const [initialFilters, setInitialFilters] = useState<MovieEventFilters>({});
 
   // Load filters from localStorage on mount
@@ -79,6 +81,7 @@ export const MovieEvents = () => {
         marginX: "auto",
       }}
     >
+      {isAuthenticated && <CreateEvent />}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

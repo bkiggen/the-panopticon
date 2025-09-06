@@ -126,7 +126,6 @@ class TomorrowTheaterScraper {
           times: show.showtimes,
           format: "Digital",
           imageUrl: show.imageUrl || "",
-          ariaLabel: "",
           theatre: this.theatreName,
           accessibility: show.tags.includes("Open Captions")
             ? ["Open Captions"]

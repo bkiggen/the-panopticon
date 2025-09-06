@@ -25,7 +25,6 @@ model MovieEvent {
   times              String[]  
   format             String
   imageUrl           String
-  ariaLabel          String
   genres             String[]  // Scraped data
   description        String?   // Scraped data
   trailerUrl         String?   // Scraped data

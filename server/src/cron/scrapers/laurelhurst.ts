@@ -124,7 +124,6 @@ class LaurelhurstScraper {
             times,
             format: "Digital",
             imageUrl: this.decodeHtmlEntities(movie.posterURL) || "",
-            ariaLabel: "",
             theatre: this.theatreName,
             accessibility: accessibility.length > 0 ? accessibility : [],
             discount: [],

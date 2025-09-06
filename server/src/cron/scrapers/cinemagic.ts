@@ -402,7 +402,6 @@ class CinemagicScraper {
               times: [timeStr],
               format: movie.formats.length > 0 ? movie.formats[0] : "Digital",
               imageUrl: movie.imageUrl || "",
-              ariaLabel: `${movie.title} at ${this.theatreName}`,
               theatre: this.theatreName,
               accessibility: movie.accessibility || [],
               discount: [],

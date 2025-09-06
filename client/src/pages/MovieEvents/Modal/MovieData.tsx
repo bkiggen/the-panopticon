@@ -25,7 +25,7 @@ type MovieDataProps = {
 
 export const MovieData = ({ selectedEvent, onClose }: MovieDataProps) => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const isAuthenticated = useSessionStore((state) => state.isAuthenticated);
+  const { isAuthenticated } = useSessionStore();
   const { submitting, deleteEvent } = useMovieEventStore();
 
   if (!selectedEvent) {
@@ -36,7 +36,7 @@ export const MovieData = ({ selectedEvent, onClose }: MovieDataProps) => {
     );
   }
 
-  const movieData = selectedEvent.movieData;
+  const { movieData } = selectedEvent;
 
   const displayTitle =
     getBestData(selectedEvent.originalTitle, movieData?.originalTitle) ||

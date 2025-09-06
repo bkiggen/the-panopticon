@@ -53,9 +53,14 @@ export const getMovieEventById = async (req: Request, res: Response) => {
 
 export const createMovieEvent = async (req: Request, res: Response) => {
   try {
+    console.log("Request Body:", req.body); // Debug log
     const movieEvent = await movieEventService.createMovieEvent(req.body);
     res.status(201).json(movieEvent);
   } catch (error) {
+    console.log(
+      "🚀 ~ createMovieEvent ~ error:",
+      JSON.stringify(error, null, 2)
+    );
     res.status(400).json({ error: "Failed to create movie event" });
   }
 };

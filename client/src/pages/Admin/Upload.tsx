@@ -122,7 +122,6 @@ const BulkMovieEventUpload: React.FC = () => {
       times: ["2:00pm", "4:30pm", "7:00pm", "9:30pm"],
       format: "Digital",
       imageUrl: "https://example.com/image.jpg",
-      ariaLabel: "",
       theatre: "Hollywood Theater",
       accessibility: null,
       discount: null,

@@ -24,6 +24,7 @@ import type { MovieEvent } from "@prismaTypes";
 import type { MovieEventFilters } from "@/services/movieEventService";
 import { useDebounce } from "@/hooks/useDebonce";
 import { theatreInfo } from "@/lib/theatreInfo";
+import { formats as allFormats } from "@/lib/formats";
 
 interface ControlsProps {
   data: MovieEvent[] | null;
@@ -39,7 +40,6 @@ export const Controls = ({
   const [open, setOpen] = useState(false);
 
   // All available options - memoized to prevent recreation
-  const allFormats = useMemo(() => ["Digital", "35mm", "70mm", "VHS"], []);
   const allAccessibility = useMemo(() => ["Open Captions"], []);
   const allGenres = useMemo(
     () => [

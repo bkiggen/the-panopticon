@@ -202,7 +202,6 @@ class HollywoodBrowserScraper {
           ? "70mm"
           : "Digital",
         imageUrl: movie.imageUrl,
-        ariaLabel: "",
         theatre: this.theatreName,
         accessibility: null,
         discount: features.includes("Special Guest") ? ["Special Guest"] : null,
