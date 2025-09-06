@@ -7,6 +7,7 @@ import { fetchMovieDataFromOmdb } from "../services/omdbService";
 import { runStJohnsCinemaScraper } from "@/cron/scrapers/stJohns";
 import { runCSTScraper } from "@/cron/scrapers/clinton";
 import { runCinemagicScraper } from "@/cron/scrapers/cinemagic";
+import { runLivingRoomTheatersScraper } from "@/cron/scrapers/livingRoom";
 
 export const runScrapers = async (req: Request, res: Response) => {
   try {
@@ -24,8 +25,9 @@ export const runScrapers = async (req: Request, res: Response) => {
     await runCSTScraper();
     // Cinemagic (unreliable)
     await runCinemagicScraper();
-
     // Living Room
+    await runLivingRoomTheatersScraper();
+
     // 5th Ave Cinema
     // Movie Madness
 
