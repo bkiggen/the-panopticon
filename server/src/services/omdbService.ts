@@ -24,11 +24,7 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
     console.log(`Found ${uniqueTitles.length} unique titles`);
 
     // 3. Limit to 3 for testing
-    const titlesToSearch = uniqueTitles.slice(0, 3);
-    console.log(
-      `Testing with ${titlesToSearch.length} titles:`,
-      titlesToSearch
-    );
+    const titlesToSearch = uniqueTitles;
 
     // 4. Search OMDB for each title
     const apiKey = process.env.OMDB_API_KEY;
