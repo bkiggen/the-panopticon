@@ -1,4 +1,4 @@
-export const formats = ["Digital", "35mm", "70mm", "VHS"] as const;
+export const formats = ["Digital", "16mm", "35mm", "70mm", "VHS"] as const;
 
 export type Format = (typeof formats)[number];
 

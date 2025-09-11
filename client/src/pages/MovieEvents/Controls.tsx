@@ -25,6 +25,7 @@ import type { MovieEventFilters } from "@/services/movieEventService";
 import { useDebounce } from "@/hooks/useDebonce";
 import { theatreInfo } from "@/lib/theatreInfo";
 import { formats as allFormats } from "@/lib/formats";
+import { genres as allGenres } from "@/lib/genres";
 
 interface ControlsProps {
   data: MovieEvent[] | null;
@@ -41,33 +42,6 @@ export const Controls = ({
 
   // All available options - memoized to prevent recreation
   const allAccessibility = useMemo(() => ["Open Captions"], []);
-  const allGenres = useMemo(
-    () => [
-      "Action",
-      "Adventure",
-      "Animation",
-      "Biography",
-      "Comedy",
-      "Crime",
-      "Documentary",
-      "Drama",
-      "Family",
-      "Fantasy",
-      "Film-Noir",
-      "History",
-      "Horror",
-      "Music",
-      "Musical",
-      "Mystery",
-      "Romance",
-      "Sci-Fi",
-      "Sport",
-      "Thriller",
-      "War",
-      "Western",
-    ],
-    []
-  );
 
   // Filter states - initialize with any provided initial filters
   const [searchTerm, setSearchTerm] = useState(initialFilters.search || "");

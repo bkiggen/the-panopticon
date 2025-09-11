@@ -16,6 +16,11 @@ const formatPropMap: Record<
     sx: { borderColor: "skyblue", color: "skyblue" },
     icon: <AlbumIcon sx={{ "*": { color: "#87CEEB" } }} />,
   },
+  "16mm": {
+    label: "16mm",
+    sx: { borderColor: "#35bea8ff", color: "#35bea8ff" },
+    icon: <GroupWorkIcon sx={{ "*": { color: "#35bea8ff" } }} />,
+  },
   "35mm": {
     label: "35mm",
     sx: { borderColor: "#35bea8ff", color: "#35bea8ff" },

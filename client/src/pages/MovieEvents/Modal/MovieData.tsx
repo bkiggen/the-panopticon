@@ -38,9 +38,7 @@ export const MovieData = ({ selectedEvent, onClose }: MovieDataProps) => {
 
   const { movieData } = selectedEvent;
 
-  const displayTitle =
-    getBestData(selectedEvent.originalTitle, movieData?.originalTitle) ||
-    selectedEvent.title;
+  const displayTitle = getBestData(selectedEvent.title, movieData?.title);
   const displayDescription = getBestData(
     selectedEvent.description,
     movieData?.description

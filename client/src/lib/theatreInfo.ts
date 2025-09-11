@@ -49,7 +49,7 @@ export const theatreInfo: Record<string, theatreInfo> = {
     neighborhood: "Hawthorne",
   },
   "Living Room Theaters": {
-    website: "https://www.livingroomtheaters.com",
+    website: "https://pdx.livingroomtheaters.com/",
     address: "341 SW 10th Ave, Portland, OR 97205",
     phone: "(971) 222-2010",
     neighborhood: "Downtown",

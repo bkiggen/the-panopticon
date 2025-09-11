@@ -4,6 +4,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import type { MovieEventWithDataProps } from "@/types/types";
 import { AllShowings } from "./AllShowings";
 import { MovieData } from "./MovieData";
+import { AdminMovieData } from "./AdminMovieData";
+import useSessionStore from "@/stores/sessionStore";
 
 type EventModalProps = {
   open: boolean;
@@ -17,6 +19,7 @@ export const EventModal = ({
   selectedEvent,
 }: EventModalProps) => {
   const [tabValue, setTabValue] = useState(0);
+const { isAuthenticated } = useSessionStore();
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -67,9 +70,12 @@ export const EventModal = ({
         </Box>
         {/* Tab Content */}
         <Box sx={{ flex: 1, overflow: "auto" }}>
-          {tabValue === 0 && (
-            <MovieData selectedEvent={selectedEvent} onClose={onClose} />
-          )}
+          {tabValue === 0 &&
+            (isAuthenticated ? (
+              <AdminMovieData selectedEvent={selectedEvent} onClose={onClose} />
+            ) : (
+              <MovieData selectedEvent={selectedEvent} onClose={onClose} />
+            ))}
           {tabValue === 1 && <AllShowings selectedEvent={selectedEvent} />}
         </Box>
       </Paper>
