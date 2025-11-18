@@ -41,7 +41,7 @@ export const SponsorBox = () => {
             color="primary"
             underline="none"
           >
-            Picture Show Collections
+            Pictureshow Collections
           </Link>
         </Button>
       </Box>

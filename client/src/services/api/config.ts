@@ -12,6 +12,11 @@ export const API_CONFIG = {
       DELETE_ALL: "/movie-events/delete-all",
       BY_ID: (id: number) => `/movie-events/${id}`,
     },
+    MOVIE_DATA: {
+      BASE: "/admin/movie-data",
+      BY_ID: (id: number) => `/admin/movie-data/${id}`,
+      BULK_DELETE: "/admin/movie-data/bulk-delete",
+    },
   },
   STORAGE_KEYS: {
     AUTH_TOKEN: "admin_token",

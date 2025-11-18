@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 import BulkMovieEventUpload from "./Upload";
+import MovieData from "./MovieData";
 import { Actions } from "./Actions";
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,15 +46,17 @@ export const Admin = () => {
         <Tabs value={value} onChange={handleChange} aria-label="admin tabs">
           <Tab label="Bulk Upload" {...a11yProps(0)} />
           <Tab label="Actions" {...a11yProps(1)} />
+          <Tab label="Movie Data" {...a11yProps(2)} />
         </Tabs>
       </Box>
-
       <TabPanel value={value} index={0}>
         <BulkMovieEventUpload />
       </TabPanel>
-
       <TabPanel value={value} index={1}>
         <Actions />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <MovieData />
       </TabPanel>
     </Box>
   );

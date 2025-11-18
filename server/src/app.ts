@@ -11,8 +11,10 @@ import { initializeCronJobs } from "./services/cronService";
 import movieEventRoutes from "./routes/movieEvents";
 import adminRoutes from "./routes/admin";
 import authRoutes from "./routes/authRoutes";
+import { runCinemagicScraper } from "./cron/scrapers/cinemagic";
 
 dotenv.config();
+runCinemagicScraper();
 
 initializeCronJobs();
 

@@ -1,5 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+import path from "path";
+
+// Load environment variables from parent directory (don't override existing ones)
+dotenv.config({ path: path.resolve(__dirname, "../.env"), override: false });
 
 const prisma = new PrismaClient();
 
