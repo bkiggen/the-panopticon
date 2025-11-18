@@ -53,9 +53,10 @@ async function main() {
     { email: email2, password: password2, name: name2 },
   ];
 
-  usersToSeed.forEach(async (user) => {
+  // Use for...of instead of forEach to properly await async operations
+  for (const user of usersToSeed) {
     await createAdminUser(user.email, user.password, user.name);
-  });
+  }
 }
 
 main()

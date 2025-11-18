@@ -79,34 +79,20 @@ export class AuthService {
   /**
    * Validate current token
    */
-  // Update your AuthService.validateToken method:
   static async validateToken(): Promise<boolean> {
     const token = this.getToken();
-    console.log("Validating token:", token);
 
     if (!token) return false;
 
     try {
-      console.log(
-        "Making validation request to:",
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH.VALIDATE}`
-      );
       const response = await ApiClient.get(
         API_CONFIG.ENDPOINTS.AUTH.VALIDATE,
         true
       );
-      console.log("Validation response status:", response.status);
-      console.log("Validation response headers:", response.headers);
-      console.log("Response ok:", response.ok);
-
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("Validation response data:", responseData);
-      }
 
       return response.ok;
     } catch (error) {
-      console.log("Validation caught error:", error);
+      // Token validation failed - user will need to re-authenticate
       return false;
     }
   }
