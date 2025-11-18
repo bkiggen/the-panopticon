@@ -1,5 +1,6 @@
 // src/stores/movieEventStore.ts
 import { create } from "zustand";
+import toast from "react-hot-toast";
 import type { MovieEvent } from "@prismaTypes";
 import {
   MovieEventService,
@@ -168,10 +169,13 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
 
       // Refresh the current page to show updated data
       await state.refreshEvents();
+
+      toast.success("Event created successfully!");
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to create event";
       state.setError(errorMessage);
+      toast.error(errorMessage);
       console.error("Error creating event:", error);
       throw error; // Re-throw so component can handle it
     } finally {
@@ -200,10 +204,13 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
       if (state.selectedEvent?.id === id) {
         state.setSelectedEvent(updatedEvent);
       }
+
+      toast.success("Event updated successfully!");
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to update event";
       state.setError(errorMessage);
+      toast.error(errorMessage);
       console.error("Error updating event:", error);
       throw error;
     } finally {
@@ -227,10 +234,13 @@ const useMovieEventStore = create<MovieEventState>((set, get) => ({
       if (state.selectedEvent?.id === id) {
         state.setSelectedEvent(null);
       }
+
+      toast.success("Event deleted successfully!");
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to delete event";
       state.setError(errorMessage);
+      toast.error(errorMessage);
       console.error("Error deleting event:", error);
       throw error;
     } finally {

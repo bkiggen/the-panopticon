@@ -12,6 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { AdminService } from "@/services/adminService";
 import { MovieEventService } from "@/services/movieEventService";
 
@@ -61,15 +62,22 @@ export const Actions = () => {
 
   const handleRunScrapers = async () => {
     if (selectedScrapers.length === 0) {
-      return; // Don't run if no scrapers selected
+      toast.error("Please select at least one scraper");
+      return;
     }
 
     setIsRunning(true);
     setScraperDialogOpen(false);
 
+    const scraperCount = selectedScrapers.length;
+    const toastId = toast.loading(`Running ${scraperCount} scraper${scraperCount > 1 ? 's' : ''}...`);
+
     try {
       await AdminService.runScrapers(selectedScrapers);
+      toast.success(`Successfully ran ${scraperCount} scraper${scraperCount > 1 ? 's' : ''}!`, { id: toastId });
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to run scrapers";
+      toast.error(message, { id: toastId });
       console.error("Failed to run scrapers:", error);
     } finally {
       setIsRunning(false);
@@ -82,7 +90,17 @@ export const Actions = () => {
 
   const handleDeleteConfirm = async () => {
     setDeleteConfirmOpen(false);
-    await MovieEventService.deleteAll();
+
+    const toastId = toast.loading("Deleting all data...");
+
+    try {
+      await MovieEventService.deleteAll();
+      toast.success("All data deleted successfully!", { id: toastId });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to delete data";
+      toast.error(message, { id: toastId });
+      console.error("Failed to delete all:", error);
+    }
   };
 
   const handleDeleteCancel = () => {

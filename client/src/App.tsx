@@ -4,6 +4,7 @@ import { ThemeProvider } from "@emotion/react";
 import { Box, CssBaseline } from "@mui/material";
 import { createAppTheme, ThemeMode } from "./utils/theme";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
@@ -32,6 +33,28 @@ const App = () => {
       <Box>
         <AppRouter />
         <ThemeToggle isDark={themeMode === "dark"} onToggle={toggleTheme} />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: themeMode === "dark" ? "#333" : "#fff",
+              color: themeMode === "dark" ? "#fff" : "#333",
+            },
+            success: {
+              iconTheme: {
+                primary: "#4caf50",
+                secondary: "#fff",
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: "#f44336",
+                secondary: "#fff",
+              },
+            },
+          }}
+        />
       </Box>
     </ThemeProvider>
   );
