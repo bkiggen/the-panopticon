@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import useMovieEventStore from "@/stores/movieEventStore";
 import { Events } from "./Events";
 import { Controls } from "./Controls";
@@ -7,6 +7,7 @@ import type { MovieEventFilters } from "@/../../models/MovieEventFilters";
 import { Pagination } from "@/components/Pagination";
 import useSessionStore from "@/stores/sessionStore";
 import { CreateEvent } from "./CreateEvent";
+import { MovieEventSkeletonList } from "@/components/LoadingSkeleton";
 
 const FILTERS_STORAGE_KEY = "movieEventFilters";
 
@@ -65,8 +66,16 @@ export const MovieEvents = () => {
 
   if (loading && events.length === 0) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <CircularProgress />
+      <Box
+        sx={{
+          paddingBottom: "80px",
+          marginTop: "40px",
+          width: "90%",
+          maxWidth: "1200px",
+          marginX: "auto",
+        }}
+      >
+        <MovieEventSkeletonList count={6} />
       </Box>
     );
   }
