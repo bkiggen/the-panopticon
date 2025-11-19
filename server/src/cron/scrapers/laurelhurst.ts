@@ -29,6 +29,13 @@ class LaurelhurstScraper {
     return null;
   }
 
+  // Create a Date object from a date string without timezone issues
+  // Avoids the bug where new Date("2025-11-18") interprets as UTC
+  createDateObject(dateString) {
+    const [year, month, day] = dateString.split("-");
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  }
+
   // Extract duration from rating/time string like "PG13 - 90min"
   extractDuration(ratingTimeString) {
     const match = ratingTimeString?.match(/(\d+)min/);
@@ -118,7 +125,7 @@ class LaurelhurstScraper {
           const duration = this.extractDuration(ratingTime);
 
           events.push({
-            date: new Date(formattedDate),
+            date: this.createDateObject(formattedDate),
             title: cleanedTitle,
             originalTitle: movie.title,
             times,

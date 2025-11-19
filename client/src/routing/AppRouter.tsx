@@ -9,6 +9,8 @@ import { Admin } from "@/pages/Admin";
 import { MovieEvents } from "@/pages/MovieEvents";
 import { Header } from "@/components/Header";
 import AdminLogin from "@/pages/Admin/Login";
+import ForgotPassword from "@/pages/Admin/ForgotPassword";
+import ResetPassword from "@/pages/Admin/ResetPassword";
 import { AuthService } from "@/services/authService";
 import useSessionStore from "@/stores/sessionStore";
 import { routeConstants } from "@/routing/routeConstants";
@@ -122,6 +124,16 @@ const AppRouter = () => {
               <AdminLogin onLoginSuccess={handleLoginSuccess} />
             )
           }
+        />
+
+        {/* Password reset routes */}
+        <Route
+          path={routeConstants.FORGOT_PASSWORD}
+          element={<ForgotPassword />}
+        />
+        <Route
+          path={routeConstants.RESET_PASSWORD}
+          element={<ResetPassword />}
         />
 
         {/* Protected admin route */}

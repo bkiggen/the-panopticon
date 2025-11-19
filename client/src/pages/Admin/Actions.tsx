@@ -15,6 +15,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { AdminService } from "@/services/adminService";
 import { MovieEventService } from "@/services/movieEventService";
+import { LogViewer } from "@/components/LogViewer";
 
 const AVAILABLE_SCRAPERS = [
   { id: "cinema21", label: "Cinema 21" },
@@ -129,6 +130,12 @@ export const Actions = () => {
             {isRunning ? "Running..." : "Select & Run Scrapers"}
           </Button>
         </div>
+
+        {/* Log Viewer */}
+        <Box sx={{ width: "100%", maxWidth: "900px" }}>
+          <LogViewer />
+        </Box>
+
         <div>
           <Typography variant="h5" gutterBottom>
             Delete All Movie Events and Movie Data

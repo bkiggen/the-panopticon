@@ -1,10 +1,10 @@
+import dayjs from "dayjs";
+
 export const formatDate = (date: string | Date, isMobile: boolean) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    weekday: isMobile ? "short" : "long",
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
+  // Parse the date string directly to avoid timezone conversion issues
+  // Showtimes are always in the local theater timezone, so we treat the date as-is
+  const dateStr = typeof date === "string" ? date : date.toISOString().split("T")[0];
+  return dayjs(dateStr).format(isMobile ? "ddd, MMM D" : "dddd, MMM D");
 };
 
 export const hasValidImage = (imageUrl: string) => {

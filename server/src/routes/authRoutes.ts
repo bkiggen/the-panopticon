@@ -14,8 +14,19 @@ const loginLimiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
+// Rate limiter for password reset requests - prevents abuse
+const passwordResetLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 3, // Limit each IP to 3 password reset requests per windowMs
+  message: "Too many password reset attempts, please try again after 15 minutes",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Public auth routes
 router.post("/login", loginLimiter, authController.login);
+router.post("/forgot-password", passwordResetLimiter, authController.forgotPassword);
+router.post("/reset-password", passwordResetLimiter, authController.resetPassword);
 
 // Protected routes
 router.get("/validate", authenticateToken, authController.validateToken);

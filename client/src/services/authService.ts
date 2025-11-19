@@ -96,4 +96,45 @@ export class AuthService {
       return false;
     }
   }
+
+  /**
+   * Request password reset
+   */
+  static async forgotPassword(email: string): Promise<string> {
+    const response = await ApiClient.post(
+      API_CONFIG.ENDPOINTS.AUTH.FORGOT_PASSWORD,
+      { email },
+      false
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to send password reset email");
+    }
+
+    const result = await response.json();
+    return result.message;
+  }
+
+  /**
+   * Reset password with token
+   */
+  static async resetPassword(
+    token: string,
+    newPassword: string
+  ): Promise<string> {
+    const response = await ApiClient.post(
+      API_CONFIG.ENDPOINTS.AUTH.RESET_PASSWORD,
+      { token, newPassword },
+      false
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to reset password");
+    }
+
+    const result = await response.json();
+    return result.message;
+  }
 }

@@ -5,6 +5,8 @@ export const API_CONFIG = {
       LOGIN: "/auth/login",
       VALIDATE: "/auth/validate",
       CREATE_ADMIN: "/auth/create-admin",
+      FORGOT_PASSWORD: "/auth/forgot-password",
+      RESET_PASSWORD: "/auth/reset-password",
     },
     MOVIE_EVENTS: {
       BASE: "/movie-events",

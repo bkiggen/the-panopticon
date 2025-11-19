@@ -8,6 +8,7 @@ import { runStJohnsCinemaScraper } from "@/cron/scrapers/stJohns";
 import { runCSTScraper } from "@/cron/scrapers/clinton";
 import { runCinemagicScraper } from "@/cron/scrapers/cinemagic";
 import { runLivingRoomTheatersScraper } from "@/cron/scrapers/livingRoom";
+import logStreamService from "../services/logStreamService";
 
 export const runScrapers = async (req: Request, res: Response) => {
   try {
@@ -38,18 +39,17 @@ export const runScrapers = async (req: Request, res: Response) => {
       omdb: fetchMovieDataFromOmdb,
     };
 
-    console.log(`Running scrapers: ${scrapersToRun.join(", ")}`);
+    logStreamService.log(`🚀 Running scrapers: ${scrapersToRun.join(", ")}`);
 
     for (const scraperName of scrapersToRun) {
       if (scraperMap[scraperName as keyof typeof scraperMap]) {
-        console.log(`Running ${scraperName} scraper...`);
+        logStreamService.log(`▶️  Running ${scraperName} scraper...`);
         await scraperMap[scraperName as keyof typeof scraperMap]();
       }
     }
 
-    console.log(
-      "Selected scrapers completed successfully at",
-      new Date().toISOString()
+    logStreamService.log(
+      `✅ Selected scrapers completed successfully at ${new Date().toISOString()}`
     );
     res.json({
       success: true,
@@ -57,7 +57,33 @@ export const runScrapers = async (req: Request, res: Response) => {
       scrapers: scrapersToRun,
     });
   } catch (error: any) {
-    console.error("❌ Scrapers failed:", error);
+    logStreamService.error(`❌ Scrapers failed: ${error.message}`);
     res.status(500).json({ success: false, error: error.message });
   }
+};
+
+/**
+ * Server-Sent Events endpoint for real-time log streaming
+ */
+export const streamLogs = (req: Request, res: Response) => {
+  // Set headers for SSE
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
+  // Add client to log stream
+  logStreamService.addClient(res);
+
+  // Send initial connection message
+  res.write(`data: ${JSON.stringify({
+    timestamp: new Date().toISOString(),
+    message: "📡 Connected to log stream",
+    type: "info"
+  })}\n\n`);
+
+  // Handle client disconnect
+  req.on("close", () => {
+    logStreamService.removeClient(res);
+  });
 };

@@ -9,48 +9,41 @@ import {
   CircularProgress,
   Link,
 } from "@mui/material";
-import { Lock } from "@mui/icons-material";
+import { Email } from "@mui/icons-material";
 import { AuthService } from "@/services/authService";
 import { useNavigate } from "react-router-dom";
 
-interface LoginProps {
-  onLoginSuccess: () => void;
-}
-
-const AdminLogin: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleChange =
-    (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCredentials((prev) => ({
-        ...prev,
-        [field]: event.target.value,
-      }));
-      setError(""); // Clear error on input change
-    };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+    setError("");
+    setSuccess("");
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!credentials.email || !credentials.password) {
-      setError("Please enter both email and password");
+    if (!email) {
+      setError("Please enter your email address");
       return;
     }
 
     setIsLoading(true);
     setError("");
+    setSuccess("");
 
     try {
-      await AuthService.login(credentials);
-      onLoginSuccess();
+      const message = await AuthService.forgotPassword(email);
+      setSuccess(message);
+      setEmail(""); // Clear email field on success
     } catch (error: any) {
-      setError(error.message || "Login failed");
+      setError(error.message || "Failed to send password reset email");
     } finally {
       setIsLoading(false);
     }
@@ -75,14 +68,15 @@ const AdminLogin: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           textAlign: "center",
         }}
       >
-        <Lock sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
+        <Email sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
 
         <Typography variant="h4" component="h1" gutterBottom>
-          Admin Login
+          Forgot Password
         </Typography>
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Please sign in to access admin features
+          Enter your email address and we'll send you a link to reset your
+          password
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -95,41 +89,20 @@ const AdminLogin: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             name="email"
             autoComplete="email"
             autoFocus
-            value={credentials.email}
-            onChange={handleChange("email")}
+            value={email}
+            onChange={handleChange}
             disabled={isLoading}
           />
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={credentials.password}
-            onChange={handleChange("password")}
-            disabled={isLoading}
-          />
-
-          <Box sx={{ textAlign: "right", mt: 1 }}>
-            <Link
-              component="button"
-              type="button"
-              variant="body2"
-              onClick={() => navigate("/forgot-password")}
-              sx={{ cursor: "pointer" }}
-              disabled={isLoading}
-            >
-              Forgot Password?
-            </Link>
-          </Box>
 
           {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
               {error}
+            </Alert>
+          )}
+
+          {success && (
+            <Alert severity="success" sx={{ mt: 2 }}>
+              {success}
             </Alert>
           )}
 
@@ -141,12 +114,22 @@ const AdminLogin: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             disabled={isLoading}
             startIcon={isLoading ? <CircularProgress size={20} /> : null}
           >
-            {isLoading ? "Signing In..." : "Sign In"}
+            {isLoading ? "Sending..." : "Send Reset Link"}
           </Button>
+
+          <Link
+            component="button"
+            type="button"
+            variant="body2"
+            onClick={() => navigate("/auth")}
+            sx={{ cursor: "pointer" }}
+          >
+            Back to Login
+          </Link>
         </Box>
       </Paper>
     </Box>
   );
 };
 
-export default AdminLogin;
+export default ForgotPassword;

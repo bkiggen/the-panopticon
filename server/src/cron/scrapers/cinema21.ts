@@ -61,6 +61,13 @@ class Cinema21Scraper {
     return null;
   }
 
+  // Create a Date object from a date string without timezone issues
+  // Avoids the bug where new Date("2025-11-18") interprets as UTC
+  createDateObject(dateString: string): Date {
+    const [year, month, day] = dateString.split("-");
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  }
+
   async scrapeMovies() {
     let browser;
 
@@ -224,7 +231,7 @@ class Cinema21Scraper {
           });
 
           events.push({
-            date: new Date(date), // Convert to Date object for Prisma
+            date: this.createDateObject(date), // Convert to Date object for Prisma (timezone-safe)
             title: movie.title,
             originalTitle: movie.title,
             times,

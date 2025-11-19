@@ -55,7 +55,10 @@ async function main() {
 
   // Use for...of instead of forEach to properly await async operations
   for (const user of usersToSeed) {
-    await createAdminUser(user.email, user.password, user.name);
+    // Skip if any of the required fields are missing (makes secondary admins optional)
+    if (user.email && user.password && user.name) {
+      await createAdminUser(user.email, user.password, user.name);
+    }
   }
 }
 

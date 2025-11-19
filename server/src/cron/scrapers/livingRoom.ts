@@ -44,6 +44,13 @@ class LivingRoomTheatersScraper {
     return null;
   }
 
+  // Create a Date object from a date string without timezone issues
+  // Avoids the bug where new Date("2025-11-18") interprets as UTC
+  createDateObject(dateString: string): Date {
+    const [year, month, day] = dateString.split("-");
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  }
+
   async scrapeMovies() {
     let browser;
     try {
@@ -199,7 +206,7 @@ class LivingRoomTheatersScraper {
             });
 
             allEvents.push({
-              date: new Date(parsedDate),
+              date: this.createDateObject(parsedDate),
               title: movie.title,
               originalTitle: movie.title,
               times,
