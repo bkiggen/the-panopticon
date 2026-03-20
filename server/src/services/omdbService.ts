@@ -1,7 +1,5 @@
 import axios from "axios";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma";
 
 export const fetchMovieDataFromOmdb = async (): Promise<void> => {
   console.log("Starting OMDB data fetch process...");
@@ -195,6 +193,6 @@ export const fetchMovieDataFromOmdb = async (): Promise<void> => {
     console.error("Error in OMDB data fetch process:", error);
     throw error;
   } finally {
-    await prisma.$disconnect();
+    // No need to disconnect - using singleton
   }
 };

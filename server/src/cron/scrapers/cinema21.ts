@@ -1,15 +1,5 @@
 import puppeteer from "puppeteer";
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-// Load environment variables
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
-
-const prisma = new PrismaClient();
+import { prisma } from "../../lib/prisma";
 
 class Cinema21Scraper {
   private baseUrl: string;
@@ -310,9 +300,7 @@ async function run() {
   } catch (error: any) {
     console.error("❌ Error:", error.message);
   } finally {
-    // Disconnect from database
-    await prisma.$disconnect();
-    console.log("\n🔌 Database connection closed");
+    console.log("\n✅ Scraper completed");
   }
 }
 

@@ -6,18 +6,19 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "./lib/prisma";
 import { initializeCronJobs } from "./services/cronService";
+import { authLimiter } from "./middleware/rateLimiter";
 import movieEventRoutes from "./routes/movieEvents";
 import adminRoutes from "./routes/admin";
 import authRoutes from "./routes/authRoutes";
+
 dotenv.config();
 
 initializeCronJobs();
 
 const app = express();
-const prisma = new PrismaClient();
-const PORT = parseInt(process.env.PORT || "3000", 10);
+const PORT = parseInt(process.env.PORT || "3021", 10);
 
 // Middleware
 app.use(
@@ -56,48 +57,25 @@ app.get("/health", (req, res) => {
 // API routes
 app.use("/api/movie-events", movieEventRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/auth/login", authLimiter);
+app.use("/api/auth/forgot-password", authLimiter);
 app.use("/api/auth", authRoutes);
-
-// Debug logging
-console.log(`🔍 NODE_ENV: ${process.env.NODE_ENV}`);
-console.log(`📂 Current working directory: ${process.cwd()}`);
-console.log(`📂 __dirname: ${__dirname}`);
-
-try {
-  console.log(`📋 Root contents:`, fs.readdirSync("./"));
-  if (fs.existsSync("./client-build")) {
-    console.log(
-      `📋 Client-build dir exists, contents:`,
-      fs.readdirSync("./client-build")
-    );
-  } else {
-    console.log(`❌ Client-build directory does not exist`);
-  }
-} catch (error) {
-  console.error(`❌ Error checking directories:`, error);
-}
 
 // Production static file serving
 if (process.env.NODE_ENV === "production") {
   const staticPath = path.join(__dirname, "../client-build");
-  console.log(`📁 Static path: ${staticPath}`);
 
   try {
     if (fs.existsSync(staticPath)) {
-      console.log(`✅ Static directory exists at: ${staticPath}`);
-      console.log(`📋 Static dir contents:`, fs.readdirSync(staticPath));
-
       // Serve static files from React build
       app.use(express.static(staticPath));
 
       // Catch-all handler for client-side routing - exclude API routes
       app.get(/^(?!\/api).*$/, (req, res) => {
         const indexPath = path.join(staticPath, "index.html");
-        console.log(`📄 Serving index.html from: ${indexPath}`);
         res.sendFile(indexPath);
       });
     } else {
-      console.log(`❌ Static directory does not exist at: ${staticPath}`);
 
       // Fallback route if static files aren't found
       app.get("/", (req, res) => {

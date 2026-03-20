@@ -1,16 +1,6 @@
 // @ts-nocheck
 import puppeteer from "puppeteer";
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-// Load environment variables
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
-
-const prisma = new PrismaClient();
+import { prisma } from "../../lib/prisma";
 
 class HumanLikeAcademyScraper {
   constructor() {
@@ -404,7 +394,7 @@ class HumanLikeAcademyScraper {
   }
 
   async saveToDatabase(events: any[]) {
-    // First, delete existing Cinema 21 events to avoid duplicates
+    // First, delete existing Academy Theater events to avoid duplicates
     await prisma.movieEvent.deleteMany({
       where: {
         theatre: this.theatreName,

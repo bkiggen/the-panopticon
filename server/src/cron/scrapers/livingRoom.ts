@@ -1,10 +1,5 @@
 import puppeteer from "puppeteer";
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const prisma = new PrismaClient();
+import { prisma } from "../../lib/prisma";
 
 class LivingRoomTheatersScraper {
   private baseUrl: string;
@@ -282,8 +277,7 @@ async function run() {
   } catch (error: any) {
     console.error("❌ Error:", error.message);
   } finally {
-    await prisma.$disconnect();
-    console.log("\n🔌 Database connection closed");
+    console.log("\n✅ Scraper completed");
   }
 }
 

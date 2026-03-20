@@ -13,7 +13,8 @@
   },
   "workspaces": [
     "client",
-    "server"
+    "server",
+    "packages/*"
   ],
   "devDependencies": {
     "concurrently": "^8.2.2"

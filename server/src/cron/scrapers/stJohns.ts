@@ -1,15 +1,6 @@
 // @ts-nocheck
 import puppeteer from "puppeteer";
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
-
-const prisma = new PrismaClient();
+import { prisma } from "../../lib/prisma";
 
 class StJohnsCinemaScraper {
   constructor() {

@@ -1,16 +1,6 @@
 // @ts-nocheck
 import puppeteer from "puppeteer";
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-// Load environment variables
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
-
-const prisma = new PrismaClient();
+import { prisma } from "../../lib/prisma";
 
 class LaurelhurstScraper {
   constructor() {

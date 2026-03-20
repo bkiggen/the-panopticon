@@ -1,19 +1,10 @@
 // @ts-nocheck
 // Fandango Cinemagic Theatre Scraper
 import puppeteer from "puppeteer";
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { prisma } from "../../lib/prisma";
 
 // Configuration - Change this to scrape more or fewer days
 const DAYS_TO_SCRAPE = 5;
-
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
-
-const prisma = new PrismaClient();
 
 class FandangoScraper {
   private baseUrl: string;
@@ -358,8 +349,7 @@ async function run() {
   } catch (error: any) {
     console.error("❌ Error:", error.message);
   } finally {
-    await prisma.$disconnect();
-    console.log("\n🔌 Database connection closed");
+    console.log("\n✅ Scraper completed");
   }
 }
 

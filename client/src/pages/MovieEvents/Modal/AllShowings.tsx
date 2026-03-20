@@ -29,7 +29,7 @@ export const AllShowings = ({ selectedEvent }: EventModalProps) => {
   // Fetch all events with the same title when modal opens
   useEffect(() => {
     const fetchEventsByTitle = async () => {
-      if (!selectedEvent?.title || !open) return;
+      if (!selectedEvent?.title) return;
 
       setLoading(true);
       try {
@@ -47,7 +47,7 @@ export const AllShowings = ({ selectedEvent }: EventModalProps) => {
     };
 
     fetchEventsByTitle();
-  }, [selectedEvent?.title, open]);
+  }, [selectedEvent?.title]);
 
   const groupedEvents = allTitleEvents.reduce((groups, event) => {
     const key = `${event.date}-${event.theatre}`;

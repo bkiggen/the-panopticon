@@ -66,6 +66,7 @@ export const Controls = ({
   const [hasInitialized, setHasInitialized] = useState(false);
 
   // Extract unique values for filter options
+  // Note: allFormats, allAccessibility, allGenres are static imports that never change
   const filterOptions = useMemo(() => {
     if (!data)
       return {
@@ -81,7 +82,8 @@ export const Controls = ({
       accessibility: allAccessibility,
       genres: allGenres,
     };
-  }, [data, allFormats, allAccessibility, allGenres]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   // Build current filters object
   const getCurrentFilters = (): MovieEventFilters => {

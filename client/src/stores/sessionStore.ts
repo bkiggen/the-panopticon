@@ -9,6 +9,7 @@ interface SessionState {
     email: string;
     isAdmin: boolean;
   } | null;
+  login: () => void;
   setAuthenticated: (authenticated: boolean) => void;
   setUser: (user: SessionState["user"]) => void;
   clearSession: () => void;
@@ -19,6 +20,8 @@ const useSessionStore = create<SessionState>()(
     (set) => ({
       isAuthenticated: false,
       user: null,
+
+      login: () => set({ isAuthenticated: true }),
 
       setAuthenticated: (authenticated: boolean) =>
         set({ isAuthenticated: authenticated }),

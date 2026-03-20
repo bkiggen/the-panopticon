@@ -379,19 +379,18 @@ const MovieDataPage: React.FC = () => {
             loading={loading}
             pagination
             paginationMode="server"
-            page={currentPage - 1} // DataGrid uses 0-based indexing
-            pageSize={pageSize}
+            paginationModel={{ page: currentPage - 1, pageSize }}
             rowCount={totalMovieData}
-            onPageChange={(newPage: any) => goToPage(newPage + 1)}
-            onPageSizeChange={(newPageSize: any) => changePageSize(newPageSize)}
+            onPaginationModelChange={(model) => {
+              if (model.page !== currentPage - 1) {
+                goToPage(model.page + 1);
+              }
+              if (model.pageSize !== pageSize) {
+                changePageSize(model.pageSize);
+              }
+            }}
             pageSizeOptions={[10, 25, 50, 100]}
             checkboxSelection
-            // rowSelectionModel={selectedIds}
-            // onRowSelectionModelChange={(
-            //   newSelection: GridRowSelectionModel
-            // ) => {
-            //   setSelectedIds(newSelection as number[]);
-            // }}
             slots={{ toolbar: GridToolbar }}
             slotProps={{
               toolbar: {

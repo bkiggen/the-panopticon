@@ -91,7 +91,7 @@ export class AuthService {
       );
 
       return response.ok;
-    } catch (error) {
+    } catch {
       // Token validation failed - user will need to re-authenticate
       return false;
     }
