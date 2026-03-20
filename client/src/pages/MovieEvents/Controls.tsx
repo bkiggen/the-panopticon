@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import type { MovieEvent } from "@prismaTypes";
 import type { MovieEventFilters } from "@/services/movieEventService";
-import { useDebounce } from "@/hooks/useDebonce";
+import { useDebounce } from "@/hooks/useDebounce";
 import { theatreInfo } from "@/lib/theatreInfo";
 import { formats as allFormats } from "@/lib/formats";
 import { genres as allGenres } from "@/lib/genres";
