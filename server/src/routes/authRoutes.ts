@@ -1,32 +1,16 @@
 import express from "express";
-import rateLimit from "express-rate-limit";
 import * as authController from "../controllers/authController";
 import { authenticateToken } from "../middleware/auth";
 
 const router = express.Router();
 
-// Rate limiter for login attempts - prevents brute force attacks
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 5 login requests per windowMs
-  message: "Too many login attempts, please try again after 15 minutes",
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
+// Note: Rate limiting is handled via authLimiter from middleware/rateLimiter.ts
+// which automatically skips rate limiting in test environment
 
-// Rate limiter for password reset requests - prevents abuse
-const passwordResetLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 3, // Limit each IP to 3 password reset requests per windowMs
-  message: "Too many password reset attempts, please try again after 15 minutes",
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// Public auth routes
-router.post("/login", loginLimiter, authController.login);
-router.post("/forgot-password", passwordResetLimiter, authController.forgotPassword);
-router.post("/reset-password", passwordResetLimiter, authController.resetPassword);
+// Public auth routes (rate limiting applied in app.ts)
+router.post("/login", authController.login);
+router.post("/forgot-password", authController.forgotPassword);
+router.post("/reset-password", authController.resetPassword);
 
 // Protected routes
 router.get("/validate", authenticateToken, authController.validateToken);

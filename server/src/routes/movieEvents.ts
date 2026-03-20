@@ -14,7 +14,7 @@ router.get("/:id", movieEventController.getMovieEventById);
 router.post("/", adminAuth, movieEventController.createMovieEvent);
 
 // POST /api/movie-events/bulk
-router.post("/bulk", movieEventController.createMovieEvents);
+router.post("/bulk", adminAuth, movieEventController.createMovieEvents);
 
 // PUT /api/movie-events/:id
 router.put("/:id", adminAuth, movieEventController.updateMovieEvent);
