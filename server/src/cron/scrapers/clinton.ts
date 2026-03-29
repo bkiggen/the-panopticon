@@ -35,12 +35,6 @@ class ClintonStreetScraper extends BaseScraper {
         // Skip events without start date
         if (!vevent.start) continue;
 
-        // Skip events outside our date range (next 90 days)
-        const eventDate = new Date(vevent.start);
-        if (eventDate < now || eventDate > threeMonthsFromNow) {
-          continue;
-        }
-
         const scrapedEvent = this.transformEvent(vevent);
         if (scrapedEvent) {
           scrapedEvents.push(scrapedEvent);
@@ -98,7 +92,10 @@ class ClintonStreetScraper extends BaseScraper {
       if (event.categories) {
         if (typeof event.categories === "string") {
           genres = [event.categories];
-        } else if (typeof event.categories === "object" && "val" in event.categories) {
+        } else if (
+          typeof event.categories === "object" &&
+          "val" in event.categories
+        ) {
           genres = [event.categories.val as string];
         } else if (Array.isArray(event.categories)) {
           genres = event.categories.filter(Boolean) as string[];
@@ -108,20 +105,24 @@ class ClintonStreetScraper extends BaseScraper {
       // Extract description (clean up escape characters)
       let description: string | null = null;
       if (event.description) {
-        const desc = typeof event.description === "string"
-          ? event.description
-          : typeof event.description === "object" && "val" in event.description
-          ? (event.description.val as string)
-          : "";
-        description = desc.replace(/\\n/g, "\n").replace(/\\,/g, ",").trim() || null;
+        const desc =
+          typeof event.description === "string"
+            ? event.description
+            : typeof event.description === "object" &&
+                "val" in event.description
+              ? (event.description.val as string)
+              : "";
+        description =
+          desc.replace(/\\n/g, "\n").replace(/\\,/g, ",").trim() || null;
       }
 
       // Handle title properly (it might be a ParameterValue)
-      const eventTitle = typeof title === "string"
-        ? title
-        : typeof title === "object" && "val" in title
-        ? (title.val as string)
-        : String(title);
+      const eventTitle =
+        typeof title === "string"
+          ? title
+          : typeof title === "object" && "val" in title
+            ? (title.val as string)
+            : String(title);
 
       return {
         date: startDate,
