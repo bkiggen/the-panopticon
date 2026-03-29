@@ -2,6 +2,7 @@ import { Browser, Page } from "puppeteer";
 import {
   BaseScraper,
   ScrapedMovieEvent,
+  Showtime,
   launchStealthBrowser,
   closeBrowser,
   detectBotProtection,
@@ -235,7 +236,7 @@ class AcademyScraper extends BaseScraper {
       date,
       title: movie.title,
       originalTitle: movie.originalTitle,
-      times: movie.times,
+      times: movie.times.map(time => ({ time })), // Convert string[] to Showtime[]
       format: "Digital",
       imageUrl: movie.posterUrl,
       genres: [],

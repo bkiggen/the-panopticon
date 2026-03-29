@@ -21,10 +21,11 @@ model User {
 
 model MovieEvent {
   id                 Int        @id @default(autoincrement())
-  date               DateTime  
+  date               DateTime
   title              String
   originalTitle      String
-  times              String[]  
+  times              Json      // Array of { time: string, ticketUrl?: string } objects
+  detailUrl          String?   // Link to movie detail page on theatre website
   format             String
   imageUrl           String
   genres             String[]  // Scraped data
@@ -35,9 +36,9 @@ model MovieEvent {
   theatre            String
   accessibility      String[]
   discount           String[]
-  pendingApprovalAt  DateTime? 
+  pendingApprovalAt  DateTime?
   approvedAt         DateTime?
-  scrapedAt          DateTime? 
+  scrapedAt          DateTime?
   movieDataId        Int?
   movieData          MovieData? @relation(fields: [movieDataId], references: [id])
   createdAt          DateTime  @default(now())

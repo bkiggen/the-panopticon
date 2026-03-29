@@ -5,6 +5,14 @@
 import { prisma } from "../../../lib/prisma";
 
 /**
+ * Showtime with optional ticket URL
+ */
+export interface Showtime {
+  time: string;
+  ticketUrl?: string;
+}
+
+/**
  * Movie event data structure for scrapers
  * Matches the Prisma MovieEvent model fields needed for creation
  */
@@ -12,7 +20,8 @@ export interface ScrapedMovieEvent {
   date: Date;
   title: string;
   originalTitle: string;
-  times: string[];
+  times: Showtime[]; // Array of { time, ticketUrl } objects
+  detailUrl?: string | null; // Link to movie detail page on theatre website
   format: string;
   imageUrl: string;
   genres?: string[];
@@ -80,7 +89,8 @@ export abstract class BaseScraper {
             date: event.date,
             title: event.title,
             originalTitle: event.originalTitle,
-            times: event.times,
+            times: event.times as any, // Prisma will serialize Showtime[] to JSON
+            detailUrl: event.detailUrl,
             format: event.format,
             imageUrl: event.imageUrl,
             genres: event.genres || [],

@@ -87,7 +87,24 @@ export const AllShowings = ({ selectedEvent }: EventModalProps) => {
 
             {Object.entries(groupedEvents).map(([key, events]) => {
               const event = events[0]; // Use first event for date/theatre info
-              const allTimes = events.flatMap((e) => e.times);
+
+              // Build arrays of times and corresponding ticket URLs
+              const showings: Array<{ time: string; ticketUrl?: string }> = [];
+              events.forEach((e) => {
+                // Handle both old format (string[]) and new format (Showtime[])
+                (e.times as any[]).forEach((showtime: any) => {
+                  if (typeof showtime === 'string') {
+                    // Old format: just a time string
+                    showings.push({ time: showtime, ticketUrl: e.detailUrl || undefined });
+                  } else {
+                    // New format: { time, ticketUrl }
+                    showings.push({
+                      time: showtime.time,
+                      ticketUrl: showtime.ticketUrl || e.detailUrl || undefined,
+                    });
+                  }
+                });
+              });
 
               return (
                 <Box
@@ -115,12 +132,21 @@ export const AllShowings = ({ selectedEvent }: EventModalProps) => {
                   </Stack>
 
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {allTimes.map((time, index) => (
+                    {showings.map((showing, index) => (
                       <Chip
                         key={index}
-                        label={time}
+                        label={showing.time}
                         variant="outlined"
                         size="small"
+                        clickable={!!showing.ticketUrl}
+                        onClick={
+                          showing.ticketUrl
+                            ? () => window.open(showing.ticketUrl, "_blank")
+                            : undefined
+                        }
+                        sx={{
+                          cursor: showing.ticketUrl ? "pointer" : "default",
+                        }}
                       />
                     ))}
                   </Box>

@@ -38,12 +38,17 @@ export const Events = ({ data }: MovieEventCardsProps) => {
     setSelectedEvent(null);
   };
 
-  const handleTheatreClick = (event: React.MouseEvent, theatre: string) => {
+  const handleTheatreClick = (
+    event: React.MouseEvent,
+    theatre: string,
+    detailUrl?: string | null
+  ) => {
     event.stopPropagation();
 
-    const theatreWebsite = theatreInfo[theatre]?.website;
-    if (theatreWebsite) {
-      window.open(theatreWebsite, "_blank");
+    // Prefer movie-specific page, fallback to theatre homepage
+    const url = detailUrl || theatreInfo[theatre]?.website;
+    if (url) {
+      window.open(url, "_blank");
     }
   };
 
@@ -159,23 +164,30 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                         overflow: "hidden",
                       }}
                     >
-                      {event.times.map((time, index) => (
-                        <Chip
-                          key={index}
-                          label={time}
-                          size="small"
-                          variant="outlined"
-                          clickable
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.open(
-                              theatreInfo[event.theatre]?.website,
-                              "_blank"
-                            );
-                          }}
-                          sx={{ fontSize: "0.75rem" }}
-                        />
-                      ))}
+                      {(event.times as any[]).map((showtime: any, index: number) => {
+                        // Handle both old format (string) and new format ({ time, ticketUrl })
+                        const time = typeof showtime === 'string' ? showtime : showtime.time;
+                        const ticketUrl = typeof showtime === 'object' ? showtime.ticketUrl : null;
+                        const fallbackUrl = event.detailUrl || theatreInfo[event.theatre]?.website;
+
+                        return (
+                          <Chip
+                            key={index}
+                            label={time}
+                            size="small"
+                            variant="outlined"
+                            clickable
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const url = ticketUrl || fallbackUrl;
+                              if (url) {
+                                window.open(url, "_blank");
+                              }
+                            }}
+                            sx={{ fontSize: "0.75rem" }}
+                          />
+                        );
+                      })}
                     </Box>
                   </Box>
 
@@ -193,7 +205,7 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                       label={event.theatre}
                       color="primary"
                       variant="filled"
-                      onClick={(e) => handleTheatreClick(e, event.theatre)}
+                      onClick={(e) => handleTheatreClick(e, event.theatre, event.detailUrl)}
                       sx={{
                         fontWeight: "medium",
                         maxWidth: "100%",

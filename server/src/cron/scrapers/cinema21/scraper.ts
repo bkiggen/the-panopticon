@@ -2,6 +2,7 @@ import { Browser, Page } from "puppeteer";
 import {
   BaseScraper,
   ScrapedMovieEvent,
+  Showtime,
   launchBrowser,
   closeBrowser,
   createDateFromString,
@@ -26,6 +27,7 @@ interface RawMovieData {
   title: string;
   duration: string;
   posterUrl: string;
+  detailUrl: string;
   showtimes: RawShowtime[];
 }
 
@@ -101,6 +103,7 @@ class Cinema21Scraper extends BaseScraper {
         title: string;
         duration: string;
         posterUrl: string;
+        detailUrl: string;
         showtimes: Array<{ date: string; time: string; attribute: string; ticketUrl: string }>;
       }> = [];
 
@@ -118,12 +121,16 @@ class Cinema21Scraper extends BaseScraper {
         const posterEl = movieEl.querySelector(
           ".movie-poster"
         ) as HTMLImageElement;
+        const detailLinkEl = movieEl.querySelector(
+          ".times-tickets-single-movie__link"
+        ) as HTMLAnchorElement;
 
         if (!titleEl) return;
 
         const title = titleEl.textContent?.trim() || "";
         const duration = durationEl?.textContent?.trim() || "";
         const posterUrl = posterEl?.src || "";
+        const detailUrl = detailLinkEl?.href || "";
 
         const showtimes: Array<{ date: string; time: string; attribute: string; ticketUrl: string }> = [];
 
@@ -163,7 +170,7 @@ class Cinema21Scraper extends BaseScraper {
           .forEach(extractShowtimes);
 
         if (title && showtimes.length > 0) {
-          movies.push({ title, duration, posterUrl, showtimes });
+          movies.push({ title, duration, posterUrl, detailUrl, showtimes });
         }
       });
 
@@ -194,7 +201,12 @@ class Cinema21Scraper extends BaseScraper {
 
       // Create event entries for each date
       showsByDate.forEach((shows, dateStr) => {
-        const times = shows.map((s) => s.time);
+        // Build Showtime objects with time and ticketUrl paired
+        const times: Showtime[] = shows.map((show) => ({
+          time: show.time,
+          ticketUrl: show.ticketUrl,
+        }));
+
         const accessibilitySet = new Set<string>();
         const discountSet = new Set<string>();
 
@@ -215,6 +227,7 @@ class Cinema21Scraper extends BaseScraper {
           title: movie.title,
           originalTitle: movie.title,
           times,
+          detailUrl: movie.detailUrl || null,
           format: "Digital",
           imageUrl: movie.posterUrl || "",
           theatre: this.theatreName,

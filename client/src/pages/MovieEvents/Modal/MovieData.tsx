@@ -68,19 +68,37 @@ export const MovieData = ({ selectedEvent, onClose }: MovieDataProps) => {
     setDeleteConfirmOpen(false);
   };
 
-  const handleTheatreClick = (event: React.MouseEvent, theatre: string) => {
+  const handleTheatreClick = (event: React.MouseEvent, theatre: string, detailUrl?: string | null) => {
     event.stopPropagation();
 
-    const theatreWebsite = theatreInfo[theatre]?.website;
-    if (theatreWebsite) {
-      window.open(theatreWebsite, "_blank");
+    // Prefer movie-specific page, fallback to theatre homepage
+    const url = detailUrl || theatreInfo[theatre]?.website;
+    if (url) {
+      window.open(url, "_blank");
+    }
+  };
+
+  const handleTitleClick = () => {
+    const url = selectedEvent.detailUrl || theatreInfo[selectedEvent.theatre]?.website;
+    if (url) {
+      window.open(url, "_blank");
     }
   };
 
   return (
     <>
       <Box sx={{ p: 4 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          gutterBottom
+          onClick={handleTitleClick}
+          sx={{
+            cursor: selectedEvent.detailUrl || theatreInfo[selectedEvent.theatre]?.website ? 'pointer' : 'default',
+            '&:hover': {
+              textDecoration: selectedEvent.detailUrl || theatreInfo[selectedEvent.theatre]?.website ? 'underline' : 'none',
+            }
+          }}
+        >
           {displayTitle}
         </Typography>
 
@@ -124,7 +142,7 @@ export const MovieData = ({ selectedEvent, onClose }: MovieDataProps) => {
                 label={selectedEvent.theatre}
                 color="primary"
                 onClick={(event) =>
-                  handleTheatreClick(event, selectedEvent.theatre)
+                  handleTheatreClick(event, selectedEvent.theatre, selectedEvent.detailUrl)
                 }
                 sx={{ cursor: "pointer" }}
               />

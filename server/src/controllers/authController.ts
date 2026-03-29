@@ -13,6 +13,39 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
+    // DEVELOPMENT BYPASS: Allow any email/password in local environment
+    const isLocalDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'local';
+
+    if (isLocalDev) {
+      console.warn('⚠️  [DEV MODE] Bypassing authentication - any email/password accepted');
+
+      const jwtSecret = process.env.JWT_SECRET;
+      if (!jwtSecret) {
+        return res.status(500).json({ error: "Server configuration error" });
+      }
+
+      // Create a dev admin token without database lookup
+      const token = jwt.sign(
+        {
+          id: "dev-admin",
+          email: email,
+          role: "admin",
+        },
+        jwtSecret,
+        { expiresIn: process.env.JWT_EXPIRES_IN || "24h" } as jwt.SignOptions
+      );
+
+      return res.json({
+        token,
+        user: {
+          id: 999999,
+          email: email,
+          isAdmin: true,
+        },
+      });
+    }
+
+    // PRODUCTION: Normal authentication flow
     // Find user in database
     const user = await prisma.user.findUnique({
       where: { email },
