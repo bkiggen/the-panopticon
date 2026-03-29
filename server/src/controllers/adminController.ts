@@ -17,14 +17,14 @@ export const runScrapers = async (req: Request, res: Response) => {
     // Default to all scrapers if none specified
     const scrapersToRun = scrapers || [
       "cinema21",
-      "academy",
-      "laurelhurst",
-      "tomorrow",
-      "stJohns",
-      "clinton",
-      "cinemagic",
-      "livingRoom",
-      "omdb",
+      // "academy",
+      // "laurelhurst",
+      // "tomorrow",
+      // "stJohns",
+      // "clinton",
+      // "cinemagic",
+      // "livingRoom",
+      // "omdb",
     ];
 
     const scraperMap = {
@@ -49,7 +49,7 @@ export const runScrapers = async (req: Request, res: Response) => {
     }
 
     logStreamService.log(
-      `✅ Selected scrapers completed successfully at ${new Date().toISOString()}`
+      `✅ Selected scrapers completed successfully at ${new Date().toISOString()}`,
     );
     res.json({
       success: true,
@@ -76,11 +76,13 @@ export const streamLogs = (req: Request, res: Response) => {
   logStreamService.addClient(res);
 
   // Send initial connection message
-  res.write(`data: ${JSON.stringify({
-    timestamp: new Date().toISOString(),
-    message: "📡 Connected to log stream",
-    type: "info"
-  })}\n\n`);
+  res.write(
+    `data: ${JSON.stringify({
+      timestamp: new Date().toISOString(),
+      message: "📡 Connected to log stream",
+      type: "info",
+    })}\n\n`,
+  );
 
   // Handle client disconnect
   req.on("close", () => {
