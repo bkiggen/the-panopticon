@@ -24,7 +24,7 @@ export const runScrapers = async (req: Request, res: Response) => {
       // "clinton",
       // "cinemagic",
       // "livingRoom",
-      // "omdb",
+      "omdb",
     ];
 
     const scraperMap = {

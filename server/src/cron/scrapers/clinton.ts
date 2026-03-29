@@ -1,448 +1,169 @@
-import puppeteer from "puppeteer";
-import { prisma } from "../../lib/prisma";
+import ical, { VEvent } from "node-ical";
+import { BaseScraper, ScrapedMovieEvent } from "./utils";
 
-class CSTScraper {
-  private baseUrl: string;
-  public theatreName: string;
+/**
+ * Clinton Street Theater scraper
+ * Uses iCalendar feed for event data
+ */
+class ClintonStreetScraper extends BaseScraper {
+  public readonly theatreName = "Clinton Street Theater";
+  protected readonly baseUrl = "https://cstpdx.com";
+  private readonly icsUrl =
+    "https://cstpdx.com/?post_type=tribe_events&ical=1&eventDisplay=list";
 
-  constructor() {
-    this.baseUrl = "https://cstpdx.com/schedule/month/";
-    this.theatreName = "Clinton Street Theater";
-  }
+  /**
+   * Main scraping method
+   */
+  async scrapeMovies(): Promise<ScrapedMovieEvent[]> {
+    this.log("Starting scrape from iCalendar feed...", "🎭");
 
-  // Helper function to parse various date formats from CST
-  parseDate(dateString: string): Date | null {
-    const currentYear = new Date().getFullYear();
-
-    // Handle formats like "Sunday, September 28 @ 3:00 PM"
-    const fullDateMatch = dateString.match(
-      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\w+)\s+(\d+)\s+@\s+(\d{1,2}:\d{2}\s*(?:AM|PM))/i
-    );
-    if (fullDateMatch) {
-      const [, dayOfWeek, month, day, time] = fullDateMatch;
-      const date = this.parseMonthDay(month, day, currentYear);
-      if (date) {
-        const [hours, minutes, ampm] = this.parseTime(time);
-        if (hours !== null && minutes !== null) {
-          date.setHours(hours, minutes, 0, 0);
-          return date;
-        }
-      }
-    }
-
-    // Handle formats like "October 2" or "September 28"
-    const monthDayMatch = dateString.match(/(\w+)\s+(\d+)/);
-    if (monthDayMatch) {
-      const [, month, day] = monthDayMatch;
-      return this.parseMonthDay(month, day, currentYear);
-    }
-
-    return null;
-  }
-
-  private parseMonthDay(month: string, day: string, year: number): Date | null {
-    const monthMap: { [key: string]: number } = {
-      January: 0,
-      February: 1,
-      March: 2,
-      April: 3,
-      May: 4,
-      June: 5,
-      July: 6,
-      August: 7,
-      September: 8,
-      October: 9,
-      November: 10,
-      December: 11,
-    };
-
-    const monthNum = monthMap[month];
-    const dayNum = parseInt(day, 10);
-
-    if (monthNum !== undefined && !isNaN(dayNum)) {
-      const date = new Date(year, monthNum, dayNum);
-
-      // If the date is in the past, assume it's next year
-      const today = new Date();
-      if (date < today) {
-        date.setFullYear(year + 1);
-      }
-
-      return date;
-    }
-
-    return null;
-  }
-
-  private parseTime(timeStr: string): [number | null, number | null, string] {
-    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-    if (timeMatch) {
-      let hours = parseInt(timeMatch[1], 10);
-      const minutes = parseInt(timeMatch[2], 10);
-      const ampm = timeMatch[3].toUpperCase();
-
-      if (ampm === "PM" && hours !== 12) {
-        hours += 12;
-      } else if (ampm === "AM" && hours === 12) {
-        hours = 0;
-      }
-
-      return [hours, minutes, ampm];
-    }
-    return [null, null, ""];
-  }
-
-  // Extract price from text
-  private extractPrice(text: string): string | null {
-    const priceMatch = text.match(/\$(\d+)/);
-    return priceMatch ? `$${priceMatch[1]}` : null;
-  }
-
-  async scrapeEvents(monthUrl?: string) {
-    let browser;
     try {
-      browser = await puppeteer.launch({
-        headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      });
+      // Fetch and parse the iCalendar feed
+      this.log(`Fetching calendar from: ${this.icsUrl}`, "🔗");
+      const events = await ical.async.fromURL(this.icsUrl);
 
-      const page = await browser.newPage();
-      await page.setUserAgent(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-      );
+      const scrapedEvents: ScrapedMovieEvent[] = [];
+      const now = new Date();
+      const threeMonthsFromNow = new Date();
+      threeMonthsFromNow.setDate(now.getDate() + 90);
 
-      const targetUrl = monthUrl || this.baseUrl;
-      console.log(`🎬 Scraping ${targetUrl}...`);
+      // Process each event in the calendar
+      for (const event of Object.values(events)) {
+        if (!event || event.type !== "VEVENT") continue;
+        const vevent = event as VEvent;
 
-      await page.goto(targetUrl, { waitUntil: "networkidle2" });
+        // Skip events without start date
+        if (!vevent.start) continue;
 
-      // Wait for the calendar to load
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      const rawData = await page.evaluate(() => {
-        const events: any[] = [];
-
-        // Get all text content and split into lines for parsing
-        const bodyText = document.body.textContent || "";
-        const lines = bodyText
-          .split("\n")
-          .map((line) => line.trim())
-          .filter((line) => line.length > 0);
-
-        let currentEvent: any = null;
-        let eventId = 0;
-
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i];
-
-          // Skip navigation and header text
-          if (
-            line.includes("Calendar of Events") ||
-            line.includes("Views Navigation") ||
-            line.includes("Select date") ||
-            line.match(/^[SMTWF]$/) || // Day abbreviations
-            line.match(/^\d+$/) || // Just numbers
-            line.includes("events found") ||
-            line.includes("Subscribe to calendar") ||
-            line.includes("There are no events")
-          ) {
-            continue;
-          }
-
-          // Look for datetime patterns like "Sunday, September 28 @ 3:00 PM"
-          const datetimeMatch = line.match(
-            /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\w+\s+\d+)\s+@\s+(\d{1,2}:\d{2}\s*(?:AM|PM))/i
-          );
-          if (datetimeMatch) {
-            // Save previous event if it exists
-            if (currentEvent && currentEvent.title) {
-              events.push({
-                ...currentEvent,
-                id: `cst_${eventId++}`,
-              });
-            }
-
-            // Start new event
-            currentEvent = {
-              datetime: line,
-              date: datetimeMatch[2], // "September 28"
-              time: datetimeMatch[3], // "3:00 PM"
-              title: "",
-              description: "",
-              price: "",
-            };
-            continue;
-          }
-
-          // Look for standalone time patterns (backup)
-          const timeMatch = line.match(/^(\d{1,2}:\d{2}\s*(?:AM|PM))$/i);
-          if (timeMatch && !currentEvent) {
-            currentEvent = {
-              time: timeMatch[1],
-              title: "",
-              description: "",
-              price: "",
-              datetime: "",
-              date: "",
-            };
-            continue;
-          }
-
-          // Look for price patterns
-          const priceMatch = line.match(/^\$(\d+)$/);
-          if (priceMatch && currentEvent) {
-            currentEvent.price = line;
-            continue;
-          }
-
-          // If we have an event context but no title yet, this might be the title
-          if (
-            currentEvent &&
-            !currentEvent.title &&
-            line.length > 3 &&
-            !line.includes("events,") &&
-            !timeMatch &&
-            !priceMatch &&
-            !line.match(/^\d/) &&
-            !line.includes("@") &&
-            line.length < 100
-          ) {
-            // Skip obvious non-title lines
-            if (!line.includes("Select date") && !line.includes("Calendar")) {
-              currentEvent.title = line;
-              continue;
-            }
-          }
-
-          // Collect description if we have title but no price yet
-          if (
-            currentEvent &&
-            currentEvent.title &&
-            !currentEvent.price &&
-            line.length > 10 &&
-            !line.includes("$") &&
-            !line.includes("events,") &&
-            !line.match(/^\d{1,2}:\d{2}/) &&
-            line !== currentEvent.title
-          ) {
-            // Avoid duplicate content and navigation text
-            if (
-              !currentEvent.description.includes(line) &&
-              !line.includes("Calendar") &&
-              !line.includes("Navigation")
-            ) {
-              currentEvent.description +=
-                (currentEvent.description ? " " : "") + line;
-            }
-          }
+        // Skip events outside our date range (next 90 days)
+        const eventDate = new Date(vevent.start);
+        if (eventDate < now || eventDate > threeMonthsFromNow) {
+          continue;
         }
 
-        // Don't forget the last event
-        if (currentEvent && currentEvent.title) {
-          events.push({
-            ...currentEvent,
-            id: `cst_${eventId++}`,
-          });
+        const scrapedEvent = this.transformEvent(vevent);
+        if (scrapedEvent) {
+          scrapedEvents.push(scrapedEvent);
         }
-
-        return events;
-      });
-
-      console.log(`📊 Found ${rawData.length} raw events`);
-
-      // Transform to database format
-      const events: any[] = [];
-      const seenEvents = new Set<string>(); // Track duplicates
-
-      rawData.forEach((event) => {
-        if (!event.title || (!event.datetime && !event.date)) return;
-
-        // Skip invalid titles
-        if (
-          event.title.toLowerCase().includes("event series") ||
-          event.title.toLowerCase() === "events" ||
-          event.title.toLowerCase().includes("navigation") ||
-          event.title.toLowerCase().includes("calendar") ||
-          event.title.length < 2
-        ) {
-          return;
-        }
-
-        // Parse the date
-        const dateToUse = event.datetime || `${event.date} @ ${event.time}`;
-        const parsedDate = this.parseDate(dateToUse);
-
-        if (!parsedDate) {
-          console.warn(`⚠️  Could not parse date for: ${event.title}`);
-          return;
-        }
-
-        // Extract time if not already parsed
-        let timeStr = event.time;
-        if (!timeStr && event.datetime) {
-          const timeMatch = event.datetime.match(
-            /(\d{1,2}:\d{2}\s*(?:AM|PM))/i
-          );
-          timeStr = timeMatch ? timeMatch[1] : "";
-        }
-
-        // Create unique key to prevent duplicates
-        const uniqueKey = `${event.title}-${
-          parsedDate.toISOString().split("T")[0]
-        }-${timeStr}`;
-        if (seenEvents.has(uniqueKey)) {
-          return; // Skip duplicate
-        }
-        seenEvents.add(uniqueKey);
-
-        // Clean up description
-        let description = event.description || "";
-        if (description.length > 500) {
-          description = description.substring(0, 500) + "...";
-        }
-
-        // Determine special attributes
-        const accessibility: string[] = [];
-        const discount: string[] = [];
-        const specialNotes: string[] = [];
-
-        if (event.title.toLowerCase().includes("rocky horror")) {
-          specialNotes.push("Cult Classic");
-          specialNotes.push("Audience Participation");
-        }
-
-        if (
-          description.toLowerCase().includes("shadowcast") ||
-          description.toLowerCase().includes("cabaret")
-        ) {
-          specialNotes.push("Live Performance");
-        }
-
-        events.push({
-          date: parsedDate,
-          title: event.title,
-          originalTitle: event.title,
-          times: timeStr ? [timeStr] : [],
-          format: "35mm/Digital", // CST shows various formats
-          imageUrl: "", // CST doesn't provide images in calendar
-          theatre: this.theatreName,
-          accessibility,
-          discount,
-          genres: [], // Could be populated later
-          description: description || null,
-          trailerUrl: null,
-          imdbId: null,
-          rottenTomatoesId: null,
-          price: event.price || null,
-          specialNotes,
-        });
-      });
-
-      return events.sort((a, b) => a.date.getTime() - b.date.getTime());
-    } catch (error: any) {
-      throw new Error(
-        `Failed to scrape Clinton Street Theater: ${error.message}`
-      );
-    } finally {
-      if (browser) {
-        await browser.close();
       }
+
+      this.log(`Found ${scrapedEvents.length} events`, "✅");
+      return this.sortEvents(scrapedEvents);
+    } catch (error) {
+      this.warn(`Error scraping calendar: ${(error as Error).message}`);
+      return [];
     }
   }
 
-  async saveToDatabase(events: any[]) {
-    // First, delete existing CST events to avoid duplicates
-    await prisma.movieEvent.deleteMany({
-      where: {
+  /**
+   * Transform iCalendar event to ScrapedMovieEvent format
+   */
+  private transformEvent(event: VEvent): ScrapedMovieEvent | null {
+    try {
+      const title = event.summary || "";
+      if (!title || !event.start) return null;
+
+      const startDate = new Date(event.start);
+
+      // Format time as "HH:MM AM/PM"
+      const formatTime = (date: Date): string => {
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "PM" : "AM";
+        const displayHours = hours % 12 || 12;
+        const displayMinutes = minutes.toString().padStart(2, "0");
+        return `${displayHours}:${displayMinutes} ${ampm}`;
+      };
+
+      const showtime = formatTime(startDate);
+
+      // Extract detail URL
+      const detailUrl = event.url || null;
+
+      // Extract poster image from attachments
+      let imageUrl = "";
+      if (event.attach) {
+        if (typeof event.attach === "string") {
+          imageUrl = event.attach;
+        } else if (typeof event.attach === "object" && "val" in event.attach) {
+          imageUrl = event.attach.val as string;
+        } else if (Array.isArray(event.attach) && event.attach.length > 0) {
+          const firstAttach = event.attach[0];
+          imageUrl = typeof firstAttach === "string" ? firstAttach : "";
+        }
+      }
+
+      // Extract categories/genres
+      let genres: string[] = [];
+      if (event.categories) {
+        if (typeof event.categories === "string") {
+          genres = [event.categories];
+        } else if (typeof event.categories === "object" && "val" in event.categories) {
+          genres = [event.categories.val as string];
+        } else if (Array.isArray(event.categories)) {
+          genres = event.categories.filter(Boolean) as string[];
+        }
+      }
+
+      // Extract description (clean up escape characters)
+      let description: string | null = null;
+      if (event.description) {
+        const desc = typeof event.description === "string"
+          ? event.description
+          : typeof event.description === "object" && "val" in event.description
+          ? (event.description.val as string)
+          : "";
+        description = desc.replace(/\\n/g, "\n").replace(/\\,/g, ",").trim() || null;
+      }
+
+      // Handle title properly (it might be a ParameterValue)
+      const eventTitle = typeof title === "string"
+        ? title
+        : typeof title === "object" && "val" in title
+        ? (title.val as string)
+        : String(title);
+
+      return {
+        date: startDate,
+        title: eventTitle,
+        originalTitle: eventTitle,
+        times: [{ time: showtime }],
+        detailUrl,
+        format: "Digital",
+        imageUrl,
+        genres: genres.filter(Boolean),
+        description,
         theatre: this.theatreName,
-      },
+        accessibility: [],
+        discount: [],
+      };
+    } catch (error) {
+      this.warn(
+        `Error transforming event "${event.summary}": ${(error as Error).message}`,
+      );
+      return null;
+    }
+  }
+
+  /**
+   * Sort events by date and title
+   */
+  private sortEvents(events: ScrapedMovieEvent[]): ScrapedMovieEvent[] {
+    return events.sort((a, b) => {
+      const dateCompare = a.date.getTime() - b.date.getTime();
+      if (dateCompare !== 0) return dateCompare;
+      return a.title.localeCompare(b.title);
     });
-
-    // Save new events
-    let savedCount = 0;
-    for (const event of events) {
-      try {
-        await prisma.movieEvent.create({
-          data: {
-            ...event,
-            // Remove fields that aren't in the schema
-            specialNotes: undefined,
-            price: undefined,
-          },
-        });
-        savedCount++;
-        console.log(
-          `✓ Saved: ${event.title} on ${event.date.toLocaleDateString()}`
-        );
-      } catch (error: any) {
-        console.error(`✗ Failed to save ${event.title}:`, {
-          error: error.message,
-          code: error.code,
-          meta: error.meta,
-          eventData: JSON.stringify(event, null, 2),
-        });
-      }
-    }
-
-    return savedCount;
-  }
-
-  // Method to scrape specific month
-  async scrapeMonth(year: number, month: number) {
-    const monthStr = month.toString().padStart(2, "0");
-    const monthUrl = `${this.baseUrl}${year}-${monthStr}/`;
-    return this.scrapeEvents(monthUrl);
   }
 }
 
-// Run the scraper
-async function run() {
-  const scraper = new CSTScraper();
+// Create singleton instance
+const scraper = new ClintonStreetScraper();
 
-  try {
-    console.log(`🎭 Starting Clinton Street Theater scraper...`);
-
-    // Scrape current month
-    const currentEvents = await scraper.scrapeEvents();
-
-    // Optionally scrape next month too
-    const nextMonth = new Date();
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    const nextMonthEvents = await scraper.scrapeMonth(
-      nextMonth.getFullYear(),
-      nextMonth.getMonth() + 1
-    );
-
-    const allEvents = [...currentEvents, ...nextMonthEvents];
-
-    if (allEvents.length > 0) {
-      // Save to database
-      const savedCount = await scraper.saveToDatabase(allEvents);
-
-      // Show summary
-      console.log("\n📈 Summary:");
-      console.log(`- Events scraped: ${allEvents.length}`);
-      console.log(`- Events saved: ${savedCount}`);
-      console.log(`- Theatre: ${scraper.theatreName}`);
-
-      // Show some sample events
-      console.log("\n🎬 Sample Events:");
-      allEvents.slice(0, 3).forEach((event) => {
-        console.log(
-          `- ${
-            event.title
-          } on ${event.date.toLocaleDateString()} at ${event.times.join(", ")}`
-        );
-      });
-    } else {
-      console.log("⚠️  No events found to save");
-    }
-  } catch (error: any) {
-    console.error("❌ Error:", error.message);
-  } finally {
-    console.log("\n✅ Scraper completed");
-  }
+// Export for use by cron service
+export async function runCSTScraper(): Promise<void> {
+  await scraper.run();
 }
 
-export { CSTScraper };
-export { run as runCSTScraper };
+// Export class for testing
+export { ClintonStreetScraper };
