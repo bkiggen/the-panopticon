@@ -17,7 +17,7 @@ export const runScrapers = async (req: Request, res: Response) => {
     // Default to all scrapers if none specified
     const scrapersToRun = scrapers || [
       "cinema21",
-      // "academy",
+      "academy",
       // "laurelhurst",
       // "tomorrow",
       // "stJohns",

@@ -2,7 +2,6 @@ import { Browser, Page } from "puppeteer";
 import {
   BaseScraper,
   ScrapedMovieEvent,
-  Showtime,
   launchStealthBrowser,
   closeBrowser,
   detectBotProtection,
@@ -22,16 +21,19 @@ interface RawMovieData {
   posterUrl: string;
   duration: string;
   times: string[];
+  ticketUrls: string[];
+  detailUrl: string;
   hasSpecialScreening: boolean;
 }
 
 /**
  * Academy Theater scraper
- * Uses stealth browser and human-like behavior due to Squarespace bot protection
+ * Uses stealth browser and human-like behavior
+ * New site structure: React/Next.js app with date-based filtering
  */
 class AcademyScraper extends BaseScraper {
   public readonly theatreName = "Academy Theater";
-  protected readonly baseUrl = "https://academytheaterpdx.com/now-playing";
+  protected readonly baseUrl = "https://www.academytheaterpdx.com/movies";
 
   private browser: Browser | null = null;
   private page: Page | null = null;
@@ -60,8 +62,11 @@ class AcademyScraper extends BaseScraper {
 
         // Respect rate limits between page loads
         if (i < dates.length - 1) {
-          this.log("Pausing before next date (respecting rate limits)...", "⏳");
-          await respectRateLimit({ minSeconds: 8, maxSeconds: 15 });
+          this.log(
+            "Pausing before next date (respecting rate limits)...",
+            "⏳",
+          );
+          await respectRateLimit({ minSeconds: 3, maxSeconds: 6 });
         }
       }
 
@@ -78,52 +83,35 @@ class AcademyScraper extends BaseScraper {
    */
   private async scrapeDatePage(
     date: Date,
-    dateStr: string
+    dateStr: string,
   ): Promise<ScrapedMovieEvent[]> {
     if (!this.page) {
       throw new Error("Browser page not initialized");
     }
 
-    const url = `${this.baseUrl}?date=${dateStr}`;
+    const url = `${this.baseUrl}/?date=${dateStr}`;
     this.log(`Navigating to: ${url}`, "🔗");
 
     try {
-      await this.page.goto(url, { waitUntil: "domcontentloaded" });
+      await this.page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
 
-      // Wait for Squarespace/bot protection to finish
-      this.log("Waiting for page to fully load...", "⏳");
-      await randomDelay(5000, 8000);
+      // Wait for React to hydrate and render content
+      this.log("Waiting for React to render...", "⏳");
+      await randomDelay(3000, 5000);
 
-      // Check if page needs more time
-      const needsMoreTime = await this.checkIfStillLoading();
-      if (needsMoreTime) {
-        this.log("Page still loading, waiting longer...", "🔄");
-        await randomDelay(8000, 12000);
-      }
-
-      // Check for CAPTCHA
+      // Check for bot protection
       const isCaptcha = await detectBotProtection(this.page);
       if (isCaptcha) {
         this.warn(`CAPTCHA detected for ${dateStr} - skipping`);
         return [];
       }
 
-      // Check if content is available
-      const hasContent = await this.checkForContent();
+      // Wait for movie content to appear
+      const hasContent = await this.waitForMovieContent();
       if (!hasContent) {
         this.warn(`No movie content found for ${dateStr}`);
-
-        // Try waiting a bit more
-        await randomDelay(3000, 5000);
-        const hasContentAfterWait = await this.checkForContent();
-        if (!hasContentAfterWait) {
-          this.warn(`Still no content after wait, skipping ${dateStr}`);
-          return [];
-        }
+        return [];
       }
-
-      // Simulate human reading behavior
-      await simulateReading(this.page);
 
       // Extract movie data
       const rawMovies = await this.extractMovieData();
@@ -132,7 +120,9 @@ class AcademyScraper extends BaseScraper {
       // Transform to ScrapedMovieEvent format
       return rawMovies.map((movie) => this.transformMovie(movie, date));
     } catch (error) {
-      this.warn(`Error loading page for ${dateStr}: ${(error as Error).message}`);
+      this.warn(
+        `Error loading page for ${dateStr}: ${(error as Error).message}`,
+      );
       return [];
     }
   }
@@ -161,8 +151,36 @@ class AcademyScraper extends BaseScraper {
     if (!this.page) return false;
 
     return this.page.evaluate(() => {
-      return document.querySelectorAll(".col-md-12.col-lg-6").length > 0;
+      // New React structure uses css-oviv6j class for movie containers
+      return document.querySelectorAll(".css-oviv6j").length > 0;
     });
+  }
+
+  /**
+   * Wait for movie content to appear (with retry logic)
+   */
+  private async waitForMovieContent(): Promise<boolean> {
+    if (!this.page) return false;
+
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    while (attempts < maxAttempts) {
+      const isLoading = await this.checkIfStillLoading();
+      if (!isLoading) {
+        const hasContent = await this.checkForContent();
+        if (hasContent) {
+          this.log("Movie content detected", "✅");
+          return true;
+        }
+      }
+
+      this.log(`Waiting for content... (attempt ${attempts + 1}/${maxAttempts})`, "⏳");
+      await randomDelay(1000, 2000);
+      attempts++;
+    }
+
+    return false;
   }
 
   /**
@@ -174,46 +192,58 @@ class AcademyScraper extends BaseScraper {
     return this.page.evaluate(() => {
       const movies: RawMovieData[] = [];
 
-      const movieContainers = document.querySelectorAll(".col-md-12.col-lg-6");
+      // New React structure uses css-oviv6j class for movie containers
+      const movieContainers = document.querySelectorAll(".css-oviv6j");
 
       movieContainers.forEach((container) => {
-        const movieContainer = container.querySelector(".at-np-container");
-        if (!movieContainer) return;
+        // Extract title and detail URL from the movie link
+        const titleLink = container.querySelector("a[href^='/movies/']") as HTMLAnchorElement;
+        if (!titleLink) return;
 
-        const titleEl = movieContainer.querySelector("h2 a");
-        if (!titleEl) return;
+        // Try to get title from multiple sources
+        const titleEl = titleLink.querySelector(".css-1gu884c");
+        const title = titleEl?.textContent?.trim() ||
+                     titleLink.getAttribute("title") ||
+                     titleLink.textContent?.trim() || "";
+        if (!title) return;
 
-        const title = titleEl.textContent?.trim() || "";
+        // Build full detail URL
+        const detailPath = titleLink.getAttribute("href") || "";
+        const detailUrl = detailPath ? `https://www.academytheaterpdx.com${detailPath}` : "";
 
-        const posterEl = movieContainer.querySelector("img");
+        // Extract poster image
+        const posterEl = titleLink.querySelector("img") as HTMLImageElement;
         const posterUrl = posterEl?.src || "";
 
-        const durationEl = movieContainer.querySelector(".at-dur .at-content");
-        const duration = durationEl?.textContent?.trim() || "";
+        // Extract showtimes with ticket URLs
+        const times: Array<{ time: string; ticketUrl?: string }> = [];
+        const showtimeLinks = container.querySelectorAll(
+          "a[href^='https://booking.academytheaterpdx.com/']"
+        ) as NodeListOf<HTMLAnchorElement>;
 
-        // Extract showtimes
-        const times: string[] = [];
-        const timesContainer = movieContainer.querySelector(".at-np-details-times");
-        if (timesContainer) {
-          const timeElements = timesContainer.querySelectorAll("ul li span:first-child");
-          timeElements.forEach((timeEl) => {
-            const text = timeEl.textContent?.trim() || "";
-            if (text.match(/\d{1,2}:\d{2}\s*(AM|PM)/i)) {
-              times.push(text);
-            }
-          });
-        }
+        showtimeLinks.forEach((link) => {
+          const timeText = link.textContent?.trim() || "";
+          const ticketUrl = link.href;
 
-        const hasSpecial = !!movieContainer.querySelector(".signs .fas.fa-star");
+          if (timeText && ticketUrl) {
+            times.push({
+              time: timeText,
+              ticketUrl: ticketUrl,
+            });
+          }
+        });
 
+        // Only add if we have showtimes
         if (title && times.length > 0) {
           movies.push({
             title,
             originalTitle: title,
             posterUrl,
-            duration,
-            times,
-            hasSpecialScreening: hasSpecial,
+            duration: "", // Duration not readily available in new structure
+            times: times.map(t => t.time), // Keep string array for backwards compatibility
+            hasSpecialScreening: false, // Not indicated in new structure
+            detailUrl,
+            ticketUrls: times.map(t => t.ticketUrl || ""),
           });
         }
       });
@@ -232,11 +262,18 @@ class AcademyScraper extends BaseScraper {
       discount.push("Special Screening");
     }
 
+    // Build Showtime array pairing times with ticket URLs
+    const times = movie.times.map((time, index) => ({
+      time,
+      ticketUrl: movie.ticketUrls[index] || undefined,
+    }));
+
     return {
       date,
       title: movie.title,
       originalTitle: movie.originalTitle,
-      times: movie.times.map(time => ({ time })), // Convert string[] to Showtime[]
+      times,
+      detailUrl: movie.detailUrl || null,
       format: "Digital",
       imageUrl: movie.posterUrl,
       genres: [],
