@@ -1,9 +1,9 @@
-// Hollywood Theater Browser Console Scraper
+// Hollywood Theatre Browser Console Scraper
 // Navigate to https://hollywoodtheatre.org/# first, then run this in the console
 
 class HollywoodBrowserScraper {
   constructor() {
-    this.theatreName = "Hollywood Theater";
+    this.theatreName = "Hollywood Theatre";
     this.allEvents = [];
   }
 
@@ -60,7 +60,7 @@ class HollywoodBrowserScraper {
       movieEvents = document.querySelectorAll(selector);
       if (movieEvents.length > 0) {
         console.log(
-          `Found ${movieEvents.length} events using selector: ${selector}`
+          `Found ${movieEvents.length} events using selector: ${selector}`,
         );
         break;
       }
@@ -150,7 +150,7 @@ class HollywoodBrowserScraper {
         }
 
         console.log(
-          `Processing event: ${title} on ${date} with ${times.length} times`
+          `Processing event: ${title} on ${date} with ${times.length} times`,
         );
 
         if (title) {
@@ -197,10 +197,10 @@ class HollywoodBrowserScraper {
         format: features.includes("35mm Film")
           ? "35mm"
           : features.includes("16mm Film")
-          ? "16mm"
-          : features.includes("70mm Film")
-          ? "70mm"
-          : "Digital",
+            ? "16mm"
+            : features.includes("70mm Film")
+              ? "70mm"
+              : "Digital",
         imageUrl: movie.imageUrl,
         theatre: this.theatreName,
         accessibility: null,
@@ -212,14 +212,14 @@ class HollywoodBrowserScraper {
 
   // Main scraping function
   async scrapeMovies() {
-    console.log(`🎭 Starting Hollywood Theater browser scraper...`);
+    console.log(`🎭 Starting Hollywood Theatre browser scraper...`);
 
     // First, make sure we're in calendar view
     console.log(`🖱️  Ensuring calendar view is active...`);
 
     // Try to click Calendar button if it exists
     const calendarButtons = Array.from(
-      document.querySelectorAll("button")
+      document.querySelectorAll("button"),
     ).filter((btn) => {
       const span = btn.querySelector("span");
       return span && span.textContent.trim() === "Calendar";
@@ -246,7 +246,7 @@ class HollywoodBrowserScraper {
     // Scrape current month and next 3 months (4 total)
     for (let monthIndex = 0; monthIndex < 4; monthIndex++) {
       console.log(
-        `\n📅 Scraping month ${monthIndex + 1}/4: ${currentMonthName}`
+        `\n📅 Scraping month ${monthIndex + 1}/4: ${currentMonthName}`,
       );
 
       // Wait for calendar data to load
@@ -257,7 +257,7 @@ class HollywoodBrowserScraper {
         this.allEvents.push(...monthData);
       } catch (error) {
         console.log(
-          `⚠️  Error scraping month ${monthIndex + 1}: ${error.message}`
+          `⚠️  Error scraping month ${monthIndex + 1}: ${error.message}`,
         );
       }
 
@@ -285,13 +285,13 @@ class HollywoodBrowserScraper {
 
           if (currentMonthName && currentMonthName !== previousMonthName) {
             console.log(
-              `✅ Month changed from "${previousMonthName}" to "${currentMonthName}"`
+              `✅ Month changed from "${previousMonthName}" to "${currentMonthName}"`,
             );
             break;
           } else {
             attempts++;
             console.log(
-              `⚠️  Month hasn't changed yet (attempt ${attempts}/${maxAttempts}). Current: "${currentMonthName}", Previous: "${previousMonthName}"`
+              `⚠️  Month hasn't changed yet (attempt ${attempts}/${maxAttempts}). Current: "${currentMonthName}", Previous: "${previousMonthName}"`,
             );
 
             if (attempts < maxAttempts) {
@@ -304,7 +304,7 @@ class HollywoodBrowserScraper {
 
         if (attempts >= maxAttempts) {
           console.log(
-            `❌ Month did not change after ${maxAttempts} attempts. Stopping.`
+            `❌ Month did not change after ${maxAttempts} attempts. Stopping.`,
           );
           break;
         }
@@ -335,7 +335,7 @@ class HollywoodBrowserScraper {
 
 // Usage instructions and runner
 console.log(`
-🎭 HOLLYWOOD THEATER BROWSER SCRAPER
+🎭 HOLLYWOOD THEATre BROWSER SCRAPER
 =====================================
 
 Instructions:

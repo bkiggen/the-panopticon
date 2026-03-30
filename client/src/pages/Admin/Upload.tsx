@@ -122,7 +122,7 @@ const BulkMovieEventUpload: React.FC = () => {
       times: ["2:00pm", "4:30pm", "7:00pm", "9:30pm"],
       format: "Digital",
       imageUrl: "https://example.com/image.jpg",
-      theatre: "Hollywood Theater",
+      theatre: "Hollywood Theatre",
       accessibility: null,
       discount: null,
     },
@@ -150,7 +150,7 @@ const BulkMovieEventUpload: React.FC = () => {
           placeholder={`Paste your JSON array here...\n\nExample:\n${JSON.stringify(
             exampleData,
             null,
-            2
+            2,
           )}`}
           value={jsonInput}
           onChange={(e) => setJsonInput(e.target.value)}

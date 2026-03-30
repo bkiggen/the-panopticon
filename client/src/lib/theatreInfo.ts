@@ -30,12 +30,12 @@ export const theatreInfo: Record<string, theatreInfo> = {
   //   phone: "",
   //   neighborhood: "Richmond",
   // },
-  // "Hollywood Theater": {
-  //   website: "https://hollywoodtheatre.org",
-  //   address: "4122 NE Sandy Blvd, Portland, OR 97212",
-  //   phone: "(503) 281-4215",
-  //   neighborhood: "Hollywood",
-  // },
+  "Hollywood Theatre": {
+    website: "https://hollywoodtheatre.org",
+    address: "4122 NE Sandy Blvd, Portland, OR 97212",
+    phone: "(503) 281-4215",
+    neighborhood: "Hollywood",
+  },
   // "Bagdad Theater": {
   //   website: "https://www.mcmenamins.com/bagdad-theater-pub",
   //   address: "3702 SE Hawthorne Blvd, Portland, OR 97214",

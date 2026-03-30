@@ -62,6 +62,11 @@ export function createApp() {
 
   // API routes
   app.use("/api/movie-events", movieEventRoutes);
+
+  // Allow CORS for manual scrape endpoint (called from external sites)
+  app.options("/api/admin/manual-scrape", cors({ origin: true, credentials: false }));
+  app.use("/api/admin/manual-scrape", cors({ origin: true, credentials: false }));
+
   app.use("/api/admin", adminRoutes);
 
   // Rate limiting for auth routes (authLimiter handles test skipping internally)

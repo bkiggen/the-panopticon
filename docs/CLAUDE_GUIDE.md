@@ -15,18 +15,18 @@ This document provides quick context for AI assistants (like Claude) working on 
 
 ### Common Tasks → File Locations
 
-| Task | File Path |
-|------|-----------|
-| Add new API endpoint | `server/src/routes/*.ts` |
-| Create new page | `client/src/pages/*/index.tsx` |
-| Add UI component | `client/src/components/*` |
-| Modify state logic | `client/src/stores/*Store.ts` |
-| API service calls | `client/src/services/*Service.ts` |
-| Database schema | `server/prisma/schema.prisma` |
-| Add constants (theaters, genres) | `client/src/lib/*.ts` |
-| Auth logic | `server/src/middleware/auth.ts` |
-| Scraper code | `server/src/cron/scrapers/*.ts` |
-| TypeScript types | `client/src/types/*.ts` or `server/src/types/*.ts` |
+| Task                             | File Path                                          |
+| -------------------------------- | -------------------------------------------------- |
+| Add new API endpoint             | `server/src/routes/*.ts`                           |
+| Create new page                  | `client/src/pages/*/index.tsx`                     |
+| Add UI component                 | `client/src/components/*`                          |
+| Modify state logic               | `client/src/stores/*Store.ts`                      |
+| API service calls                | `client/src/services/*Service.ts`                  |
+| Database schema                  | `server/prisma/schema.prisma`                      |
+| Add constants (theaters, genres) | `client/src/lib/*.ts`                              |
+| Auth logic                       | `server/src/middleware/auth.ts`                    |
+| Scraper code                     | `server/src/cron/scrapers/*.ts`                    |
+| TypeScript types                 | `client/src/types/*.ts` or `server/src/types/*.ts` |
 
 ## Key Directories
 
@@ -50,6 +50,7 @@ panopticon/
 ## Data Models
 
 ### MovieEvent (Primary)
+
 ```typescript
 {
   id: number
@@ -64,6 +65,7 @@ panopticon/
 ```
 
 ### MovieData (Enriched metadata)
+
 ```typescript
 {
   id: number
@@ -78,11 +80,13 @@ panopticon/
 ## State Management (Zustand)
 
 ### Stores
+
 1. **sessionStore** - Auth state (token, user, isAuthenticated)
 2. **movieEventStore** - Public events with pagination/filters
 3. **movieDataStore** - Admin movie metadata management
 
 ### Pattern
+
 ```typescript
 const useStore = create((set, get) => ({
   // State
@@ -100,22 +104,25 @@ const useStore = create((set, get) => ({
     set({ loading: true });
     const data = await service.getItems();
     set({ items: data, loading: false });
-  }
+  },
 }));
 ```
 
 ## API Patterns
 
 ### Frontend → Backend Flow
+
 ```
 Component → Store → Service → API → Server Route → Controller → Prisma → Database
 ```
 
 ### API Base URL
+
 - Dev: `http://localhost:3021/api`
 - Prod: `/api` (same domain)
 
 ### Auth Header
+
 ```
 Authorization: Bearer <jwt_token>
 ```
@@ -125,6 +132,7 @@ Authorization: Bearer <jwt_token>
 ### Adding a New Feature
 
 **Frontend:**
+
 1. Create component in `client/src/components/`
 2. Add to page in `client/src/pages/`
 3. Create service in `client/src/services/`
@@ -132,6 +140,7 @@ Authorization: Bearer <jwt_token>
 5. Add types in `client/src/types/`
 
 **Backend:**
+
 1. Update Prisma schema if DB changes needed
 2. Run `npx prisma migrate dev`
 3. Add route in `server/src/routes/`
@@ -139,11 +148,13 @@ Authorization: Bearer <jwt_token>
 5. Update types
 
 ### Forms
+
 - Use `react-hook-form` + `yup` for validation
 - Use `Controller` for MUI components
 - Use `useFieldArray` for dynamic fields (like times)
 
 ### API Calls
+
 - All go through service modules
 - Use `authenticatedFetch` for protected endpoints
 - Services are in `client/src/services/`
@@ -151,38 +162,47 @@ Authorization: Bearer <jwt_token>
 ## Important Constants
 
 ### Theaters (client/src/lib/theatres.ts)
+
 ```typescript
 export const THEATRES = [
   "Cinema 21",
   "Academy Theater",
   "Laurelhurst Theater",
   "Tomorrow Theater",
-  "Hollywood Theater",
+  "Hollywood Theatre",
   // ... more
-]
+];
 ```
 
 ### Formats (client/src/lib/formats.ts)
+
 ```typescript
-export const FORMATS = ["Digital", "35mm", "70mm", "16mm", "VHS"]
+export const FORMATS = ["Digital", "35mm", "70mm", "16mm", "VHS"];
 ```
 
 ### Genres (client/src/lib/genres.ts)
+
 ```typescript
 export const GENRES = [
-  "Action", "Comedy", "Drama", "Horror",
-  "Sci-Fi", "Documentary", // ... more
-]
+  "Action",
+  "Comedy",
+  "Drama",
+  "Horror",
+  "Sci-Fi",
+  "Documentary", // ... more
+];
 ```
 
 ## Environment Variables
 
 ### Client (.env)
+
 ```bash
 VITE_API_URL=http://localhost:3021/api
 ```
 
 ### Server (.env)
+
 ```bash
 DATABASE_URL="postgresql://devuser:devpassword@localhost:5432/panopticon"
 PORT=3021
@@ -196,6 +216,7 @@ ADMIN_PASSWORD=admin123
 ## Known Issues & Technical Debt
 
 ### High Priority
+
 1. **EventEditor.tsx is incomplete** - Needs full implementation
 2. **MovieData modal incomplete** - View/edit tabs not functional
 3. **TypeScript errors** - Several `@ts-expect-error` suppressions
@@ -203,12 +224,14 @@ ADMIN_PASSWORD=admin123
 5. **Console.log statements** - Debug logs in authService.ts
 
 ### Security Concerns
+
 1. JWT in localStorage (XSS vulnerable)
 2. No rate limiting
 3. No refresh tokens
 4. Console logs leak info
 
 ### Performance
+
 1. No code splitting
 2. No image lazy loading
 3. Large bundle size
@@ -217,24 +240,28 @@ ADMIN_PASSWORD=admin123
 ## Typical User Requests
 
 ### "Add a new theater"
+
 1. Add to `client/src/lib/theatres.ts` THEATRES array
 2. Create scraper in `server/src/cron/scrapers/newtheater.ts`
 3. Register in `server/src/services/cronService.ts`
 4. Add to available scrapers list in admin
 
 ### "Fix TypeScript error"
+
 1. Check `client/src/` or `server/src/`
 2. Look for `@ts-expect-error` comments
 3. Import proper types from `@prismaTypes`
 4. Fix underlying type mismatch
 
 ### "Add new filter"
+
 1. Add to `movieEventStore` filters
 2. Add UI component in `client/src/components/Filters/`
 3. Update API query params in `movieEventService`
 4. Handle in backend route/controller
 
 ### "Change UI styling"
+
 1. MUI components use theme from `client/src/main.tsx`
 2. Override in component with `sx` prop
 3. Global theme changes in `createTheme()`
@@ -242,6 +269,7 @@ ADMIN_PASSWORD=admin123
 ## Testing Strategy (Not Yet Implemented)
 
 When adding tests:
+
 - **Frontend:** Vitest + React Testing Library
 - **Backend:** Jest + Supertest
 - Location: `__tests__` folders next to code
@@ -280,18 +308,23 @@ cd server && node create-admin.js
 ## When User Asks For...
 
 ### "Analyze the codebase"
+
 → Refer to ARCHITECTURE.md
 
 ### "How do I..."
+
 → Refer to DEVELOPMENT.md
 
 ### "What needs improvement?"
+
 → Refer to IMPROVEMENTS.md
 
 ### "What are the API endpoints?"
+
 → Refer to API.md
 
 ### "How do I get started?"
+
 → Refer to README.md
 
 ## File Path Shortcuts
@@ -299,6 +332,7 @@ cd server && node create-admin.js
 For quick reference when navigating:
 
 **Frontend:**
+
 - Main app: `client/src/main.tsx`
 - Routes: `client/src/routing/routes.tsx`
 - Home page: `client/src/pages/MovieEvents/index.tsx`
@@ -306,6 +340,7 @@ For quick reference when navigating:
 - Login: `client/src/pages/Auth/Payphone.tsx`
 
 **Backend:**
+
 - Main app: `server/src/app.ts`
 - Auth: `server/src/controllers/authController.ts`
 - DB schema: `server/prisma/schema.prisma`
@@ -313,11 +348,13 @@ For quick reference when navigating:
 ## Shared Types
 
 Frontend can import backend types:
+
 ```typescript
-import type { MovieEvent } from '@prismaTypes';
+import type { MovieEvent } from "@prismaTypes";
 ```
 
 Configured in `tsconfig.json`:
+
 ```json
 {
   "paths": {
@@ -350,6 +387,7 @@ Configured in `tsconfig.json`:
 ## Summary
 
 This is a **modern, well-architected full-stack app** with:
+
 - ✅ Strong TypeScript typing
 - ✅ Clean separation of concerns
 - ✅ Effective state management (Zustand)
@@ -357,12 +395,14 @@ This is a **modern, well-architected full-stack app** with:
 - ✅ Prisma for type-safe DB access
 
 **Main gaps:**
+
 - No tests
 - Some incomplete features
 - Security hardening needed
 - Performance optimizations needed
 
 **Refer to other docs for details:**
+
 - Architecture → ARCHITECTURE.md
 - API Reference → API.md
 - Development → DEVELOPMENT.md
