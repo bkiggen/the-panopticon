@@ -158,6 +158,7 @@ export const createMovieEvents = async (
       title: event.title,
       originalTitle: event.originalTitle,
       times: event.times || [],
+      detailUrl: event.detailUrl || null,
       format: event.format,
       imageUrl: event.imageUrl,
       theatre: event.theatre,

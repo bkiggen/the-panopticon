@@ -15,7 +15,12 @@ import {
   Alert,
   CircularProgress,
   FormHelperText,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AddIcon from "@mui/icons-material/Add";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { theatreInfo } from "@/lib/theatreInfo";
@@ -55,6 +60,7 @@ const schema = yup.object().shape({
 });
 
 export const CreateEvent = () => {
+  const [expanded, setExpanded] = useState(false);
   const [accessibilityInput, setAccessibilityInput] = useState("");
   const [selectedHour, setSelectedHour] = useState<number>(12);
   const [selectedMinute, setSelectedMinute] = useState<number>(0);
@@ -120,6 +126,7 @@ export const CreateEvent = () => {
 
       reset();
       setAccessibilityInput("");
+      setExpanded(false); // Close accordion after successful creation
     } catch (error) {
       console.error("Failed to create event:", error);
     }
@@ -134,14 +141,25 @@ export const CreateEvent = () => {
           </Alert>
         )}
 
-        <Paper sx={{ p: 3 }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={3}>
-              <Grid size={12}>
-                <Typography variant="h6" gutterBottom>
-                  Add Event
-                </Typography>
-              </Grid>
+        <Accordion
+          expanded={expanded}
+          onChange={() => setExpanded(!expanded)}
+          sx={{ mb: 2 }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="create-event-content"
+            id="create-event-header"
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <AddIcon />
+              <Typography variant="h6">Create New Event</Typography>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Paper sx={{ p: 3 }}>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Grid container spacing={3}>
 
               <Grid size={{ xs: 12, md: 6 }}>
                 <Controller
@@ -263,7 +281,7 @@ export const CreateEvent = () => {
                             <MenuItem key={hour} value={hour}>
                               {hour}
                             </MenuItem>
-                          )
+                          ),
                         )}
                       </Select>
                     </FormControl>
@@ -285,7 +303,7 @@ export const CreateEvent = () => {
                             <MenuItem key={minute} value={minute}>
                               {minute.toString().padStart(2, "0")}
                             </MenuItem>
-                          )
+                          ),
                         )}
                       </Select>
                     </FormControl>
@@ -387,6 +405,8 @@ export const CreateEvent = () => {
             </Grid>
           </form>
         </Paper>
+          </AccordionDetails>
+        </Accordion>
       </Box>
     </LocalizationProvider>
   );

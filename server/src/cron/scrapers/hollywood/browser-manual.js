@@ -38,6 +38,8 @@
       const events = [];
       const movieEvents = document.querySelectorAll('.fc-event, .fc-daygrid-event');
 
+      console.log(`   Found ${movieEvents.length} event elements in DOM`);
+
       movieEvents.forEach((eventEl) => {
         try {
           // Get date from parent cell
@@ -64,13 +66,33 @@
             }
           });
 
-          // Get image
+          // Get image from FullCalendar data or DOM
           let imageUrl = '';
-          const imageEl = eventEl.querySelector('[style*="background-image"]');
-          if (imageEl) {
-            const bgImage = imageEl.style.backgroundImage;
-            const match = bgImage.match(/url\(["']?(.+?)["']?\)/);
-            if (match) imageUrl = match[1];
+          try {
+            if (eventEl.fcSeg?.eventRange?.def?.extendedProps?.image) {
+              imageUrl = eventEl.fcSeg.eventRange.def.extendedProps.image;
+            }
+          } catch (e) {
+            // FullCalendar data not available, will try DOM
+          }
+
+          if (!imageUrl) {
+            const imageEl = eventEl.querySelector('[style*="background-image"]');
+            if (imageEl) {
+              const bgImage = imageEl.style.backgroundImage;
+              const match = bgImage.match(/url\(["']?(.+?)["']?\)/);
+              if (match) imageUrl = match[1];
+            }
+          }
+
+          // Get detail URL from FullCalendar data
+          let detailUrl = null;
+          try {
+            if (eventEl.fcSeg?.eventRange?.def?.extendedProps?.permalink) {
+              detailUrl = eventEl.fcSeg.eventRange.def.extendedProps.permalink;
+            }
+          } catch (e) {
+            // FullCalendar data not available
           }
 
           // Clean title (remove "in 35mm" etc)
@@ -82,6 +104,7 @@
               title: cleanedTitle,
               originalTitle: rawTitle,
               times: times.length > 0 ? times : ['7:00 PM'], // Array of strings
+              detailUrl: detailUrl,
               format: this.detectFormat(rawTitle),
               imageUrl,
               theatre: THEATRE_NAME,
@@ -103,7 +126,13 @@
       if (!nextButton) return false;
 
       nextButton.click();
-      await this.delay(2000, 3000); // Wait for calendar to load
+
+      // Wait longer for calendar to reload and FullCalendar to attach event data
+      await this.delay(3000, 4000);
+
+      // Extra wait to ensure FullCalendar event data is attached
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
       return true;
     }
 

@@ -23,7 +23,7 @@ export const Header = () => {
       const progress = Math.min(scrolled / maxScroll, 1);
       document.documentElement.style.setProperty(
         "--scroll-progress",
-        progress.toString()
+        progress.toString(),
       );
     };
 
@@ -101,25 +101,27 @@ export const Header = () => {
       )}
 
       {/* Main header with CSS custom property animation */}
-      <Box sx={{ backgroundColor: isDarkMode ? "black" : "white" }}>
-        <Box
-          component="header"
-          sx={{
-            backgroundImage: isDarkMode
-              ? `url(/panopticon-dark.png)`
-              : `url(/panopticon.png)`,
-            backgroundRepeat: "repeat-x",
-            backgroundPosition: "-100px -4px",
-            backgroundSize: "300px auto",
-            height: "calc(90px - var(--scroll-progress, 0) * 52px)",
-            overflow: "hidden",
-            willChange: "height",
-          }}
-        />
-        {route === routeConstants.ADMIN || userIsPatreonMember ? null : (
-          <SponsorBox />
-        )}
-      </Box>
+      {isAuthenticated ? null : (
+        <Box sx={{ backgroundColor: isDarkMode ? "black" : "white" }}>
+          <Box
+            component="header"
+            sx={{
+              backgroundImage: isDarkMode
+                ? `url(/panopticon-dark.png)`
+                : `url(/panopticon.png)`,
+              backgroundRepeat: "repeat-x",
+              backgroundPosition: "-100px -4px",
+              backgroundSize: "300px auto",
+              height: "calc(90px - var(--scroll-progress, 0) * 52px)",
+              overflow: "hidden",
+              willChange: "height",
+            }}
+          />
+          {route === routeConstants.ADMIN || userIsPatreonMember ? null : (
+            <SponsorBox />
+          )}
+        </Box>
+      )}
     </Box>
   );
 };

@@ -120,6 +120,7 @@ const BulkMovieEventUpload: React.FC = () => {
       title: "CAUGHT STEALING",
       originalTitle: "CAUGHT STEALING",
       times: ["2:00pm", "4:30pm", "7:00pm", "9:30pm"],
+      detailUrl: "https://hollywoodtheatre.org/show/caught-stealing/",
       format: "Digital",
       imageUrl: "https://example.com/image.jpg",
       theatre: "Hollywood Theatre",
