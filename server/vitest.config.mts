@@ -9,7 +9,7 @@ export default defineConfig({
     globals: true,
     environment: "node",
     include: ["src/**/*.test.ts"],
-    exclude: ["node_modules", "src/cron/**/*.test.ts"],
+    exclude: ["node_modules"],
     fileParallelism: false, // Run test files sequentially
     sequence: {
       shuffle: false, // Run tests in order

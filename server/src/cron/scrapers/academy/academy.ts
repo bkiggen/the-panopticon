@@ -36,6 +36,14 @@ class AcademyScraper extends BaseScraper {
 
   private browser: Browser | null = null;
   private page: Page | null = null;
+  private daysToScrape: number = 90; // Default to 90 days (3 months)
+
+  /**
+   * Set the number of days to scrape (default: 90)
+   */
+  setDaysToScrape(days: number): void {
+    this.daysToScrape = days;
+  }
 
   /**
    * Main scraping method
@@ -46,7 +54,7 @@ class AcademyScraper extends BaseScraper {
       this.browser = browser;
       this.page = page;
 
-      const dates = generateDateRange(90); // 3 months of dates
+      const dates = generateDateRange(this.daysToScrape);
       const allEvents: ScrapedMovieEvent[] = [];
 
       this.log(`Starting scrape for ${dates.length} dates...`, "🎭");
