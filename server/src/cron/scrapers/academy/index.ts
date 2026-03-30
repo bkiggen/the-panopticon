@@ -1,4 +1,4 @@
 /**
  * Academy scraper module
  */
-export { AcademyScraper, runAcademyScraper } from "./scraper";
+export { AcademyScraper, runAcademyScraper } from "./academy";

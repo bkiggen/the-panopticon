@@ -26,8 +26,8 @@ describe("Academy Theater Scraper", () => {
       console.log(`  Title: ${firstEvent.title}`);
       console.log(`  Date: ${firstEvent.date.toLocaleDateString()}`);
       console.log(`  Theatre: ${firstEvent.theatre}`);
-      console.log(`  Times: ${firstEvent.times.map(t => t.time).join(", ")}`);
-      console.log(`  Ticket URLs: ${firstEvent.times.filter(t => t.ticketUrl).length}/${firstEvent.times.length} showtimes have ticket URLs`);
+      console.log(`  Times: ${firstEvent.times.map((t: { time: string }) => t.time).join(", ")}`);
+      console.log(`  Ticket URLs: ${firstEvent.times.filter((t: { ticketUrl?: string }) => t.ticketUrl).length}/${firstEvent.times.length} showtimes have ticket URLs`);
       console.log(`  Detail URL: ${firstEvent.detailUrl || "N/A"}`);
       console.log(`  Image URL: ${firstEvent.imageUrl ? "✓" : "✗"}`);
 
@@ -42,7 +42,7 @@ describe("Academy Theater Scraper", () => {
       expect(firstEvent.times.length).toBeGreaterThan(0);
 
       // Validate that at least some showtimes have ticket URLs
-      const timesWithTickets = firstEvent.times.filter(t => t.ticketUrl);
+      const timesWithTickets = firstEvent.times.filter((t: { ticketUrl?: string }) => t.ticketUrl);
       expect(timesWithTickets.length).toBeGreaterThan(0);
 
       // Validate ticket URL format (should be booking.academytheaterpdx.com)

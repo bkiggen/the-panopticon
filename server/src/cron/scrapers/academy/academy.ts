@@ -9,7 +9,7 @@ import {
   formatDateToString,
   randomDelay,
   respectRateLimit,
-} from "./utils";
+} from "../utils";
 
 /**
  * Raw movie data extracted from the page
