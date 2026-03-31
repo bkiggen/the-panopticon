@@ -3,6 +3,7 @@ import { Box, Tab, Tabs } from "@mui/material";
 import BulkMovieEventUpload from "./Upload";
 import MovieData from "./MovieData";
 import { Actions } from "./Actions";
+import { FilmReport } from "./FilmReport";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -47,6 +48,7 @@ export const Admin = () => {
           <Tab label="Bulk Upload" {...a11yProps(0)} />
           <Tab label="Actions" {...a11yProps(1)} />
           <Tab label="Movie Data" {...a11yProps(2)} />
+          <Tab label="Film Report" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -57,6 +59,9 @@ export const Admin = () => {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <MovieData />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <FilmReport />
       </TabPanel>
     </Box>
   );

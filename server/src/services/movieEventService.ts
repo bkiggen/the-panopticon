@@ -73,10 +73,14 @@ export const getAllMovieEvents = async (
   if (filters.startDate || filters.endDate) {
     where.date = {};
     if (filters.startDate) {
-      where.date.gte = new Date(filters.startDate);
+      // Create date at start of day (midnight) for the given date string
+      where.date.gte = new Date(filters.startDate + "T00:00:00.000Z");
     }
     if (filters.endDate) {
-      where.date.lte = new Date(filters.endDate);
+      // Create date at end of day for the given date string
+      const endDate = new Date(filters.endDate + "T00:00:00.000Z");
+      endDate.setDate(endDate.getDate() + 1); // Include the entire end date
+      where.date.lt = endDate;
     }
   }
 
@@ -214,4 +218,42 @@ export const deleteMovieEvent = async (id: number): Promise<MovieEvent> => {
 export const deleteAllMovieEvents = async (): Promise<void> => {
   await prisma.movieEvent.deleteMany({});
   await prisma.movieData.deleteMany({});
+};
+
+export const getTheatreCountsToday = async (): Promise<Record<string, number>> => {
+  // Get today's date in Pacific Time
+  const pacificDate = new Date().toLocaleString("en-US", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  // Convert MM/DD/YYYY to YYYY-MM-DD
+  const [month, day, year] = pacificDate.split("/");
+  const todayStr = `${year}-${month}-${day}`;
+
+  const today = new Date(todayStr + "T00:00:00.000Z");
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const events = await prisma.movieEvent.groupBy({
+    by: ["theatre"],
+    where: {
+      date: {
+        gte: today,
+        lt: tomorrow,
+      },
+    },
+    _count: {
+      _all: true,
+    },
+  });
+
+  const counts: Record<string, number> = {};
+  events.forEach((event) => {
+    counts[event.theatre] = event._count._all;
+  });
+
+  return counts;
 };

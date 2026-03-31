@@ -8,6 +8,7 @@ import path from "path";
 import fs from "fs";
 import { prisma } from "./lib/prisma";
 import { initializeCronJobs } from "./services/cronService";
+import { cleanupOldEvents } from "./services/cleanupService";
 import { authLimiter } from "./middleware/rateLimiter";
 import movieEventRoutes from "./routes/movieEvents";
 import adminRoutes from "./routes/admin";
@@ -114,6 +115,11 @@ export function createApp() {
 
 // Only start server if this file is run directly (not imported for tests)
 if (process.env.NODE_ENV !== "test") {
+  // Clean up events older than 180 days on startup
+  cleanupOldEvents().catch((error) => {
+    console.error("Failed to cleanup old events:", error);
+  });
+
   initializeCronJobs();
 
   const app = createApp();

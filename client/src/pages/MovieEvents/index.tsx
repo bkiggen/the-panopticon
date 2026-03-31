@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 import useMovieEventStore from "@/stores/movieEventStore";
 import { Events } from "./Events";
 import { Controls } from "./Controls";
@@ -8,6 +9,8 @@ import { Pagination } from "@/components/Pagination";
 import useSessionStore from "@/stores/sessionStore";
 import { CreateEvent } from "./CreateEvent";
 import { MovieEventSkeletonList } from "@/components/LoadingSkeleton";
+import { Navigation } from "@/components/Navigation";
+import { TheatreMap } from "@/components/TheatreMap";
 
 const FILTERS_STORAGE_KEY = "movieEventFilters";
 
@@ -23,20 +26,72 @@ export const MovieEvents = () => {
     goToPage,
   } = useMovieEventStore();
   const { isAuthenticated } = useSessionStore();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [initialFilters, setInitialFilters] = useState<MovieEventFilters>({});
+  const [activeTab, setActiveTab] = useState<"listings" | "map">("listings");
 
-  // Load filters from localStorage on mount
+  // Parse filters from URL
+  const parseFiltersFromURL = useCallback((): MovieEventFilters => {
+    const filters: MovieEventFilters = {};
+    const search = searchParams.get("search");
+    const theatres = searchParams.get("theatres");
+    const formats = searchParams.get("formats");
+    const accessibility = searchParams.get("accessibility");
+    const genres = searchParams.get("genres");
+    const startDate = searchParams.get("startDate");
+    const endDate = searchParams.get("endDate");
+    const timeFilter = searchParams.get("timeFilter");
+
+    if (search) filters.search = search;
+    if (theatres) filters.theatres = theatres.split(",");
+    if (formats) filters.formats = formats.split(",");
+    if (accessibility) filters.accessibility = accessibility.split(",");
+    if (genres) filters.genres = genres.split(",");
+    if (startDate) filters.startDate = startDate;
+    if (endDate) filters.endDate = endDate;
+    if (timeFilter) filters.timeFilter = timeFilter;
+
+    return filters;
+  }, [searchParams]);
+
+  // Update URL with filters
+  const updateURLFilters = useCallback((filters: MovieEventFilters) => {
+    const params = new URLSearchParams();
+
+    if (filters.search) params.set("search", filters.search);
+    if (filters.theatres?.length) params.set("theatres", filters.theatres.join(","));
+    if (filters.formats?.length) params.set("formats", filters.formats.join(","));
+    if (filters.accessibility?.length) params.set("accessibility", filters.accessibility.join(","));
+    if (filters.genres?.length) params.set("genres", filters.genres.join(","));
+    if (filters.startDate) params.set("startDate", filters.startDate);
+    if (filters.endDate) params.set("endDate", filters.endDate);
+    if (filters.timeFilter) params.set("timeFilter", filters.timeFilter);
+
+    setSearchParams(params, { replace: true });
+  }, [setSearchParams]);
+
+  // Load filters from URL or localStorage on mount
   useEffect(() => {
     try {
-      const savedFilters = localStorage.getItem(FILTERS_STORAGE_KEY);
-      if (savedFilters) {
-        const parsedFilters = JSON.parse(savedFilters) as MovieEventFilters;
-        setInitialFilters(parsedFilters);
-        // Fetch events with saved filters
-        fetchEvents(parsedFilters);
+      // First check URL
+      const urlFilters = parseFiltersFromURL();
+
+      if (Object.keys(urlFilters).length > 0) {
+        // URL has filters, use those
+        setInitialFilters(urlFilters);
+        fetchEvents(urlFilters);
       } else {
-        // No saved filters, fetch with defaults
-        fetchEvents();
+        // No URL filters, check localStorage
+        const savedFilters = localStorage.getItem(FILTERS_STORAGE_KEY);
+        if (savedFilters) {
+          const parsedFilters = JSON.parse(savedFilters) as MovieEventFilters;
+          setInitialFilters(parsedFilters);
+          updateURLFilters(parsedFilters);
+          fetchEvents(parsedFilters);
+        } else {
+          // No saved filters, fetch with defaults
+          fetchEvents();
+        }
       }
     } catch (error) {
       console.warn("Failed to load saved filters:", error);
@@ -49,7 +104,6 @@ export const MovieEvents = () => {
       // Save filters to localStorage
       try {
         if (Object.keys(filters).length === 0) {
-          // If filters are empty, remove from localStorage
           localStorage.removeItem(FILTERS_STORAGE_KEY);
         } else {
           localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
@@ -58,65 +112,87 @@ export const MovieEvents = () => {
         console.warn("Failed to save filters:", error);
       }
 
+      // Update URL
+      updateURLFilters(filters);
+
       // Fetch events with new filters
       fetchEvents(filters);
     },
-    [fetchEvents]
+    [fetchEvents, updateURLFilters]
   );
+
+  const handleTheatreSelect = useCallback((theatreName: string) => {
+    const newFilters: MovieEventFilters = {
+      ...parseFiltersFromURL(),
+      theatres: [theatreName],
+    };
+    handleFiltersChange(newFilters);
+    setActiveTab("listings");
+  }, [parseFiltersFromURL, handleFiltersChange]);
 
   if (loading && events.length === 0) {
     return (
-      <Box
-        sx={{
-          paddingBottom: "80px",
-          marginTop: "40px",
-          width: "90%",
-          maxWidth: "1200px",
-          marginX: "auto",
-        }}
-      >
-        <MovieEventSkeletonList count={6} />
-      </Box>
+      <>
+        <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+        <Box
+          sx={{
+            paddingBottom: "80px",
+            marginTop: "40px",
+            width: "90%",
+            maxWidth: "1200px",
+            marginX: "auto",
+          }}
+        >
+          <MovieEventSkeletonList count={6} />
+        </Box>
+      </>
     );
   }
 
   return (
-    <Box
-      sx={{
-        paddingBottom: "80px",
-        marginTop: "40px",
-        width: "90%",
-        maxWidth: "1200px",
-        marginX: "auto",
-      }}
-    >
-      {isAuthenticated && <CreateEvent />}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        totalItems={totalEvents}
-        pageSize={pageSize}
-        onPageChange={goToPage}
-        loading={loading}
-        leftContent={
-          <Controls
-            data={events}
-            onFiltersChange={handleFiltersChange}
-            initialFilters={initialFilters}
+    <>
+      <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+      {activeTab === "listings" ? (
+        <Box
+          sx={{
+            paddingBottom: "80px",
+            marginTop: "40px",
+            width: "90%",
+            maxWidth: "1200px",
+            marginX: "auto",
+          }}
+        >
+          {isAuthenticated && <CreateEvent />}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalEvents}
+            pageSize={pageSize}
+            onPageChange={goToPage}
+            loading={loading}
+            leftContent={
+              <Controls
+                data={events}
+                onFiltersChange={handleFiltersChange}
+                initialFilters={initialFilters}
+              />
+            }
           />
-        }
-      />
-      <Box sx={{ padding: "16px 0" }}>
-        <Events data={events} />
-      </Box>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        totalItems={totalEvents}
-        pageSize={pageSize}
-        onPageChange={goToPage}
-        loading={loading}
-      />
-    </Box>
+          <Box sx={{ padding: "16px 0" }}>
+            <Events data={events} />
+          </Box>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalEvents}
+            pageSize={pageSize}
+            onPageChange={goToPage}
+            loading={loading}
+          />
+        </Box>
+      ) : (
+        <TheatreMap onTheatreSelect={handleTheatreSelect} />
+      )}
+    </>
   );
 };

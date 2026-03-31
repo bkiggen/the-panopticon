@@ -8,6 +8,7 @@ import {
 import { Admin } from "@/pages/Admin";
 import { MovieEvents } from "@/pages/MovieEvents";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import AdminLogin from "@/pages/Admin/Login";
 import ForgotPassword from "@/pages/Admin/ForgotPassword";
 import ResetPassword from "@/pages/Admin/ResetPassword";
@@ -60,6 +61,7 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <Header />
       {children}
+      <Footer />
     </>
   );
 };
@@ -90,6 +92,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <Header />
       {children}
+      <Footer />
     </>
   );
 };

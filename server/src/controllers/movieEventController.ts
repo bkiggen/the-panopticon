@@ -1,17 +1,26 @@
 import { Request, Response } from "express";
 import * as movieEventService from "../services/movieEventService";
-import { startOfToday, format } from "date-fns";
 
 export const getMovieEvents = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 100;
 
-    const today = startOfToday();
+    // Get today's date in Pacific Time (Portland, OR)
+    const pacificDate = new Date().toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    // Convert MM/DD/YYYY to YYYY-MM-DD
+    const [month, day, year] = pacificDate.split("/");
+    const todayPacific = `${year}-${month}-${day}`;
 
     let startDate = req.query.startDate as string;
     if (!startDate) {
-      startDate = format(today, "yyyy-MM-dd");
+      startDate = todayPacific;
     }
 
     const filters: movieEventService.MovieEventFilters = {
@@ -127,5 +136,14 @@ export const deleteAllMovieEvents = async (req: Request, res: Response) => {
       .json({ message: "All movie events and associated data deleted" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete all movie events" });
+  }
+};
+
+export const getTheatreCountsToday = async (req: Request, res: Response) => {
+  try {
+    const counts = await movieEventService.getTheatreCountsToday();
+    res.json(counts);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };

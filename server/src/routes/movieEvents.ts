@@ -7,6 +7,9 @@ const router = express.Router();
 // GET /api/movie-events
 router.get("/", movieEventController.getMovieEvents);
 
+// GET /api/movie-events/theatre-counts/today
+router.get("/theatre-counts/today", movieEventController.getTheatreCountsToday);
+
 // GET /api/movie-events/:id
 router.get("/:id", movieEventController.getMovieEventById);
 

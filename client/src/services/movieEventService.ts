@@ -158,4 +158,22 @@ export class MovieEventService {
       );
     }
   }
+
+  /**
+   * Get theatre event counts for today (public endpoint)
+   */
+  static async getTheatreCountsToday(): Promise<Record<string, number>> {
+    const response = await ApiClient.get(
+      `${API_CONFIG.ENDPOINTS.MOVIE_EVENTS.BASE}/theatre-counts/today`,
+      false
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch theatre counts: ${response.statusText}`
+      );
+    }
+
+    return response.json();
+  }
 }

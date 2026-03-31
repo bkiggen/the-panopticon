@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { AuthService } from "@/services/authService";
 import useSessionStore from "@/stores/sessionStore";
 import { routeConstants } from "@/routing/routeConstants";
-import { SponsorBox } from "./SponsorBox";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -13,7 +12,6 @@ export const Header = () => {
   const { isAuthenticated, clearSession } = useSessionStore();
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
-  const userIsPatreonMember = false; // TODO: Replace with real check
 
   // CSS custom property approach for smooth scroll
   useEffect(() => {
@@ -117,9 +115,6 @@ export const Header = () => {
               willChange: "height",
             }}
           />
-          {route === routeConstants.ADMIN || userIsPatreonMember ? null : (
-            <SponsorBox />
-          )}
         </Box>
       )}
     </Box>
