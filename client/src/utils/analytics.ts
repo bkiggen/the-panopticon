@@ -3,6 +3,13 @@ export const initializeUmami = () => {
   const umamiUrl = import.meta.env.VITE_UMAMI_URL;
   const websiteId = import.meta.env.VITE_UMAMI_WEBSITE_ID;
 
+  // Debug: Log what we have
+  console.log('Umami Debug:', {
+    umamiUrl,
+    websiteId,
+    allEnv: import.meta.env
+  });
+
   // Only initialize if both environment variables are set
   if (!umamiUrl || !websiteId) {
     console.warn('Umami analytics not configured - missing environment variables');
