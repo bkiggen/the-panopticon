@@ -118,7 +118,9 @@ export const AdminMovieData = ({
           theatre: selectedEvent.theatre,
           format: selectedEvent.format,
           date: new Date(selectedEvent.date),
-          times: (selectedEvent.times || []).map((time) => ({ value: time })),
+          times: (selectedEvent.times || []).map((time) => ({
+            value: typeof time === 'string' ? time : time.time
+          })),
           imageUrl: selectedEvent.imageUrl,
           trailerUrl: selectedEvent.trailerUrl || "",
           imdbId: selectedEvent.imdbId || "",

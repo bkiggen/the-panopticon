@@ -11,6 +11,7 @@ import { CreateEvent } from "./CreateEvent";
 import { MovieEventSkeletonList } from "@/components/LoadingSkeleton";
 import { Navigation } from "@/components/Navigation";
 import { TheatreMap } from "@/components/TheatreMap";
+import { CalendarView } from "@/components/CalendarView";
 
 const FILTERS_STORAGE_KEY = "movieEventFilters";
 
@@ -28,7 +29,7 @@ export const MovieEvents = () => {
   const { isAuthenticated } = useSessionStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const [initialFilters, setInitialFilters] = useState<MovieEventFilters>({});
-  const [activeTab, setActiveTab] = useState<"listings" | "map">("listings");
+  const [activeTab, setActiveTab] = useState<"listings" | "map" | "calendar">("listings");
 
   // Parse filters from URL
   const parseFiltersFromURL = useCallback((): MovieEventFilters => {
@@ -190,8 +191,10 @@ export const MovieEvents = () => {
             loading={loading}
           />
         </Box>
-      ) : (
+      ) : activeTab === "map" ? (
         <TheatreMap onTheatreSelect={handleTheatreSelect} />
+      ) : (
+        <CalendarView filters={parseFiltersFromURL()} />
       )}
     </>
   );

@@ -2,15 +2,18 @@ import { Tabs, Tab, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 interface NavigationProps {
-  activeTab: "listings" | "map";
-  onTabChange: (tab: "listings" | "map") => void;
+  activeTab: "listings" | "map" | "calendar";
+  onTabChange: (tab: "listings" | "map" | "calendar") => void;
 }
 
 export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
 
-  const handleChange = (_event: React.SyntheticEvent, newValue: "listings" | "map") => {
+  const handleChange = (
+    _event: React.SyntheticEvent,
+    newValue: "listings" | "map" | "calendar",
+  ) => {
     onTabChange(newValue);
   };
 
@@ -52,7 +55,8 @@ export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
           },
         }}
       >
-        <Tab label="Listings" value="listings" />
+        <Tab label="List" value="listings" />
+        <Tab label="Calendar" value="calendar" />
         <Tab label="Map" value="map" />
       </Tabs>
     </Box>
