@@ -22,6 +22,7 @@ import { EventModal } from "@/pages/MovieEvents/Modal";
 import type { MovieEventWithDataProps } from "@/types/types";
 import { theatreInfo } from "@/lib/theatreInfo";
 import useSessionStore from "@/stores/sessionStore";
+import { getBestData } from "@/utils/general";
 
 dayjs.extend(utc);
 
@@ -286,7 +287,7 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
       <Dialog
         open={!!selectedDate}
         onClose={handleCloseDialog}
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
         PaperProps={{
           sx: {
@@ -307,6 +308,11 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
         <DialogContent sx={{ p: 0 }}>
           <List sx={{ p: 0 }}>
             {selectedDateEvents.map((event) => {
+              const displayImageUrl = getBestData(
+                event.imageUrl,
+                event.movieData?.imageUrl
+              );
+
               if (isAuthenticated) {
                 // Admin view: clickable list items that open EventModal
                 const times = event.times.map((t: any) =>
@@ -318,7 +324,7 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
                     onClick={() => handleEventClick(event)}
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
+                      flexDirection: "row",
                       alignItems: "flex-start",
                       borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
                       "&:last-child": { borderBottom: "none" },
@@ -328,30 +334,58 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
                       "&:hover": {
                         backgroundColor: isDarkMode ? "#2a2a2a" : "#f5f5f5",
                       },
+                      gap: 2,
                     }}
                   >
-                    <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 0.5 }}>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                        {event.title}
-                      </Typography>
-                      {event.format && event.format !== "Digital" && (
-                        <Chip
-                          label={event.format}
-                          size="small"
-                          sx={{
-                            height: 20,
-                            fontSize: "0.7rem",
-                            backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
+                    {/* Poster area - fixed width maintained even if no image */}
+                    <Box
+                      sx={{
+                        width: 60,
+                        height: 90,
+                        flexShrink: 0,
+                        backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
+                        borderRadius: 1,
+                        overflow: "hidden",
+                      }}
+                    >
+                      {displayImageUrl && (
+                        <img
+                          src={displayImageUrl}
+                          alt={event.title}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
                           }}
                         />
                       )}
                     </Box>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
-                      {event.theatre}
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                      {times.join(", ")}
-                    </Typography>
+
+                    {/* Content area */}
+                    <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                      <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 0.5 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                          {event.title}
+                        </Typography>
+                        {event.format && event.format !== "Digital" && (
+                          <Chip
+                            label={event.format}
+                            size="small"
+                            sx={{
+                              height: 20,
+                              fontSize: "0.7rem",
+                              backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
+                            }}
+                          />
+                        )}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                        {event.theatre}
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
+                        {times.join(", ")}
+                      </Typography>
+                    </Box>
                   </ListItem>
                 );
               } else {
@@ -370,60 +404,88 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
                     key={event.id}
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
+                      flexDirection: "row",
                       alignItems: "flex-start",
                       borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
                       "&:last-child": { borderBottom: "none" },
                       py: 2,
                       px: 3,
+                      gap: 2,
                     }}
                   >
-                    <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 0.5 }}>
-                      <Typography
-                        variant="subtitle1"
-                        sx={{
-                          fontWeight: 600,
-                          cursor: externalUrl ? "pointer" : "default",
-                          "&:hover": {
-                            textDecoration: externalUrl ? "underline" : "none",
-                          },
-                        }}
-                        onClick={() => externalUrl && window.open(externalUrl, "_blank")}
-                      >
-                        {event.title}
-                      </Typography>
-                      {event.format && event.format !== "Digital" && (
-                        <Chip
-                          label={event.format}
-                          size="small"
-                          sx={{
-                            height: 20,
-                            fontSize: "0.7rem",
-                            backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
+                    {/* Poster area - fixed width maintained even if no image */}
+                    <Box
+                      sx={{
+                        width: 60,
+                        height: 90,
+                        flexShrink: 0,
+                        backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
+                        borderRadius: 1,
+                        overflow: "hidden",
+                      }}
+                    >
+                      {displayImageUrl && (
+                        <img
+                          src={displayImageUrl}
+                          alt={event.title}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
                           }}
                         />
                       )}
                     </Box>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                      {event.theatre}
-                    </Typography>
-                    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                      {showtimes.map((showing, idx) => (
-                        <Chip
-                          key={idx}
-                          label={showing.time}
-                          size="small"
-                          clickable={!!showing.ticketUrl}
-                          onClick={() =>
-                            showing.ticketUrl && window.open(showing.ticketUrl, "_blank")
-                          }
+
+                    {/* Content area */}
+                    <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                      <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 0.5 }}>
+                        <Typography
+                          variant="subtitle1"
                           sx={{
-                            cursor: showing.ticketUrl ? "pointer" : "default",
-                            fontFamily: "monospace",
+                            fontWeight: 600,
+                            cursor: externalUrl ? "pointer" : "default",
+                            "&:hover": {
+                              textDecoration: externalUrl ? "underline" : "none",
+                            },
                           }}
-                        />
-                      ))}
-                    </Stack>
+                          onClick={() => externalUrl && window.open(externalUrl, "_blank")}
+                        >
+                          {event.title}
+                        </Typography>
+                        {event.format && event.format !== "Digital" && (
+                          <Chip
+                            label={event.format}
+                            size="small"
+                            sx={{
+                              height: 20,
+                              fontSize: "0.7rem",
+                              backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
+                            }}
+                          />
+                        )}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                        {event.theatre}
+                      </Typography>
+                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                        {showtimes.map((showing, idx) => (
+                          <Chip
+                            key={idx}
+                            label={showing.time}
+                            size="small"
+                            clickable={!!showing.ticketUrl}
+                            onClick={() =>
+                              showing.ticketUrl && window.open(showing.ticketUrl, "_blank")
+                            }
+                            sx={{
+                              cursor: showing.ticketUrl ? "pointer" : "default",
+                              fontFamily: "monospace",
+                            }}
+                          />
+                        ))}
+                      </Stack>
+                    </Box>
                   </ListItem>
                 );
               }

@@ -1,5 +1,6 @@
 import { Tabs, Tab, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import useSessionStore from "@/stores/sessionStore";
 
 interface NavigationProps {
   activeTab: "listings" | "map" | "calendar";
@@ -9,6 +10,7 @@ interface NavigationProps {
 export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
+  const { isAuthenticated } = useSessionStore();
 
   const handleChange = (
     _event: React.SyntheticEvent,
@@ -23,7 +25,7 @@ export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
         backgroundColor: isDarkMode ? "#0a0a0a" : "#f5f5f5",
         borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
         position: "sticky",
-        top: 38,
+        top: isAuthenticated ? 56 : 38,
         zIndex: 1001,
       }}
     >

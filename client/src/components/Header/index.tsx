@@ -13,8 +13,14 @@ export const Header = () => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
 
-  // CSS custom property approach for smooth scroll
+  // CSS custom property approach for smooth scroll (only when not authenticated)
   useEffect(() => {
+    // Don't run scroll animation when authenticated
+    if (isAuthenticated) {
+      document.documentElement.style.setProperty("--scroll-progress", "0");
+      return;
+    }
+
     const updateScrollProgress = () => {
       const scrolled = window.scrollY;
       const maxScroll = 200;
@@ -41,7 +47,7 @@ export const Header = () => {
     updateScrollProgress(); // Set initial value
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isAuthenticated]);
 
   const handleLogout = async () => {
     await AuthService.logout();
@@ -60,6 +66,7 @@ export const Header = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            height: 56,
           }}
         >
           {/* Navigation buttons */}

@@ -68,6 +68,11 @@ export const Events = ({ data }: MovieEventCardsProps) => {
         {data.map((event) => {
           const displayGenres =
             getBestData(event.genres, event.movieData?.genres) || [];
+          const displayImageUrl = getBestData(
+            event.imageUrl,
+            event.movieData?.imageUrl
+          );
+          const isDarkMode = theme.palette.mode === "dark";
 
           return (
             <Card
@@ -81,8 +86,8 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                   boxShadow: theme.shadows[4],
                   backgroundColor: theme.palette.action.hover,
                 },
-                flexDirection: isMobile ? "column" : "row",
-                minHeight: isMobile ? "auto" : 120,
+                flexDirection: "row",
+                minHeight: 120,
               }}
               onClick={() => handleCardClick(event)}
             >
@@ -97,6 +102,32 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                     pb: isMobile ? 2 : "16px !important",
                   }}
                 >
+                  {/* Poster - desktop */}
+                  {!isMobile && (
+                    <Box
+                      sx={{
+                        width: 80,
+                        height: 120,
+                        flexShrink: 0,
+                        backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
+                        borderRadius: 1,
+                        overflow: "hidden",
+                      }}
+                    >
+                      {displayImageUrl && (
+                        <img
+                          src={displayImageUrl}
+                          alt={event.title}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      )}
+                    </Box>
+                  )}
+
                   {/* Left side - Title and Date */}
                   <Box
                     sx={{
@@ -107,6 +138,34 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                       minWidth: 0, // Allows text to wrap properly
                     }}
                   >
+                    {/* Poster - mobile */}
+                    {isMobile && (
+                      <Box
+                        sx={{
+                          width: 60,
+                          height: 90,
+                          flexShrink: 0,
+                          backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
+                          borderRadius: 1,
+                          overflow: "hidden",
+                          float: "left",
+                          marginRight: 2,
+                          marginBottom: 1,
+                        }}
+                      >
+                        {displayImageUrl && (
+                          <img
+                            src={displayImageUrl}
+                            alt={event.title}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                            }}
+                          />
+                        )}
+                      </Box>
+                    )}
                     <Typography
                       variant={isMobile ? "h6" : "h5"}
                       component="h2"
