@@ -65,6 +65,18 @@ export const Controls = ({
   // Track if this is the initial load to prevent calling onFiltersChange on mount
   const [hasInitialized, setHasInitialized] = useState(false);
 
+  // Sync internal state with URL changes (initialFilters prop)
+  useEffect(() => {
+    setSearchTerm(initialFilters.search || "");
+    setSelectedTheatres(initialFilters.theatres || []);
+    setSelectedFormats(initialFilters.formats || []);
+    setSelectedAccessibility(initialFilters.accessibility || []);
+    setSelectedGenres(initialFilters.genres || []);
+    setDateFrom(initialFilters.startDate || "");
+    setDateTo(initialFilters.endDate || "");
+    setTimeFilter(initialFilters.timeFilter || "");
+  }, [initialFilters]);
+
   // Extract unique values for filter options
   // Note: allFormats, allAccessibility, allGenres are static imports that never change
   const filterOptions = useMemo(() => {

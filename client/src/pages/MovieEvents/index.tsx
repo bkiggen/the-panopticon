@@ -123,13 +123,13 @@ export const MovieEvents = () => {
   );
 
   const handleTheatreSelect = useCallback((theatreName: string) => {
+    // Clear all other filters and only apply theatre filter
     const newFilters: MovieEventFilters = {
-      ...parseFiltersFromURL(),
       theatres: [theatreName],
     };
     handleFiltersChange(newFilters);
     setActiveTab("listings");
-  }, [parseFiltersFromURL, handleFiltersChange]);
+  }, [handleFiltersChange]);
 
   if (loading && events.length === 0) {
     return (
