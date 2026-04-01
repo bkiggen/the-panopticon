@@ -15,6 +15,8 @@ import {
   FormControlLabel,
   Checkbox,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   Clear as ClearIcon,
@@ -39,6 +41,8 @@ export const Controls = ({
   initialFilters = {},
 }: ControlsProps) => {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
   // All available options - memoized to prevent recreation
   const allAccessibility = useMemo(() => ["Open Captions"], []);
@@ -215,6 +219,20 @@ export const Controls = ({
           placeholder="Type movie title..."
           sx={{ minWidth: 250 }}
         />
+        {isDesktop && hasActiveFilters && (
+          <Button
+            variant="text"
+            size="small"
+            startIcon={<ClearIcon />}
+            onClick={clearAllFilters}
+            sx={{
+              textTransform: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Clear Filters
+          </Button>
+        )}
       </Box>
 
       {/* Filter Modal */}
