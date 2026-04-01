@@ -10,8 +10,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { theatreInfo } from "@/lib/theatreInfo";
-import { FormatChip } from "@/components/FormatChip";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
+import GroupWorkIcon from "@mui/icons-material/GroupWork";
+import AlbumIcon from "@mui/icons-material/Album";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { formatDate } from "@/utils/general";
 import type { MovieEventWithDataProps } from "@/types/types";
 import { getBestData } from "@/utils/general";
@@ -19,9 +21,23 @@ import { EventModal } from "./Modal";
 
 interface MovieEventCardsProps {
   data: MovieEventWithDataProps[];
+  selectedGenres?: string[];
+  selectedFormats?: string[];
+  selectedTheatres?: string[];
+  onGenreToggle?: (genre: string) => void;
+  onFormatToggle?: (format: string) => void;
+  onTheatreToggle?: (theatre: string) => void;
 }
 
-export const Events = ({ data }: MovieEventCardsProps) => {
+export const Events = ({
+  data,
+  selectedGenres = [],
+  selectedFormats = [],
+  selectedTheatres = [],
+  onGenreToggle,
+  onFormatToggle,
+  onTheatreToggle,
+}: MovieEventCardsProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,20 +52,6 @@ export const Events = ({ data }: MovieEventCardsProps) => {
   const handleModalClose = () => {
     setModalOpen(false);
     setSelectedEvent(null);
-  };
-
-  const handleTheatreClick = (
-    event: React.MouseEvent,
-    theatre: string,
-    detailUrl?: string | null
-  ) => {
-    event.stopPropagation();
-
-    // Prefer movie-specific page, fallback to theatre homepage
-    const url = detailUrl || theatreInfo[theatre]?.website;
-    if (url) {
-      window.open(url, "_blank");
-    }
   };
 
   if (!data || data.length === 0) {
@@ -70,7 +72,7 @@ export const Events = ({ data }: MovieEventCardsProps) => {
             getBestData(event.genres, event.movieData?.genres) || [];
           const displayImageUrl = getBestData(
             event.imageUrl,
-            event.movieData?.imageUrl
+            event.movieData?.imageUrl,
           );
           const isDarkMode = theme.palette.mode === "dark";
 
@@ -189,19 +191,51 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                       {formatDate(event.date, isMobile)}
                     </Typography>
                     {displayGenres.length > 0 && (
-                      <Stack direction="row" spacing={1} flexWrap="wrap">
-                        {displayGenres.map((genre: string, index: number) => (
-                          <Chip
-                            key={index}
-                            label={genre}
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                              "*": { color: "#db4500ff" },
-                              borderColor: "#db4500ff",
-                            }}
-                          />
-                        ))}
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        sx={{ flexWrap: "wrap" }}
+                      >
+                        {displayGenres.map((genre: string, index: number) => {
+                          const isSelected = selectedGenres.includes(genre);
+                          const isDarkMode = theme.palette.mode === "dark";
+
+                          return (
+                            <Chip
+                              key={index}
+                              label={genre}
+                              variant={isSelected ? "filled" : "outlined"}
+                              size="small"
+                              clickable={!!onGenreToggle}
+                              onClick={(e) => {
+                                if (onGenreToggle) {
+                                  e.stopPropagation();
+                                  onGenreToggle(genre);
+                                }
+                              }}
+                              sx={{
+                                "*": {
+                                  color: isSelected
+                                    ? isDarkMode
+                                      ? "#000"
+                                      : "#000"
+                                    : "#db4500ff",
+                                },
+                                borderColor: "#db4500ff",
+                                backgroundColor: isSelected
+                                  ? "#fff"
+                                  : "transparent",
+                                "&:hover": {
+                                  backgroundColor: isSelected
+                                    ? "#f5f5f5"
+                                    : isDarkMode
+                                      ? "#1a1a1a"
+                                      : "#f5f5f5",
+                                },
+                              }}
+                            />
+                          );
+                        })}
                       </Stack>
                     )}
                   </Box>
@@ -223,30 +257,40 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                         overflow: "hidden",
                       }}
                     >
-                      {(event.times as any[]).map((showtime: any, index: number) => {
-                        // Handle both old format (string) and new format ({ time, ticketUrl })
-                        const time = typeof showtime === 'string' ? showtime : showtime.time;
-                        const ticketUrl = typeof showtime === 'object' ? showtime.ticketUrl : null;
-                        const fallbackUrl = event.detailUrl || theatreInfo[event.theatre]?.website;
+                      {(event.times as any[]).map(
+                        (showtime: any, index: number) => {
+                          // Handle both old format (string) and new format ({ time, ticketUrl })
+                          const time =
+                            typeof showtime === "string"
+                              ? showtime
+                              : showtime.time;
+                          const ticketUrl =
+                            typeof showtime === "object"
+                              ? showtime.ticketUrl
+                              : null;
+                          const fallbackUrl =
+                            event.detailUrl ||
+                            theatreInfo[event.theatre]?.website;
 
-                        return (
-                          <Chip
-                            key={index}
-                            label={time}
-                            size="small"
-                            variant="outlined"
-                            clickable
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              const url = ticketUrl || fallbackUrl;
-                              if (url) {
-                                window.open(url, "_blank");
-                              }
-                            }}
-                            sx={{ fontSize: "0.75rem" }}
-                          />
-                        );
-                      })}
+                          return (
+                            <Chip
+                              key={index}
+                              label={time}
+                              size="small"
+                              variant="outlined"
+                              clickable
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const url = ticketUrl || fallbackUrl;
+                                if (url) {
+                                  window.open(url, "_blank");
+                                }
+                              }}
+                              sx={{ fontSize: "0.75rem" }}
+                            />
+                          );
+                        },
+                      )}
                     </Box>
                   </Box>
 
@@ -260,16 +304,38 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                       gap: 1,
                     }}
                   >
-                    <Chip
-                      label={event.theatre}
-                      color="primary"
-                      variant="filled"
-                      onClick={(e) => handleTheatreClick(e, event.theatre, event.detailUrl)}
-                      sx={{
-                        fontWeight: "medium",
-                        maxWidth: "100%",
-                      }}
-                    />
+                    {(() => {
+                      const isTheatreSelected = selectedTheatres.includes(
+                        event.theatre,
+                      );
+
+                      return (
+                        <Chip
+                          label={event.theatre}
+                          variant={isTheatreSelected ? "filled" : "filled"}
+                          clickable={!!onTheatreToggle}
+                          onClick={(e) => {
+                            if (onTheatreToggle) {
+                              e.stopPropagation();
+                              onTheatreToggle(event.theatre);
+                            }
+                          }}
+                          sx={{
+                            fontWeight: "medium",
+                            maxWidth: "100%",
+                            backgroundColor: isTheatreSelected
+                              ? "#fff"
+                              : undefined,
+                            color: isTheatreSelected ? "#000" : undefined,
+                            "&:hover": {
+                              backgroundColor: isTheatreSelected
+                                ? "#f5f5f5"
+                                : undefined,
+                            },
+                          }}
+                        />
+                      );
+                    })()}
                     <Box
                       sx={{
                         display: "flex",
@@ -278,7 +344,105 @@ export const Events = ({ data }: MovieEventCardsProps) => {
                         justifyContent: isMobile ? "flex-start" : "flex-end",
                       }}
                     >
-                      <FormatChip format={event.format} />
+                      {(() => {
+                        const isFormatSelected = selectedFormats.includes(
+                          event.format,
+                        );
+                        const isDarkMode = theme.palette.mode === "dark";
+
+                        // Format config
+                        const formatPropMap: Record<
+                          string,
+                          {
+                            label: string;
+                            color: string;
+                            icon: React.ReactElement;
+                          }
+                        > = {
+                          Digital: {
+                            label: "Digital",
+                            color: "#87CEEB",
+                            icon: (
+                              <AlbumIcon sx={{ "*": { color: "#87CEEB" } }} />
+                            ),
+                          },
+                          "16mm": {
+                            label: "16mm",
+                            color: "#35bea8ff",
+                            icon: (
+                              <GroupWorkIcon
+                                sx={{ "*": { color: "#35bea8ff" } }}
+                              />
+                            ),
+                          },
+                          "35mm": {
+                            label: "35mm",
+                            color: "#35bea8ff",
+                            icon: (
+                              <GroupWorkIcon
+                                sx={{ "*": { color: "#35bea8ff" } }}
+                              />
+                            ),
+                          },
+                          "70mm": {
+                            label: "70mm",
+                            color: "#ae61cdff",
+                            icon: (
+                              <GroupWorkIcon
+                                sx={{ "*": { color: "#ae61cdff" } }}
+                              />
+                            ),
+                          },
+                          VHS: {
+                            label: "VHS",
+                            color: "#d4d28eff",
+                            icon: (
+                              <PlayCircleOutlineIcon
+                                sx={{ "*": { color: "#d4d28eff" } }}
+                              />
+                            ),
+                          },
+                        };
+
+                        const { label, color, icon } = formatPropMap[
+                          event.format
+                        ] || {
+                          label: event.format,
+                          color: undefined,
+                        };
+
+                        return (
+                          <Chip
+                            label={label}
+                            size="small"
+                            variant={isFormatSelected ? "filled" : "outlined"}
+                            clickable={!!onFormatToggle}
+                            onClick={(e) => {
+                              if (onFormatToggle) {
+                                e.stopPropagation();
+                                onFormatToggle(event.format);
+                              }
+                            }}
+                            avatar={icon}
+                            sx={{
+                              borderColor: isFormatSelected ? undefined : color,
+                              color: isFormatSelected ? "#000" : color,
+                              backgroundColor: isFormatSelected
+                                ? "#fff"
+                                : "transparent",
+                              "&:hover": {
+                                backgroundColor: isFormatSelected
+                                  ? "#f5f5f5"
+                                  : isDarkMode
+                                    ? "#1a1a1a"
+                                    : "#f5f5f5",
+                              },
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          />
+                        );
+                      })()}
                       {event.accessibility?.map((feature, index) => (
                         <Chip
                           key={index}
