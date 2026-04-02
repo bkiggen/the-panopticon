@@ -26,6 +26,10 @@ export function createApp() {
       contentSecurityPolicy: {
         directives: {
           ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+          "script-src": [
+            "'self'",
+            "https://umami-production-56d7.up.railway.app",
+          ],
           "img-src": [
             "'self'",
             "data:",
