@@ -53,8 +53,12 @@ COPY server/ ./server/
 # Build client with environment variables available
 ARG VITE_AUTH_CODE
 ARG VITE_API_URL
+ARG VITE_UMAMI_URL
+ARG VITE_UMAMI_WEBSITE_ID
 ENV VITE_AUTH_CODE=$VITE_AUTH_CODE
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_UMAMI_URL=$VITE_UMAMI_URL
+ENV VITE_UMAMI_WEBSITE_ID=$VITE_UMAMI_WEBSITE_ID
 
 # Build client using workspace-aware command
 RUN npm run build:client
