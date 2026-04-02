@@ -8,7 +8,7 @@ export const SponsorBox = () => {
   return (
     <Box
       sx={{
-        backgroundColor: isDarkMode ? "#000000ff" : "#f5f5f5",
+        backgroundColor: isDarkMode ? "#34495E" : "#8BA8D9",
         py: 1,
         px: 2,
         display: "flex",

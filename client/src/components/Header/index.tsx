@@ -60,7 +60,7 @@ export const Header = () => {
       {isAuthenticated && (
         <Box
           sx={{
-            backgroundColor: isDarkMode ? "#1a1a1a" : "#f5f5f5",
+            backgroundColor: isDarkMode ? "#34495E" : "#6B8AC9",
             py: 1,
             px: 2,
             display: "flex",
@@ -74,7 +74,7 @@ export const Header = () => {
             <Button
               variant="text"
               onClick={() => navigate(routeConstants.HOME)}
-              sx={{ color: route === routeConstants.HOME ? "red" : "inherit" }}
+              sx={{ color: route === routeConstants.HOME ? "#FF6B3D" : "#fff" }}
               size="small"
             >
               <Typography variant="h6">Home</Typography>
@@ -83,7 +83,7 @@ export const Header = () => {
               variant="text"
               onClick={() => navigate(routeConstants.ADMIN)}
               sx={{
-                color: route === routeConstants.ADMIN ? "red" : "inherit",
+                color: route === routeConstants.ADMIN ? "#FF6B3D" : "#fff",
               }}
               size="small"
             >
@@ -97,7 +97,9 @@ export const Header = () => {
             onClick={handleLogout}
             size="small"
             sx={{
-              "&:hover": { backgroundColor: "#042940" },
+              color: "#fff",
+              borderColor: "#fff",
+              "&:hover": { backgroundColor: "#FF6B3D", borderColor: "#FF6B3D" },
             }}
           >
             <Typography variant="h6">Logout</Typography>
@@ -107,17 +109,15 @@ export const Header = () => {
 
       {/* Main header with CSS custom property animation */}
       {isAuthenticated ? null : (
-        <Box sx={{ backgroundColor: isDarkMode ? "black" : "white" }}>
+        <Box sx={{ backgroundColor: "#6B8AC9" }}>
           <Box
             component="header"
             sx={{
-              backgroundImage: isDarkMode
-                ? `url(/panopticon-dark.png)`
-                : `url(/panopticon.png)`,
+              backgroundImage: `url(/dr-movie-times.png)`,
               backgroundRepeat: "repeat-x",
-              backgroundPosition: "-100px -4px",
-              backgroundSize: "300px auto",
-              height: "calc(90px - var(--scroll-progress, 0) * 52px)",
+              backgroundPosition: "center",
+              backgroundSize: "auto 100%",
+              height: "calc(120px - var(--scroll-progress, 0) * 60px)",
               overflow: "hidden",
               willChange: "height",
             }}
