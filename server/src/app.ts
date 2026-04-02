@@ -30,6 +30,10 @@ export function createApp() {
             "'self'",
             "https://umami-production-56d7.up.railway.app",
           ],
+          "connect-src": [
+            "'self'",
+            "https://umami-production-56d7.up.railway.app",
+          ],
           "img-src": [
             "'self'",
             "data:",
