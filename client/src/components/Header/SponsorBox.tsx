@@ -24,7 +24,7 @@ export const SponsorBox = () => {
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <Button sx={{ height: "20px", textTransform: "none", px: "6px" }}>
           <Link
-            href="https://patreon.com/PanopticonPDX"
+            href="https://patreon.com/DrMovieTimes"
             target="_blank"
             rel="noopener"
             color="primary"
