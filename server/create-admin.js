@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const prisma = new PrismaClient();
 
 async function createAdmin() {
-  const email = 'admin@panopticon.local';
+  const email = 'admin@drmovietimesmd.local';
   const password = 'admin123';
   const name = 'Admin User';
 

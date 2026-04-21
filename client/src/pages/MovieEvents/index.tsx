@@ -10,7 +10,6 @@ import useSessionStore from "@/stores/sessionStore";
 import { CreateEvent } from "./CreateEvent";
 import { MovieEventSkeletonList } from "@/components/LoadingSkeleton";
 import { Navigation } from "@/components/Navigation";
-import { TheatreMap } from "@/components/TheatreMap";
 import { CalendarView } from "@/components/CalendarView";
 
 const FILTERS_STORAGE_KEY = "movieEventFilters";
@@ -29,7 +28,7 @@ export const MovieEvents = () => {
   const { isAuthenticated } = useSessionStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const [initialFilters, setInitialFilters] = useState<MovieEventFilters>({});
-  const [activeTab, setActiveTab] = useState<"listings" | "map" | "calendar">(
+  const [activeTab, setActiveTab] = useState<"listings" | "calendar">(
     "listings",
   );
 
@@ -280,8 +279,6 @@ export const MovieEvents = () => {
             loading={loading}
           />
         </Box>
-      ) : activeTab === "map" ? (
-        <TheatreMap onTheatreSelect={handleTheatreSelect} />
       ) : (
         <CalendarView filters={parseFiltersFromURL()} />
       )}

@@ -114,7 +114,7 @@ class EmailService {
       <body>
         <div class="container">
           <h2>Password Reset Request</h2>
-          <p>You requested to reset your password for Panopticon.</p>
+          <p>You requested to reset your password for Dr. Movie Times M.D.</p>
           <p>Click the button below to reset your password:</p>
           <a href="${resetUrl}" class="button">Reset Password</a>
           <p>Or copy and paste this link into your browser:</p>
@@ -122,7 +122,7 @@ class EmailService {
           <p>This link will expire in 1 hour.</p>
           <p>If you didn't request this, please ignore this email.</p>
           <div class="footer">
-            <p>This is an automated email from Panopticon. Please do not reply.</p>
+            <p>This is an automated email from Dr. Movie Times M.D. Please do not reply.</p>
           </div>
         </div>
       </body>
@@ -132,7 +132,7 @@ class EmailService {
     const text = `
 Password Reset Request
 
-You requested to reset your password for Panopticon.
+You requested to reset your password for Dr. Movie Times M.D.
 
 Visit this link to reset your password:
 ${resetUrl}

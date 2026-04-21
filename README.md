@@ -1,10 +1,10 @@
-# The Panopticon
+# Dr. Movie Times M.D.
 
-A movie theater event aggregation platform for Portland, Oregon's independent cinema scene. Panopticon scrapes showtimes from local theaters, enriches them with metadata, and presents them through an intuitive web interface with admin controls.
+A movie theater event aggregation platform for Portland, Oregon's independent cinema scene. Dr. Movie Times M.D. scrapes showtimes from local theaters, enriches them with metadata, and presents them through an intuitive web interface with admin controls.
 
 ## Overview
 
-Panopticon helps movie lovers discover what's playing at Portland's independent theaters:
+Dr. Movie Times M.D. helps movie lovers discover what's playing at Portland's independent theaters:
 - **Academy Theater**
 - **Cinema 21**
 - **Laurelhurst Theater**
@@ -76,7 +76,7 @@ JWT_SECRET=your_secret_here
 JWT_EXPIRES_IN=1d
 
 # Admin user for seeding
-ADMIN_EMAIL=admin@panopticon.local
+ADMIN_EMAIL=admin@drmovietimesmd.local
 ADMIN_PASSWORD=admin123
 ADMIN_NAME=Admin User
 ```

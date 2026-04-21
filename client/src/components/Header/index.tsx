@@ -60,7 +60,7 @@ export const Header = () => {
       {isAuthenticated && (
         <Box
           sx={{
-            backgroundColor: isDarkMode ? "#1a1a1a" : "#f5f5f5",
+            backgroundColor: "black",
             py: 1,
             px: 2,
             display: "flex",
@@ -116,12 +116,70 @@ export const Header = () => {
                 : `url(/panopticon.png)`,
               backgroundRepeat: "repeat-x",
               backgroundPosition: "-100px -4px",
-              backgroundSize: "300px auto",
+              backgroundSize: "280px auto",
               height: "calc(90px - var(--scroll-progress, 0) * 52px)",
               overflow: "hidden",
               willChange: "height",
+              position: "relative",
             }}
-          />
+          >
+            {/* Text overlay */}
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "38px",
+                backgroundColor: "black",
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  animation: "none",
+                  position: "relative",
+                  left: "-100px",
+                }}
+              >
+                {[...Array(20)].map((_, i) => (
+                  <Box
+                    key={i}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginRight: "20px",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: "Antonio, sans-serif",
+                        fontSize: "28px",
+                        fontWeight: 700,
+                        color: "white",
+                        textTransform: "uppercase",
+                        letterSpacing: "2px",
+                      }}
+                    >
+                      Dr. Movie Times M.D.
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "24px",
+                        marginLeft: "12px",
+                      }}
+                    >
+                      🩺
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
         </Box>
       )}
     </Box>

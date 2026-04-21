@@ -1,6 +1,6 @@
 # Development Guide
 
-Best practices, patterns, and conventions for developing Panopticon.
+Best practices, patterns, and conventions for developing Dr. Movie Times M.D.
 
 ## Getting Started
 

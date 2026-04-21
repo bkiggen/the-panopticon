@@ -1,4 +1,4 @@
-// Shared types for Panopticon
+// Shared types for Dr. Movie Times M.D.
 // These types mirror the Prisma schema but are decoupled for client use
 
 export interface MovieEvent {

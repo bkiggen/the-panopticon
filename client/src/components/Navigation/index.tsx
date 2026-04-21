@@ -3,8 +3,8 @@ import { useTheme } from "@mui/material/styles";
 import useSessionStore from "@/stores/sessionStore";
 
 interface NavigationProps {
-  activeTab: "listings" | "map" | "calendar";
-  onTabChange: (tab: "listings" | "map" | "calendar") => void;
+  activeTab: "listings" | "calendar";
+  onTabChange: (tab: "listings" | "calendar") => void;
 }
 
 export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
@@ -14,7 +14,7 @@ export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
 
   const handleChange = (
     _event: React.SyntheticEvent,
-    newValue: "listings" | "map" | "calendar",
+    newValue: "listings" | "calendar",
   ) => {
     onTabChange(newValue);
   };
@@ -22,7 +22,7 @@ export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
   return (
     <Box
       sx={{
-        backgroundColor: isDarkMode ? "#0a0a0a" : "#f5f5f5",
+        backgroundColor: isDarkMode ? "black" : "#f5f5f5",
         borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
         position: "sticky",
         top: isAuthenticated ? 56 : 38,
@@ -59,7 +59,6 @@ export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
       >
         <Tab label="List" value="listings" />
         <Tab label="Calendar" value="calendar" />
-        <Tab label="Map" value="map" />
       </Tabs>
     </Box>
   );

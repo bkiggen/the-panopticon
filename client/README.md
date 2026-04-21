@@ -1,6 +1,6 @@
-# THE PANOPTICON - Frontend
+# Dr. Movie Times M.D. - Frontend
 
-This is the React frontend for Panopticon, a movie theater event aggregator.
+This is the React frontend for Dr. Movie Times M.D., a movie theater event aggregator.
 
 ## Documentation
 

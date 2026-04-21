@@ -1,6 +1,6 @@
 # Improvements & Technical Debt
 
-This document outlines areas for improvement, technical debt, and recommendations for enhancing Panopticon.
+This document outlines areas for improvement, technical debt, and recommendations for enhancing Dr. Movie Times M.D.
 
 ## Critical Issues
 

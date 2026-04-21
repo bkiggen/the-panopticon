@@ -25,7 +25,7 @@ Authenticate admin user and receive JWT token.
 **Request Body:**
 ```json
 {
-  "email": "admin@panopticon.local",
+  "email": "admin@drmovietimesmd.local",
   "password": "admin123"
 }
 ```
@@ -36,7 +36,7 @@ Authenticate admin user and receive JWT token.
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "user": {
     "id": "1",
-    "email": "admin@panopticon.local",
+    "email": "admin@drmovietimesmd.local",
     "isAdmin": true
   }
 }
@@ -60,7 +60,7 @@ Validate current JWT token.
 {
   "user": {
     "id": "1",
-    "email": "admin@panopticon.local",
+    "email": "admin@drmovietimesmd.local",
     "isAdmin": true
   }
 }

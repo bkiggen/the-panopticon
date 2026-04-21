@@ -78,4 +78,6 @@ export const theatreInfo: Record<string, theatreInfo> = {
   //   phone: "(503) 222-1158",
   //   neighborhood: "Downtown",
   // },
+  // MORELAND
+  // KIGGENS
 };

@@ -206,7 +206,7 @@ export const FilmReport = () => {
       }
 
       text += `Did we miss any upcoming 16/35/70mm screenings in Portland? Let us know in the comments! 🎥\n\n`;
-      text += `Check out www.panopticonpdx.com for more independent movie listings`;
+      text += `Check out Dr. Movie Times M.D. for more independent movie listings`;
 
       setReportText(text);
     } catch (err) {

@@ -1,4 +1,4 @@
-# Panopticon Roadmap
+# Dr. Movie Times M.D. Roadmap
 
 ## 🛠️ Admin/Maintenance
 

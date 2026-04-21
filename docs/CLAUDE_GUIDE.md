@@ -1,10 +1,10 @@
 # Quick Reference Guide for AI Assistants
 
-This document provides quick context for AI assistants (like Claude) working on Panopticon.
+This document provides quick context for AI assistants (like Claude) working on Dr. Movie Times M.D.
 
 ## Project Summary
 
-**Panopticon** is a movie theater event aggregator for Portland, Oregon independent cinemas.
+**Dr. Movie Times M.D.** is a movie theater event aggregator for Portland, Oregon independent cinemas.
 
 - **Type:** Full-stack web application
 - **Frontend:** React 19 + TypeScript + Vite + Material-UI + Zustand
@@ -209,7 +209,7 @@ PORT=3021
 NODE_ENV=development
 OMDB_API_KEY=your_key
 JWT_SECRET=your_secret
-ADMIN_EMAIL=admin@panopticon.local
+ADMIN_EMAIL=admin@drmovietimesmd.local
 ADMIN_PASSWORD=admin123
 ```
 

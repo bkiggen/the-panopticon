@@ -2,7 +2,7 @@
 
 ## Overview
 
-Panopticon is a full-stack web application built with a modern React frontend and Node.js backend, designed to aggregate and display movie theater events for Portland's independent cinema scene.
+Dr. Movie Times M.D. is a full-stack web application built with a modern React frontend and Node.js backend, designed to aggregate and display movie theater events for Portland's independent cinema scene.
 
 ## System Architecture
 
@@ -113,7 +113,7 @@ client/src/
 
 ### State Management
 
-Panopticon uses **Zustand** for state management, providing a simple, hook-based API without boilerplate.
+Dr. Movie Times M.D. uses **Zustand** for state management, providing a simple, hook-based API without boilerplate.
 
 #### Store Pattern
 
@@ -856,7 +856,7 @@ Frontend can now fetch updated events
 
 ## Summary
 
-Panopticon is a well-structured, modern full-stack application with:
+Dr. Movie Times M.D. is a well-structured, modern full-stack application with:
 - Clean separation of concerns
 - Strong typing with TypeScript
 - Effective use of modern frameworks
