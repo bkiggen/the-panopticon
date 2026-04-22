@@ -141,12 +141,20 @@ export const Header = () => {
               <Box
                 sx={{
                   display: "flex",
-                  animation: "none",
                   position: "relative",
-                  left: "-100px",
+                  animation: "scroll 600s linear infinite",
+                  paddingBottom: "4px",
+                  "@keyframes scroll": {
+                    "0%": {
+                      transform: "translateX(0)",
+                    },
+                    "100%": {
+                      transform: "translateX(-50%)",
+                    },
+                  },
                 }}
               >
-                {[...Array(20)].map((_, i) => (
+                {[...Array(40)].map((_, i) => (
                   <Box
                     key={i}
                     sx={{
