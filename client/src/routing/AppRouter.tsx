@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import { Admin } from "@/pages/Admin";
 import { MovieEvents } from "@/pages/MovieEvents";
+import { Education } from "@/pages/Education";
+import { ClassDetail } from "@/pages/Education/ClassDetail";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import AdminLogin from "@/pages/Admin/Login";
@@ -147,6 +149,16 @@ const AppRouter = () => {
               <Admin />
             </AdminLayout>
           }
+        />
+
+        {/* Education routes — hidden, no nav link */}
+        <Route
+          path={routeConstants.EDUCATION}
+          element={<Education />}
+        />
+        <Route
+          path={routeConstants.EDUCATION_CLASS}
+          element={<ClassDetail />}
         />
 
         {/* Catch all - redirect to home */}

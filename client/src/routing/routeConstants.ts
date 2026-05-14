@@ -4,4 +4,6 @@ export const routeConstants = {
   AUTH: "/auth",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
+  EDUCATION: "/education",
+  EDUCATION_CLASS: "/education/:classId",
 };
