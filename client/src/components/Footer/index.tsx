@@ -1,6 +1,41 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { SponsorBox } from "../Header/SponsorBox";
+
+const SHOW_UNDER_CONSTRUCTION = true;
+
+const UnderConstructionBar = () => (
+  <Box
+    sx={{
+      background: "repeating-linear-gradient(45deg, #f5c800, #f5c800 16px, #1a1a1a 16px, #1a1a1a 32px)",
+      py: "6px",
+      px: 2,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: 1.5,
+      overflow: "hidden",
+    }}
+  >
+    <Typography sx={{ fontSize: "18px", lineHeight: 1 }}>👷</Typography>
+    <Typography
+      sx={{
+        fontFamily: "Antonio, sans-serif",
+        fontWeight: 700,
+        fontSize: "13px",
+        letterSpacing: "0.18em",
+        textTransform: "uppercase",
+        color: "#1a1a1a",
+        backgroundColor: "#f5c800",
+        px: "10px",
+        py: "2px",
+      }}
+    >
+      Pardon Our Dust
+    </Typography>
+    <Typography sx={{ fontSize: "18px", lineHeight: 1 }}>👷</Typography>
+  </Box>
+);
 
 export const Footer = () => {
   const theme = useTheme();
@@ -19,7 +54,7 @@ export const Footer = () => {
         zIndex: 1000,
       }}
     >
-      <SponsorBox />
+      {SHOW_UNDER_CONSTRUCTION ? <UnderConstructionBar /> : <SponsorBox />}
     </Box>
   );
 };
