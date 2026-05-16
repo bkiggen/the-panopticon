@@ -56,16 +56,25 @@ export const classes: ClassData[] = [
       {
         id: 'opening-frame',
         numeral: 'I',
-        title: 'Any resemblance to real people, dead or otherwise…',
+        title: "Pontecorvo's Ogro and the Question of Political Violence",
         items: [
           {
-            text: 'Ogro is a film about real people, a real tunnel, a real car flying over a five-story building — and it was made only six years after it happened, by a director who spent his life thinking about "political violence." It offers no easy answers.',
+            text: 'Any resemblance to real people, dead or otherwise…',
+            items: [
+              {
+                text: 'Ogro is a film about real people, a real tunnel, a real car flying over a five-story building — and it was made only six years after it happened, by a director who spent his life thinking about "political violence." It offers no easy answers.',
+              },
+            ],
           },
-          { text: 'State Violence. Terrorism. Rebellion. Revolution.' },
-          { text: "What's the difference between a political assassination and terrorism?" },
-          { text: 'Can the context of a violent state justify a violent response?' },
-          { text: 'Do the ends justify the means? Do the means matter?' },
-          { text: '…and who gets to answer these questions?' },
+          {
+            text: 'State Violence. Terrorism. Rebellion. Revolution.',
+            items: [
+              { text: "What's the difference between a political assassination and terrorism?" },
+              { text: 'Can the context of a violent state justify a violent response?' },
+              { text: 'Do the ends justify the means? Do the means matter?' },
+              { text: '…and who gets to answer these questions?' },
+            ],
+          },
         ],
       },
 
