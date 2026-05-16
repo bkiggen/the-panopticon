@@ -160,117 +160,107 @@ export const classes: ClassData[] = [
                 text: 'He was 37 at the time. Remained committed to Marxist ideology but rejected the hierarchical structure of the PCI',
               },
               { text: 'He meets Franco Solinas and begins a long, fruitful partnership' },
+            ],
+          },
+          {
+            text: 'La grande strada azzurra (The Wide Blue Road) (1957)',
+            items: [
+              { text: 'First feature' },
+              { text: 'Based on novel by Solinas' },
               {
-                text: 'La grande strada azzurra (The Wide Blue Road) (1957)',
+                text: "The film presents the struggles of a fishing community in Sardinia attempting to form a cooperative against middlemen who exploit the fishermen's labor by driving down the price of their daily catch.",
+              },
+              {
+                text: '"Pink Neorealism"',
                 items: [
-                  { text: 'First feature' },
-                  { text: 'Based on novel by Solinas' },
                   {
-                    text: "The film presents the struggles of a fishing community in Sardinia attempting to form a cooperative against middlemen who exploit the fishermen's labor by driving down the price of their daily catch.",
-                  },
-                  {
-                    text: '"Pink Neorealism"',
-                    items: [
-                      {
-                        text: 'In pink neorealism the basic elements of the neorealist style — such as a simple plot with a progressive theme — are maintained, with nods to audience demands for more visually pleasing elements such as recognizable stars and color. This film starred Yves Montand and Alida Valli, big stars at the time.',
-                      },
-                    ],
-                  },
-                  { text: 'Won the best director award at the Karlovy Vary festival in Russia' },
-                  {
-                    text: 'During a time when his brother was a star in the Soviet nuclear arms program so…',
+                    text: 'In pink neorealism the basic elements of the neorealist style — such as a simple plot with a progressive theme — are maintained, with nods to audience demands for more visually pleasing elements such as recognizable stars and color. This film starred Yves Montand and Alida Valli, big stars at the time.',
                   },
                 ],
               },
+              { text: 'Won the best director award at the Karlovy Vary festival in Russia' },
               {
-                text: 'Kapò (1959)',
-                items: [
-                  { text: 'Another collaboration with Solinas' },
-                  { text: 'Academy-award nominated' },
-                  {
-                    text: 'One of the first films to show the conditions of the concentration camps',
-                  },
-                  {
-                    text: "Added a love story at Solinas' insistence, felt compromised",
-                  },
-                ],
+                text: 'During a time when his brother was a star in the Soviet nuclear arms program so…',
+              },
+            ],
+          },
+          {
+            text: 'Kapò (1959)',
+            items: [
+              { text: 'Another collaboration with Solinas' },
+              { text: 'Academy-award nominated' },
+              { text: 'One of the first films to show the conditions of the concentration camps' },
+              { text: "Added a love story at Solinas' insistence, felt compromised" },
+            ],
+          },
+          {
+            text: 'The first silence…',
+            items: [
+              { text: '7 years between the two films.' },
+              {
+                text: "Pontecorvo has explained the pattern of long delays between projects as a result of his inability to accept any form of compromise or middle ground in his commitment to a project.",
+              },
+              { text: 'Withdrew from numerous opportunities and projects during this time' },
+              { text: 'Period in which Italy was the second biggest film industry in the world' },
+            ],
+          },
+          {
+            text: 'La battaglia di Algeri (The Battle of Algiers) (1966)',
+            items: [
+              {
+                text: 'After Kapò, Pontecorvo received offers from around the world. Instead, he made his career-defining master-work.',
               },
               {
-                text: 'The first silence…',
-                items: [
-                  { text: '7 years between the two films.' },
-                  {
-                    text: "Pontecorvo has explained the pattern of long delays between projects as a result of his inability to accept any form of compromise or middle ground in his commitment to a project.",
-                  },
-                  {
-                    text: 'Withdrew from numerous opportunities and projects during this time',
-                  },
-                  {
-                    text: 'Period in which Italy was the second biggest film industry in the world',
-                  },
-                ],
+                text: 'Shot in Algiers with non-professional actors, in black and white, with a handheld documentary texture so convincing that distributors had to add a title card clarifying no newsreel footage was used',
               },
               {
-                text: 'La battaglia di Algeri (The Battle of Algiers) (1966)',
-                items: [
-                  {
-                    text: 'After Kapò, Pontecorvo received offers from around the world. Instead, he made his career-defining master-work.',
-                  },
-                  {
-                    text: 'Shot in Algiers with non-professional actors, in black and white, with a handheld documentary texture so convincing that distributors had to add a title card clarifying no newsreel footage was used',
-                  },
-                  {
-                    text: 'The FLN are the protagonists. Yacef Saadi, a real FLN leader, contributed to the screenplay and starred in the film. The French are somewhat humanized…',
-                  },
-                  { text: 'Embed: https://www.youtube.com/watch?v=7XZZ25S2JBA' },
-                  {
-                    text: 'Banned in France for five years; used by revolutionary movements worldwide as a practical and ideological manual; famously screened at the Pentagon in 2003 as a study in insurgency and counter-insurgency',
-                  },
-                  {
-                    text: "Establishes Pontecorvo's method: procedural reconstruction, documentary texture, moral complexity without easy resolution",
-                  },
-                ],
+                text: 'The FLN are the protagonists. Yacef Saadi, a real FLN leader, contributed to the screenplay and starred in the film. The French are somewhat humanized…',
+              },
+              { text: 'Embed: https://www.youtube.com/watch?v=7XZZ25S2JBA' },
+              {
+                text: 'Banned in France for five years; used by revolutionary movements worldwide as a practical and ideological manual; famously screened at the Pentagon in 2003 as a study in insurgency and counter-insurgency',
               },
               {
-                text: 'Queimada (Burn!) (1969)',
-                items: [
-                  {
-                    text: 'Marlon Brando as a British agent who first manufactures and then suppresses a Caribbean revolution years later',
-                  },
-                  {
-                    text: 'Colonialism as a system that generates the violence it then condemns',
-                  },
-                  { text: 'Not well-received outside of Italy and critically panned' },
-                  {
-                    text: "United Artists, afraid of offending the Spanish market (due to Franco's threats to kill Spanish distribution), changed the nationality of the villains from Spaniards to Portuguese at the last minute — and then hardly distributed the picture after the critics' reviews were less than enthusiastic.",
-                  },
-                  {
-                    text: 'There was also a 17-minute cut made for the American export version that damaged the film.',
-                  },
-                  {
-                    text: 'Gained more praise as time went on. Edward Said said it and Battle of Algiers "stand unmatched and unexcelled since they were made in the 60s."',
-                  },
-                  {
-                    text: "Brando considered it some of his best work, and counted Pontecorvo among the only three directors he'd rate alongside Kazan and Bertolucci.",
-                  },
-                ],
+                text: "Establishes Pontecorvo's method: procedural reconstruction, documentary texture, moral complexity without easy resolution",
+              },
+            ],
+          },
+          {
+            text: 'Queimada (Burn!) (1969)',
+            items: [
+              {
+                text: 'Marlon Brando as a British agent who first manufactures and then suppresses a Caribbean revolution years later',
+              },
+              { text: 'Colonialism as a system that generates the violence it then condemns' },
+              { text: 'Not well-received outside of Italy and critically panned' },
+              {
+                text: "United Artists, afraid of offending the Spanish market (due to Franco's threats to kill Spanish distribution), changed the nationality of the villains from Spaniards to Portuguese at the last minute — and then hardly distributed the picture after the critics' reviews were less than enthusiastic.",
               },
               {
-                text: 'The second silence…',
-                items: [{ text: 'Again, why?' }],
+                text: 'There was also a 17-minute cut made for the American export version that damaged the film.',
               },
               {
-                text: 'Ogro (1979)',
-                items: [
-                  {
-                    text: 'depicts the assassination of the Francoist prime minister, Carrero Blanco, by ETA Basque separatists in 1973.',
-                  },
-                  { text: 'Script originally written with a less conflicted ending' },
-                  { text: 'Then the Aldo Moro kidnapping and killing happened' },
-                  {
-                    text: "Pontecorvo reconsidered his stance on political violence and changed the ending of Ogro in order to question the legitimacy of violent armed struggle.",
-                  },
-                ],
+                text: 'Gained more praise as time went on. Edward Said said it and Battle of Algiers "stand unmatched and unexcelled since they were made in the 60s."',
+              },
+              {
+                text: "Brando considered it some of his best work, and counted Pontecorvo among the only three directors he'd rate alongside Kazan and Bertolucci.",
+              },
+            ],
+          },
+          {
+            text: 'The second silence…',
+            items: [{ text: 'Again, why?' }],
+          },
+          {
+            text: 'Ogro (1979)',
+            items: [
+              {
+                text: 'depicts the assassination of the Francoist prime minister, Carrero Blanco, by ETA Basque separatists in 1973.',
+              },
+              { text: 'Script originally written with a less conflicted ending' },
+              { text: 'Then the Aldo Moro kidnapping and killing happened' },
+              {
+                text: "Pontecorvo reconsidered his stance on political violence and changed the ending of Ogro in order to question the legitimacy of violent armed struggle.",
               },
             ],
           },
