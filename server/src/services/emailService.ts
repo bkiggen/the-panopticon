@@ -18,7 +18,7 @@ class EmailService {
     const emailEnabled = process.env.EMAIL_ENABLED === "true";
 
     if (!emailEnabled) {
-      console.log("📧 Email service is disabled");
+      console.log("📧 Email service disabled — magic links logged to console in dev");
       return;
     }
 
@@ -26,23 +26,17 @@ class EmailService {
     const emailPort = process.env.EMAIL_PORT;
     const emailUser = process.env.EMAIL_USER;
     const emailPassword = process.env.EMAIL_PASSWORD;
-    const emailFrom = process.env.EMAIL_FROM;
 
-    if (!emailHost || !emailPort || !emailUser || !emailPassword || !emailFrom) {
-      console.warn(
-        "⚠️  Email service enabled but missing configuration. Required: EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASSWORD, EMAIL_FROM"
-      );
+    if (!emailHost || !emailPort || !emailUser || !emailPassword) {
+      console.warn("⚠️  EMAIL_ENABLED=true but missing EMAIL_HOST / EMAIL_PORT / EMAIL_USER / EMAIL_PASSWORD");
       return;
     }
 
     this.transporter = nodemailer.createTransport({
       host: emailHost,
       port: parseInt(emailPort),
-      secure: parseInt(emailPort) === 465, // true for 465, false for other ports
-      auth: {
-        user: emailUser,
-        pass: emailPassword,
-      },
+      secure: parseInt(emailPort) === 465,
+      auth: { user: emailUser, pass: emailPassword },
     });
 
     console.log("✅ Email service initialized");
@@ -50,22 +44,18 @@ class EmailService {
 
   async sendEmail(options: EmailOptions): Promise<boolean> {
     if (!this.transporter) {
-      console.log(
-        `📧 Email would be sent to ${options.to}: ${options.subject}`
-      );
-      console.log(`Reset link: ${options.text}`);
+      console.log(`📧 [no mailer] Would send to ${options.to}: ${options.subject}`);
       return false;
     }
 
     try {
       await this.transporter.sendMail({
-        from: process.env.EMAIL_FROM,
+        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
         to: options.to,
         subject: options.subject,
         text: options.text,
         html: options.html,
       });
-
       console.log(`✅ Email sent to ${options.to}`);
       return true;
     } catch (error) {
@@ -74,77 +64,43 @@ class EmailService {
     }
   }
 
-  async sendPasswordResetEmail(
-    email: string,
-    resetToken: string
-  ): Promise<boolean> {
-    const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+  async sendMagicLinkEmail(email: string, token: string): Promise<boolean> {
+    const loginUrl = `${process.env.CLIENT_URL}/magic-link?token=${token}`;
 
     const html = `
       <!DOCTYPE html>
       <html>
       <head>
         <style>
-          body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-          }
-          .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-          }
-          .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #1976d2;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            margin: 20px 0;
-          }
-          .footer {
-            margin-top: 30px;
-            font-size: 12px;
-            color: #666;
-          }
+          body { font-family: Arial, sans-serif; background: #080808; color: #f0f0f0; margin: 0; padding: 0; }
+          .container { max-width: 480px; margin: 40px auto; padding: 40px 32px; }
+          .label { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #c9a84c; margin-bottom: 24px; }
+          h2 { font-size: 28px; font-weight: 700; margin: 0 0 16px; letter-spacing: -0.02em; }
+          p { color: #888; font-size: 14px; line-height: 1.7; margin: 0 0 28px; }
+          .button { display: inline-block; padding: 14px 28px; background: #c9a84c; color: #080808; text-decoration: none; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+          .url { margin-top: 28px; font-size: 12px; color: #444; word-break: break-all; }
+          .url a { color: #c9a84c; }
+          .expire { margin-top: 24px; font-size: 12px; color: #383838; }
         </style>
       </head>
       <body>
         <div class="container">
-          <h2>Password Reset Request</h2>
-          <p>You requested to reset your password for Dr. Movie Times M.D.</p>
-          <p>Click the button below to reset your password:</p>
-          <a href="${resetUrl}" class="button">Reset Password</a>
-          <p>Or copy and paste this link into your browser:</p>
-          <p><a href="${resetUrl}">${resetUrl}</a></p>
-          <p>This link will expire in 1 hour.</p>
-          <p>If you didn't request this, please ignore this email.</p>
-          <div class="footer">
-            <p>This is an automated email from Dr. Movie Times M.D. Please do not reply.</p>
-          </div>
+          <div class="label">Dr. Movie Times M.D.</div>
+          <h2>Your login link</h2>
+          <p>Click the button below to sign in. No password needed.</p>
+          <a href="${loginUrl}" class="button">Sign In →</a>
+          <div class="url">Or paste this into your browser:<br><a href="${loginUrl}">${loginUrl}</a></div>
+          <div class="expire">This link expires in 7 days and can only be used once.</div>
         </div>
       </body>
       </html>
     `;
 
-    const text = `
-Password Reset Request
-
-You requested to reset your password for Dr. Movie Times M.D.
-
-Visit this link to reset your password:
-${resetUrl}
-
-This link will expire in 1 hour.
-
-If you didn't request this, please ignore this email.
-    `;
+    const text = `Sign in to Dr. Movie Times M.D.\n\n${loginUrl}\n\nThis link expires in 7 days and can only be used once.`;
 
     return this.sendEmail({
       to: email,
-      subject: "Password Reset Request",
+      subject: "Your Dr. Movie Times login link",
       html,
       text,
     });

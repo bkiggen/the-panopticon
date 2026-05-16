@@ -12,8 +12,7 @@ import { ClassDetail } from "@/pages/Education/ClassDetail";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import AdminLogin from "@/pages/Admin/Login";
-import ForgotPassword from "@/pages/Admin/ForgotPassword";
-import ResetPassword from "@/pages/Admin/ResetPassword";
+import MagicLinkVerify from "@/pages/Admin/MagicLinkVerify";
 import { AuthService } from "@/services/authService";
 import useSessionStore from "@/stores/sessionStore";
 import { routeConstants } from "@/routing/routeConstants";
@@ -24,19 +23,16 @@ const useAuth = () => {
   const setAuthenticated = useSessionStore((state) => state.setAuthenticated);
   const [isValidating, setIsValidating] = useState(true);
 
-  // Check token validity on app load
   useEffect(() => {
     const checkAuth = async () => {
       setIsValidating(true);
 
       if (!AuthService.isAuthenticated()) {
-        // No token stored, definitely not authenticated
         setAuthenticated(false);
         setIsValidating(false);
         return;
       }
 
-      // Token exists, validate with server
       const isValid = await AuthService.validateToken();
       setAuthenticated(isValid);
       setIsValidating(false);
@@ -50,37 +46,23 @@ const useAuth = () => {
     setAuthenticated(false);
   }, [setAuthenticated]);
 
-  return {
-    isAuthenticated,
-    isValidating,
-    logout,
-  };
+  return { isAuthenticated, isValidating, logout };
 };
 
-// Layout for public routes (no auth required)
-const PublicLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <>
-      <Header />
-      {children}
-      <Footer />
-    </>
-  );
-};
+const PublicLayout = ({ children }: { children: React.ReactNode }) => (
+  <>
+    <Header />
+    {children}
+    <Footer />
+  </>
+);
 
-// Layout for admin routes (auth required)
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isValidating } = useAuth();
 
-  // Show loading while validating token
   if (isValidating) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
         <CircularProgress />
       </Box>
     );
@@ -102,70 +84,34 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 const AppRouter = () => {
   const { isAuthenticated } = useAuth();
 
-  const handleLoginSuccess = () => {
-    useSessionStore.getState().setAuthenticated(true);
-  };
-
   return (
     <Router>
       <Routes>
-        {/* Public route - MovieEvents (no auth required) */}
         <Route
           path={routeConstants.HOME}
-          element={
-            <PublicLayout>
-              <MovieEvents />
-            </PublicLayout>
-          }
+          element={<PublicLayout><MovieEvents /></PublicLayout>}
         />
 
-        {/* Auth route - Admin login */}
         <Route
           path={routeConstants.AUTH}
           element={
-            isAuthenticated ? (
-              <Navigate to={routeConstants.ADMIN} replace />
-            ) : (
-              <AdminLogin onLoginSuccess={handleLoginSuccess} />
-            )
+            isAuthenticated
+              ? <Navigate to={routeConstants.ADMIN} replace />
+              : <AdminLogin onLoginSuccess={() => {}} />
           }
         />
 
-        {/* Password reset routes */}
-        <Route
-          path={routeConstants.FORGOT_PASSWORD}
-          element={<ForgotPassword />}
-        />
-        <Route
-          path={routeConstants.RESET_PASSWORD}
-          element={<ResetPassword />}
-        />
+        <Route path={routeConstants.MAGIC_LINK} element={<MagicLinkVerify />} />
 
-        {/* Protected admin route */}
         <Route
           path={routeConstants.ADMIN}
-          element={
-            <AdminLayout>
-              <Admin />
-            </AdminLayout>
-          }
+          element={<AdminLayout><Admin /></AdminLayout>}
         />
 
-        {/* Education routes — hidden, no nav link */}
-        <Route
-          path={routeConstants.EDUCATION}
-          element={<Education />}
-        />
-        <Route
-          path={routeConstants.EDUCATION_CLASS}
-          element={<ClassDetail />}
-        />
+        <Route path={routeConstants.EDUCATION} element={<Education />} />
+        <Route path={routeConstants.EDUCATION_CLASS} element={<ClassDetail />} />
 
-        {/* Catch all - redirect to home */}
-        <Route
-          path="*"
-          element={<Navigate to={routeConstants.HOME} replace />}
-        />
+        <Route path="*" element={<Navigate to={routeConstants.HOME} replace />} />
       </Routes>
     </Router>
   );

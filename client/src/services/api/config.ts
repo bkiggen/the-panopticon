@@ -2,11 +2,9 @@ export const API_CONFIG = {
   BASE_URL: import.meta.env.VITE_API_URL || "http://localhost:3021/api",
   ENDPOINTS: {
     AUTH: {
-      LOGIN: "/auth/login",
+      MAGIC_LINK: "/auth/magic-link",
+      MAGIC_LINK_VERIFY: "/auth/magic-link/verify",
       VALIDATE: "/auth/validate",
-      CREATE_ADMIN: "/auth/create-admin",
-      FORGOT_PASSWORD: "/auth/forgot-password",
-      RESET_PASSWORD: "/auth/reset-password",
     },
     MOVIE_EVENTS: {
       BASE: "/movie-events",

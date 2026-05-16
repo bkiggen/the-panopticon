@@ -82,10 +82,7 @@ export function createApp() {
 
   app.use("/api/admin", adminRoutes);
 
-  // Rate limiting for auth routes (authLimiter handles test skipping internally)
-  app.use("/api/auth/login", authLimiter);
-  app.use("/api/auth/forgot-password", authLimiter);
-  app.use("/api/auth/reset-password", authLimiter);
+  app.use("/api/auth/magic-link", authLimiter);
   app.use("/api/auth", authRoutes);
 
   // Production static file serving

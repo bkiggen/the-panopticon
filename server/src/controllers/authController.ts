@@ -1,158 +1,12 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { prisma } from "../lib/prisma";
 import emailService from "../services/emailService";
 
-export const login = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
+const MAGIC_LINK_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
-    }
-
-    // DEVELOPMENT BYPASS: Allow any email/password in local environment
-    const isLocalDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'local';
-
-    if (isLocalDev) {
-      console.warn('⚠️  [DEV MODE] Bypassing authentication - any email/password accepted');
-
-      const jwtSecret = process.env.JWT_SECRET;
-      if (!jwtSecret) {
-        return res.status(500).json({ error: "Server configuration error" });
-      }
-
-      // Create a dev admin token without database lookup
-      const token = jwt.sign(
-        {
-          id: "dev-admin",
-          email: email,
-          role: "admin",
-        },
-        jwtSecret,
-        { expiresIn: process.env.JWT_EXPIRES_IN || "24h" } as jwt.SignOptions
-      );
-
-      return res.json({
-        token,
-        user: {
-          id: 999999,
-          email: email,
-          isAdmin: true,
-        },
-      });
-    }
-
-    // PRODUCTION: Normal authentication flow
-    // Find user in database
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    // Check if user is admin
-    if (!user.isAdmin) {
-      return res.status(403).json({ error: "Admin access required" });
-    }
-
-    // Check password
-    const isValidPassword = await bcrypt.compare(password, user.hashedPassword);
-    if (!isValidPassword) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    // Generate JWT
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-      return res.status(500).json({ error: "Server configuration error" });
-    }
-
-    const token = jwt.sign(
-      {
-        id: user.id.toString(), // Convert to string for JWT
-        email: user.email,
-        role: user.isAdmin ? "admin" : "user",
-      },
-      jwtSecret,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "24h" } as jwt.SignOptions
-    );
-
-    res.json({
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      },
-    });
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ error: "Login failed" });
-  }
-};
-
-export const validateToken = async (req: Request, res: Response) => {
-  // This endpoint uses the authenticateToken middleware
-  // If we get here, the token is valid
-  res.json({
-    valid: true,
-    user: req.user,
-  });
-};
-
-// Helper function to create an admin user (for initial setup)
-export const createAdmin = async (req: Request, res: Response) => {
-  try {
-    const { email, password, name } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
-    }
-
-    // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      return res.status(400).json({ error: "User already exists" });
-    }
-
-    // Hash password
-    const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    // Create admin user
-    const user = await prisma.user.create({
-      data: {
-        email,
-        name,
-        hashedPassword,
-        isAdmin: true,
-      },
-    });
-
-    res.status(201).json({
-      message: "Admin created successfully",
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        isAdmin: user.isAdmin,
-      },
-    });
-  } catch (error) {
-    console.error("Create admin error:", error);
-    res.status(500).json({ error: "Failed to create admin" });
-  }
-};
-
-export const forgotPassword = async (req: Request, res: Response) => {
+export const requestMagicLink = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
 
@@ -160,86 +14,83 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Email is required" });
     }
 
-    // Find user
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    const user = await prisma.user.findUnique({ where: { email } });
 
     // Always return success to prevent email enumeration
-    if (!user) {
-      return res.json({
-        message: "If an account exists with this email, a password reset link has been sent",
-      });
+    if (!user || !user.isAdmin) {
+      return res.json({ message: "If an account exists for this email, a login link has been sent." });
     }
 
-    // Generate reset token
-    const resetToken = crypto.randomBytes(32).toString("hex");
-    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiry = new Date(Date.now() + MAGIC_LINK_EXPIRY_MS);
 
-    // Save reset token to database
     await prisma.user.update({
       where: { id: user.id },
-      data: {
-        resetToken,
-        resetTokenExpiry,
-      },
+      data: { resetToken: token, resetTokenExpiry: expiry },
     });
 
-    // Send email
-    await emailService.sendPasswordResetEmail(email, resetToken);
+    const loginUrl = `${process.env.CLIENT_URL}/magic-link?token=${token}`;
 
-    res.json({
-      message: "If an account exists with this email, a password reset link has been sent",
-    });
+    // In dev, log the link so you can test without email configured
+    if (process.env.NODE_ENV !== "production") {
+      console.log(`\n🔗 [DEV] Magic link for ${email}:\n${loginUrl}\n`);
+    }
+
+    await emailService.sendMagicLinkEmail(email, token);
+
+    res.json({ message: "If an account exists for this email, a login link has been sent." });
   } catch (error) {
-    console.error("Forgot password error:", error);
-    res.status(500).json({ error: "Failed to process request" });
+    console.error("Magic link request error:", error);
+    res.status(500).json({ error: "Failed to send login link" });
   }
 };
 
-export const resetPassword = async (req: Request, res: Response) => {
+export const verifyMagicLink = async (req: Request, res: Response) => {
   try {
-    const { token, newPassword } = req.body;
+    const { token } = req.query as { token?: string };
 
-    if (!token || !newPassword) {
-      return res.status(400).json({ error: "Token and new password are required" });
+    if (!token) {
+      return res.status(400).json({ error: "Token is required" });
     }
 
-    if (newPassword.length < 8) {
-      return res.status(400).json({ error: "Password must be at least 8 characters" });
-    }
-
-    // Find user with valid reset token
     const user = await prisma.user.findFirst({
       where: {
         resetToken: token,
-        resetTokenExpiry: {
-          gte: new Date(), // Token must not be expired
-        },
+        resetTokenExpiry: { gte: new Date() },
       },
     });
 
     if (!user) {
-      return res.status(400).json({ error: "Invalid or expired reset token" });
+      return res.status(400).json({ error: "Invalid or expired login link" });
     }
 
-    // Hash new password
-    const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
-    // Update password and clear reset token
+    // Clear token so it can't be reused
     await prisma.user.update({
       where: { id: user.id },
-      data: {
-        hashedPassword,
-        resetToken: null,
-        resetTokenExpiry: null,
-      },
+      data: { resetToken: null, resetTokenExpiry: null },
     });
 
-    res.json({ message: "Password has been reset successfully" });
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      return res.status(500).json({ error: "Server configuration error" });
+    }
+
+    const jwtToken = jwt.sign(
+      { id: user.id.toString(), email: user.email, role: "admin" },
+      jwtSecret,
+      { expiresIn: "7d" } as jwt.SignOptions
+    );
+
+    res.json({
+      token: jwtToken,
+      user: { id: user.id, email: user.email, isAdmin: user.isAdmin },
+    });
   } catch (error) {
-    console.error("Reset password error:", error);
-    res.status(500).json({ error: "Failed to reset password" });
+    console.error("Magic link verify error:", error);
+    res.status(500).json({ error: "Failed to verify login link" });
   }
+};
+
+export const validateToken = async (req: Request, res: Response) => {
+  res.json({ valid: true, user: req.user });
 };

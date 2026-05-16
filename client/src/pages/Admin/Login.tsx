@@ -1,56 +1,29 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Paper,
-  Alert,
-  CircularProgress,
-  Link,
-} from "@mui/material";
-import { Lock } from "@mui/icons-material";
+import { Box, Button, TextField, Typography, Alert, CircularProgress } from "@mui/material";
 import { AuthService } from "@/services/authService";
-import { useNavigate } from "react-router-dom";
 
 interface LoginProps {
   onLoginSuccess: () => void;
 }
 
-const AdminLogin: React.FC<LoginProps> = ({ onLoginSuccess }) => {
-  const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
+const AdminLogin: React.FC<LoginProps> = () => {
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [sent, setSent] = useState(false);
 
-  const handleChange =
-    (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCredentials((prev) => ({
-        ...prev,
-        [field]: event.target.value,
-      }));
-      setError(""); // Clear error on input change
-    };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!credentials.email || !credentials.password) {
-      setError("Please enter both email and password");
-      return;
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
 
     setIsLoading(true);
     setError("");
 
     try {
-      await AuthService.login(credentials);
-      onLoginSuccess();
-    } catch (error: any) {
-      setError(error.message || "Login failed");
+      await AuthService.requestMagicLink(email);
+      setSent(true);
+    } catch (err: any) {
+      setError(err.message || "Failed to send login link");
     } finally {
       setIsLoading(false);
     }
@@ -63,88 +36,110 @@ const AdminLogin: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        bgcolor: "grey.100",
+        bgcolor: "#080808",
       }}
     >
-      <Paper
-        elevation={3}
-        sx={{
-          p: 4,
-          width: "100%",
-          maxWidth: 400,
-          textAlign: "center",
-        }}
-      >
-        <Lock sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
-
-        <Typography variant="h4" component="h1" gutterBottom>
-          Admin Login
+      <Box sx={{ width: "100%", maxWidth: 360, px: 3 }}>
+        <Typography
+          sx={{
+            fontFamily: "Antonio, sans-serif",
+            fontSize: "11px",
+            letterSpacing: "0.36em",
+            textTransform: "uppercase",
+            color: "#c9a84c",
+            mb: 4,
+          }}
+        >
+          Dr. Movie Times M.D.
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Please sign in to access admin features
-        </Typography>
-
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={credentials.email}
-            onChange={handleChange("email")}
-            disabled={isLoading}
-          />
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={credentials.password}
-            onChange={handleChange("password")}
-            disabled={isLoading}
-          />
-
-          <Box sx={{ textAlign: "right", mt: 1 }}>
-            <Link
-              component="button"
-              type="button"
-              variant="body2"
-              onClick={() => navigate("/forgot-password")}
-              sx={{ cursor: "pointer" }}
-              disabled={isLoading}
+        {sent ? (
+          <>
+            <Typography
+              sx={{
+                fontFamily: "Antonio, sans-serif",
+                fontSize: "32px",
+                fontWeight: 700,
+                color: "#f0f0f0",
+                lineHeight: 1,
+                mb: 2,
+              }}
             >
-              Forgot Password?
-            </Link>
-          </Box>
+              Check your email
+            </Typography>
+            <Typography sx={{ fontFamily: "Lato, sans-serif", fontSize: "15px", color: "#555", lineHeight: 1.7 }}>
+              A login link has been sent to <span style={{ color: "#888" }}>{email}</span>. Click it to sign in — it's good for 7 days.
+            </Typography>
+          </>
+        ) : (
+          <>
+            <Typography
+              sx={{
+                fontFamily: "Antonio, sans-serif",
+                fontSize: "32px",
+                fontWeight: 700,
+                color: "#f0f0f0",
+                lineHeight: 1,
+                mb: 2,
+              }}
+            >
+              Sign in
+            </Typography>
+            <Typography sx={{ fontFamily: "Lato, sans-serif", fontSize: "15px", color: "#555", lineHeight: 1.7, mb: 4 }}>
+              Enter your email and we'll send you a login link.
+            </Typography>
 
-          {error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {error}
-            </Alert>
-          )}
+            <Box component="form" onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); setError(""); }}
+                disabled={isLoading}
+                autoFocus
+                sx={{
+                  mb: 2,
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor: "#0e0e0e",
+                    "& fieldset": { borderColor: "#222" },
+                    "&:hover fieldset": { borderColor: "#333" },
+                    "&.Mui-focused fieldset": { borderColor: "#c9a84c" },
+                  },
+                  "& input": { color: "#f0f0f0", fontFamily: "Lato, sans-serif" },
+                }}
+              />
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            disabled={isLoading}
-            startIcon={isLoading ? <CircularProgress size={20} /> : null}
-          >
-            {isLoading ? "Signing In..." : "Sign In"}
-          </Button>
-        </Box>
-      </Paper>
+              {error && (
+                <Alert severity="error" sx={{ mb: 2, bgcolor: "#1a0a0a", color: "#f44336" }}>
+                  {error}
+                </Alert>
+              )}
+
+              <Button
+                type="submit"
+                fullWidth
+                disabled={isLoading || !email}
+                sx={{
+                  py: 1.5,
+                  backgroundColor: "#c9a84c",
+                  color: "#080808",
+                  fontFamily: "Antonio, sans-serif",
+                  fontSize: "13px",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  fontWeight: 700,
+                  borderRadius: 0,
+                  "&:hover": { backgroundColor: "#d4b86a" },
+                  "&:disabled": { backgroundColor: "#222", color: "#444" },
+                }}
+              >
+                {isLoading ? <CircularProgress size={18} sx={{ color: "#080808" }} /> : "Send Login Link"}
+              </Button>
+            </Box>
+          </>
+        )}
+      </Box>
     </Box>
   );
 };
