@@ -45,6 +45,10 @@ export function createApp() {
             "https://ticketing.useast.veezi.com",
             "https://pdx.livingroomtheaters.com",
           ],
+          "frame-src": [
+            "https://www.youtube.com",
+            "https://www.youtube-nocookie.com",
+          ],
         },
       },
     })
