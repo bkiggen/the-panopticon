@@ -563,7 +563,7 @@ export const ClassDetail = () => {
                 mb: 5,
               }}
             >
-              Movie Madness University · Class {cls.number}
+              Movie Madness University
             </Typography>
 
             {/* Poster placeholder */}
