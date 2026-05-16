@@ -40,6 +40,20 @@ function renderOutlineItem(
   expanded: Record<string, boolean>,
   onToggle: (id: string) => void,
 ): React.ReactNode {
+  // Image embed
+  if (item.text.startsWith('Image: ')) {
+    const src = item.text.slice(7).trim();
+    return (
+      <Box sx={{ my: 1 }}>
+        <img
+          src={src}
+          alt=""
+          style={{ maxWidth: '100%', display: 'block', border: '1px solid #1c1c1c' }}
+        />
+      </Box>
+    );
+  }
+
   // YouTube embed
   if (item.text.startsWith('Embed: ')) {
     const videoId = getYouTubeId(item.text.slice(7).trim());
