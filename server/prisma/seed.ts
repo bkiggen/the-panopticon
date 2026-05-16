@@ -1,63 +1,38 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import path from "path";
 
-// Load environment variables from parent directory (don't override existing ones)
 dotenv.config({ path: path.resolve(__dirname, "../.env"), override: false });
 
 const prisma = new PrismaClient();
 
-const createAdminUser = async (
-  email?: string,
-  password?: string,
-  name?: string
-) => {
-  const saltRounds = 12;
+const upsertAdminUser = async (email: string, name: string) => {
+  const existing = await prisma.user.findUnique({ where: { email } });
 
-  if (!email || !password || !name) {
-    console.error(
-      "❌ ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME must be set in environment variables"
-    );
-    process.exit(1);
-  }
-
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-  const existingUser = await prisma.user.findUnique({ where: { email } });
-
-  if (!existingUser) {
+  if (!existing) {
     await prisma.user.create({
       data: {
         email,
         name,
-        hashedPassword,
+        hashedPassword: "magic-link-auth",
         isAdmin: true,
       },
     });
-    console.log("✅ Admin user created");
+    console.log(`✅ Admin user created: ${email}`);
   } else {
-    console.log("ℹ️ Admin already exists");
+    console.log(`ℹ️  Admin already exists: ${email}`);
   }
 };
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL;
-  const password = process.env.ADMIN_PASSWORD;
-  const name = process.env.ADMIN_NAME;
-  const email2 = process.env.ADMIN_EMAIL_2;
-  const password2 = process.env.ADMIN_PASSWORD_2;
-  const name2 = process.env.ADMIN_NAME_2;
-  const usersToSeed = [
-    { email, password, name },
-    { email: email2, password: password2, name: name2 },
+  const admins = [
+    { email: process.env.ADMIN_EMAIL, name: process.env.ADMIN_NAME },
+    { email: process.env.ADMIN_EMAIL_2, name: process.env.ADMIN_NAME_2 },
   ];
 
-  // Use for...of instead of forEach to properly await async operations
-  for (const user of usersToSeed) {
-    // Skip if any of the required fields are missing (makes secondary admins optional)
-    if (user.email && user.password && user.name) {
-      await createAdminUser(user.email, user.password, user.name);
+  for (const { email, name } of admins) {
+    if (email && name) {
+      await upsertAdminUser(email, name);
     }
   }
 }
