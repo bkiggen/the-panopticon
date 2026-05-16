@@ -42,7 +42,8 @@
     "node-ical": "^0.25.6",
     "nodemailer": "^7.0.10",
     "prisma": "^6.13.0",
-    "puppeteer": "^24.15.0"
+    "puppeteer": "^24.15.0",
+    "resend": "^6.12.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
