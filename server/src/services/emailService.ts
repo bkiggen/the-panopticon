@@ -37,6 +37,9 @@ class EmailService {
       port: parseInt(emailPort),
       secure: parseInt(emailPort) === 465,
       auth: { user: emailUser, pass: emailPassword },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
     });
 
     console.log("✅ Email service initialized");

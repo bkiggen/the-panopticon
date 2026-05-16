@@ -36,9 +36,12 @@ export const requestMagicLink = async (req: Request, res: Response) => {
       console.log(`\n🔗 [DEV] Magic link for ${email}:\n${loginUrl}\n`);
     }
 
-    await emailService.sendMagicLinkEmail(email, token);
-
+    // Respond immediately — send email in background so SMTP latency never blocks the request
     res.json({ message: "If an account exists for this email, a login link has been sent." });
+
+    emailService.sendMagicLinkEmail(email, token).catch((err) =>
+      console.error("Failed to send magic link email:", err)
+    );
   } catch (error) {
     console.error("Magic link request error:", error);
     res.status(500).json({ error: "Failed to send login link" });
