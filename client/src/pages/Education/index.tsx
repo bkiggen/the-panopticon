@@ -16,6 +16,7 @@ export const Education = () => {
         backgroundColor: '#080808',
         minHeight: '100vh',
         color: '#f0f0f0',
+        overflowX: 'hidden',
       }}
     >
       {/* Header */}

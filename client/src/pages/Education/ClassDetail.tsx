@@ -193,7 +193,7 @@ const SectionBlock = ({ section, idx, onRef, expanded, onToggle }: SectionBlockP
         py: { xs: '80px', md: '120px' },
         borderBottom: '1px solid #111',
         position: 'relative',
-        overflowX: 'hidden',
+        overflow: 'hidden',
         backgroundColor: idx % 2 === 0 ? BG : '#0a0a0a',
       }}
     >
