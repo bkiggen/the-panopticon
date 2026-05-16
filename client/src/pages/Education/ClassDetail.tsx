@@ -6,6 +6,13 @@ import { classes, type OutlineItem, type OutlineSection } from './data/classes';
 const GOLD = '#c9a84c';
 const BG = '#080808';
 
+// ─── YouTube embed helper ──────────────────────────────────────────────────────
+
+function getYouTubeId(url: string): string | null {
+  const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
 // ─── Accordion ID helpers ──────────────────────────────────────────────────────
 // IDs are path strings: "sectionId/itemIdx/subIdx/..." so each accordion is unique.
 
@@ -33,6 +40,26 @@ function renderOutlineItem(
   expanded: Record<string, boolean>,
   onToggle: (id: string) => void,
 ): React.ReactNode {
+  // YouTube embed
+  if (item.text.startsWith('Embed: ')) {
+    const videoId = getYouTubeId(item.text.slice(7).trim());
+    if (videoId) {
+      return (
+        <Box sx={{ width: '100%', aspectRatio: '16/9', my: 1, border: '1px solid #1c1c1c', overflow: 'hidden' }}>
+          <iframe
+            width="100%"
+            height="100%"
+            src={`https://www.youtube.com/embed/${videoId}`}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ display: 'block' }}
+          />
+        </Box>
+      );
+    }
+  }
+
   const isAccordion = !!item.items?.length;
   const isOpen = !!expanded[id];
 

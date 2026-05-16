@@ -222,6 +222,7 @@ export const classes: ClassData[] = [
                   {
                     text: 'The FLN are the protagonists. Yacef Saadi, a real FLN leader, contributed to the screenplay and starred in the film. The French are somewhat humanized…',
                   },
+                  { text: 'Embed: https://www.youtube.com/watch?v=7XZZ25S2JBA' },
                   {
                     text: 'Banned in France for five years; used by revolutionary movements worldwide as a practical and ideological manual; famously screened at the Pentagon in 2003 as a study in insurgency and counter-insurgency',
                   },
