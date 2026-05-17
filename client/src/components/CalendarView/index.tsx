@@ -26,6 +26,8 @@ import { getBestData } from "@/utils/general";
 
 dayjs.extend(utc);
 
+type ViewMode = "month" | "week";
+
 interface CalendarViewProps {
   filters: MovieEventFilters;
 }
@@ -39,38 +41,46 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
   const isDarkMode = theme.palette.mode === "dark";
   const { isAuthenticated } = useSessionStore();
 
-  const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
+  const [viewMode, setViewMode] = useState<ViewMode>("month");
+  const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
   const [eventsByDate, setEventsByDate] = useState<EventsByDate>({});
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<MovieEventWithDataProps | null>(null);
   const [eventModalOpen, setEventModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Compute fetch range based on view mode
+  const getFetchRange = () => {
+    if (viewMode === "week") {
+      const start = currentDate.startOf("week");
+      const end = currentDate.endOf("week");
+      return { start, end };
+    }
+    return {
+      start: currentDate.startOf("month"),
+      end: currentDate.endOf("month"),
+    };
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        // Get events for the current month
-        const startOfMonth = currentMonth.startOf("month").format("YYYY-MM-DD");
-        const endOfMonth = currentMonth.endOf("month").format("YYYY-MM-DD");
-
+        const { start, end } = getFetchRange();
         const result = await MovieEventService.getAll(
           {
             ...filters,
-            startDate: startOfMonth,
-            endDate: endOfMonth,
+            startDate: start.format("YYYY-MM-DD"),
+            endDate: end.format("YYYY-MM-DD"),
           },
           1,
           1000
         );
 
-        // Group events by date
         const grouped: EventsByDate = {};
         result.events.forEach((event: MovieEventWithDataProps) => {
-          const dateStr = event.date.split("T")[0]; // YYYY-MM-DD
-          if (!grouped[dateStr]) {
-            grouped[dateStr] = [];
-          }
+          const dateStr = event.date.split("T")[0];
+          if (!grouped[dateStr]) grouped[dateStr] = [];
           grouped[dateStr].push(event);
         });
 
@@ -83,28 +93,31 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
     };
 
     fetchEvents();
-  }, [currentMonth, filters]);
+  }, [currentDate, viewMode, filters]);
 
-  const handlePrevMonth = () => {
-    setCurrentMonth(currentMonth.subtract(1, "month"));
+  const handlePrev = () => {
+    setCurrentDate(
+      viewMode === "week"
+        ? currentDate.subtract(1, "week")
+        : currentDate.subtract(1, "month")
+    );
   };
 
-  const handleNextMonth = () => {
-    setCurrentMonth(currentMonth.add(1, "month"));
+  const handleNext = () => {
+    setCurrentDate(
+      viewMode === "week"
+        ? currentDate.add(1, "week")
+        : currentDate.add(1, "month")
+    );
   };
 
-  const handleDateClick = (dateStr: string) => {
-    setSelectedDate(dateStr);
-  };
-
-  const handleCloseDialog = () => {
-    setSelectedDate(null);
-  };
+  const handleDateClick = (dateStr: string) => setSelectedDate(dateStr);
+  const handleCloseDialog = () => setSelectedDate(null);
 
   const handleEventClick = (event: MovieEventWithDataProps) => {
     setSelectedEvent(event);
     setEventModalOpen(true);
-    setSelectedDate(null); // Close the date dialog
+    setSelectedDate(null);
   };
 
   const handleEventModalClose = () => {
@@ -112,20 +125,30 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
     setSelectedEvent(null);
   };
 
-  const renderCalendarDays = () => {
-    const startOfMonth = currentMonth.startOf("month");
-    const endOfMonth = currentMonth.endOf("month");
-    const startDate = startOfMonth.startOf("week");
-    const endDate = endOfMonth.endOf("week");
+  const headerLabel = () => {
+    if (viewMode === "month") return currentDate.format("MMMM YYYY");
+    const start = currentDate.startOf("week");
+    const end = currentDate.endOf("week");
+    if (start.month() === end.month()) {
+      return `${start.format("MMM D")} – ${end.format("D, YYYY")}`;
+    }
+    return `${start.format("MMM D")} – ${end.format("MMM D, YYYY")}`;
+  };
+
+  // ── Month view ────────────────────────────────────────────────────────────────
+
+  const renderMonthView = () => {
+    const startDate = currentDate.startOf("month").startOf("week");
+    const endDate = currentDate.endOf("month").endOf("week");
 
     const days = [];
-    let currentDate = startDate;
+    let day = startDate;
 
-    while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, "day")) {
-      const dateStr = currentDate.format("YYYY-MM-DD");
+    while (day.isBefore(endDate) || day.isSame(endDate, "day")) {
+      const dateStr = day.format("YYYY-MM-DD");
       const events = eventsByDate[dateStr] || [];
-      const isCurrentMonth = currentDate.month() === currentMonth.month();
-      const isToday = currentDate.isSame(dayjs(), "day");
+      const isCurrentMonth = day.month() === currentDate.month();
+      const isToday = day.isSame(dayjs(), "day");
 
       days.push(
         <Box
@@ -137,20 +160,13 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
             p: 1,
             cursor: events.length > 0 ? "pointer" : "default",
             backgroundColor: isToday
-              ? isDarkMode
-                ? "#1a1a1a"
-                : "#f0f0f0"
-              : isDarkMode
-              ? "#0a0a0a"
-              : "#fff",
+              ? isDarkMode ? "#1a1a1a" : "#f0f0f0"
+              : isDarkMode ? "#0a0a0a" : "#fff",
             opacity: isCurrentMonth ? 1 : 0.4,
             "&:hover": {
-              backgroundColor:
-                events.length > 0
-                  ? isDarkMode
-                    ? "#1a1a1a"
-                    : "#f5f5f5"
-                  : undefined,
+              backgroundColor: events.length > 0
+                ? isDarkMode ? "#1a1a1a" : "#f5f5f5"
+                : undefined,
             },
             overflow: "hidden",
             display: "flex",
@@ -159,13 +175,9 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
         >
           <Typography
             variant="caption"
-            sx={{
-              fontWeight: isToday ? 700 : 400,
-              color: isDarkMode ? "#fff" : "#000",
-              mb: 0.5,
-            }}
+            sx={{ fontWeight: isToday ? 700 : 400, color: isDarkMode ? "#fff" : "#000", mb: 0.5 }}
           >
-            {currentDate.date()}
+            {day.date()}
           </Typography>
           {events.length > 0 && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
@@ -187,11 +199,7 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
               {events.length > 3 && (
                 <Typography
                   variant="caption"
-                  sx={{
-                    fontSize: "0.65rem",
-                    color: isDarkMode ? "#999" : "#999",
-                    fontStyle: "italic",
-                  }}
+                  sx={{ fontSize: "0.65rem", color: "#999", fontStyle: "italic" }}
                 >
                   +{events.length - 3} more
                 </Typography>
@@ -201,99 +209,197 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
         </Box>
       );
 
-      currentDate = currentDate.add(1, "day");
+      day = day.add(1, "day");
     }
 
-    return days;
+    return (
+      <>
+        {/* Day labels */}
+        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+            <Box key={d} sx={{ p: 1, textAlign: "center", borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}` }}>
+              <Typography
+                variant="caption"
+                sx={{ fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", color: isDarkMode ? "#999" : "#666" }}
+              >
+                {d}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
+          {days}
+        </Box>
+      </>
+    );
   };
 
-  const selectedDateEvents = selectedDate ? eventsByDate[selectedDate] : [];
+  // ── Week view ─────────────────────────────────────────────────────────────────
+
+  const renderWeekView = () => {
+    const startOfWeek = currentDate.startOf("week");
+    const days = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, "day"));
+
+    return (
+      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", border: `1px solid ${isDarkMode ? "#333" : "#ddd"}`, borderRight: "none", borderBottom: "none" }}>
+        {days.map((day) => {
+          const dateStr = day.format("YYYY-MM-DD");
+          const events = eventsByDate[dateStr] || [];
+          const isToday = day.isSame(dayjs(), "day");
+
+          return (
+            <Box
+              key={dateStr}
+              sx={{
+                borderRight: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
+                borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
+                minHeight: 480,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {/* Day header */}
+              <Box
+                sx={{
+                  p: 1,
+                  borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
+                  backgroundColor: isToday
+                    ? isDarkMode ? "#1a1a1a" : "#f0f0f0"
+                    : isDarkMode ? "#0d0d0d" : "#fafafa",
+                  textAlign: "center",
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  sx={{ display: "block", textTransform: "uppercase", letterSpacing: "0.06em", color: isDarkMode ? "#999" : "#666", fontSize: "0.6rem" }}
+                >
+                  {day.format("ddd")}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontWeight: isToday ? 700 : 400,
+                    fontSize: "1.1rem",
+                    color: isToday ? (isDarkMode ? "#fff" : "#000") : isDarkMode ? "#aaa" : "#555",
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {day.date()}
+                </Typography>
+              </Box>
+
+              {/* Events */}
+              <Box sx={{ flex: 1, p: 0.5, display: "flex", flexDirection: "column", gap: 0.5 }}>
+                {events.map((event, idx) => (
+                  <Box
+                    key={idx}
+                    onClick={() => handleDateClick(dateStr)}
+                    sx={{
+                      p: "4px 6px",
+                      borderRadius: "3px",
+                      backgroundColor: isDarkMode ? "#1a1a1a" : "#f0f0f0",
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: isDarkMode ? "#252525" : "#e8e8e8" },
+                    }}
+                  >
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        display: "block",
+                        fontSize: "0.68rem",
+                        lineHeight: 1.35,
+                        color: isDarkMode ? "#ddd" : "#333",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {event.title}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{ fontSize: "0.6rem", color: isDarkMode ? "#666" : "#999" }}
+                    >
+                      {event.theatre}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
+    );
+  };
+
+  const selectedDateEvents = selectedDate ? eventsByDate[selectedDate] || [] : [];
+
+  const border = `1px solid ${isDarkMode ? "#333" : "#ddd"}`;
 
   return (
     <Box sx={{ p: 3, maxWidth: 1200, mx: "auto" }}>
-      {/* Calendar header */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 3,
-        }}
-      >
-        <IconButton onClick={handlePrevMonth}>
+      {/* Header */}
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+        <IconButton onClick={handlePrev}>
           <ChevronLeftIcon />
         </IconButton>
-        <Typography variant="h5" sx={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>
-          {currentMonth.format("MMMM YYYY")}
-        </Typography>
-        <IconButton onClick={handleNextMonth}>
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+          <Typography variant="h5" sx={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            {headerLabel()}
+          </Typography>
+
+          {/* View toggle */}
+          <Box sx={{ display: "flex", border, overflow: "hidden", borderRadius: "2px" }}>
+            {(["month", "week"] as ViewMode[]).map((mode) => (
+              <Box
+                key={mode}
+                onClick={() => setViewMode(mode)}
+                sx={{
+                  px: "12px",
+                  py: "6px",
+                  cursor: "pointer",
+                  fontSize: "11px",
+                  fontFamily: "Antonio, sans-serif",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  backgroundColor: viewMode === mode
+                    ? isDarkMode ? "#222" : "#eee"
+                    : "transparent",
+                  color: viewMode === mode
+                    ? isDarkMode ? "#fff" : "#000"
+                    : isDarkMode ? "#555" : "#aaa",
+                  transition: "background 0.15s, color 0.15s",
+                  "&:hover": { backgroundColor: isDarkMode ? "#1a1a1a" : "#f0f0f0" },
+                  borderRight: mode === "month" ? border : "none",
+                }}
+              >
+                {mode}
+              </Box>
+            ))}
+          </Box>
+        </Box>
+
+        <IconButton onClick={handleNext}>
           <ChevronRightIcon />
         </IconButton>
       </Box>
 
-      {/* Day labels */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(7, 1fr)",
-          gap: 0,
-          mb: 0,
-        }}
-      >
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <Box
-            key={day}
-            sx={{
-              p: 1,
-              textAlign: "center",
-              borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                color: isDarkMode ? "#999" : "#666",
-              }}
-            >
-              {day}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
-
-      {/* Calendar grid */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(7, 1fr)",
-          gap: 0,
-        }}
-      >
-        {renderCalendarDays()}
-      </Box>
+      {/* Calendar body */}
+      {viewMode === "month" ? renderMonthView() : renderWeekView()}
 
       {loading && (
         <Box sx={{ textAlign: "center", mt: 3 }}>
-          <Typography variant="body2" color="text.secondary">
-            Loading events...
-          </Typography>
+          <Typography variant="body2" color="text.secondary">Loading events...</Typography>
         </Box>
       )}
 
-      {/* Event details dialog */}
+      {/* Date detail dialog */}
       <Dialog
         open={!!selectedDate}
         onClose={handleCloseDialog}
         maxWidth="md"
         fullWidth
-        PaperProps={{
-          sx: {
-            backgroundColor: isDarkMode ? "#1a1a1a" : "#fff",
-          },
-        }}
+        PaperProps={{ sx: { backgroundColor: isDarkMode ? "#1a1a1a" : "#fff" } }}
       >
         <DialogTitle>
           <Box>
@@ -308,16 +414,10 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
         <DialogContent sx={{ p: 0 }}>
           <List sx={{ p: 0 }}>
             {selectedDateEvents.map((event) => {
-              const displayImageUrl = getBestData(
-                event.imageUrl,
-                event.movieData?.imageUrl
-              );
+              const displayImageUrl = getBestData(event.imageUrl, event.movieData?.imageUrl);
 
               if (isAuthenticated) {
-                // Admin view: clickable list items that open EventModal
-                const times = event.times.map((t: any) =>
-                  typeof t === "string" ? t : t.time
-                );
+                const times = event.times.map((t: any) => (typeof t === "string" ? t : t.time));
                 return (
                   <ListItem
                     key={event.id}
@@ -326,79 +426,37 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "flex-start",
-                      borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
+                      borderBottom: border,
                       "&:last-child": { borderBottom: "none" },
                       py: 2,
                       px: 3,
                       cursor: "pointer",
-                      "&:hover": {
-                        backgroundColor: isDarkMode ? "#2a2a2a" : "#f5f5f5",
-                      },
+                      "&:hover": { backgroundColor: isDarkMode ? "#2a2a2a" : "#f5f5f5" },
                       gap: 2,
                     }}
                   >
-                    {/* Poster area - fixed width maintained even if no image */}
-                    <Box
-                      sx={{
-                        width: 60,
-                        height: 90,
-                        flexShrink: 0,
-                        backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
-                        borderRadius: 1,
-                        overflow: "hidden",
-                      }}
-                    >
+                    <Box sx={{ width: 60, height: 90, flexShrink: 0, backgroundColor: isDarkMode ? "#333" : "#e0e0e0", borderRadius: 1, overflow: "hidden" }}>
                       {displayImageUrl && (
-                        <img
-                          src={displayImageUrl}
-                          alt={event.title}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
+                        <img src={displayImageUrl} alt={event.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       )}
                     </Box>
-
-                    {/* Content area */}
                     <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                       <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 0.5 }}>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                          {event.title}
-                        </Typography>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{event.title}</Typography>
                         {event.format && event.format !== "Digital" && (
-                          <Chip
-                            label={event.format}
-                            size="small"
-                            sx={{
-                              height: 20,
-                              fontSize: "0.7rem",
-                              backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
-                            }}
-                          />
+                          <Chip label={event.format} size="small" sx={{ height: 20, fontSize: "0.7rem", backgroundColor: isDarkMode ? "#333" : "#e0e0e0" }} />
                         )}
                       </Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
-                        {event.theatre}
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                        {times.join(", ")}
-                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>{event.theatre}</Typography>
+                      <Typography variant="body2" sx={{ fontFamily: "monospace" }}>{times.join(", ")}</Typography>
                     </Box>
                   </ListItem>
                 );
               } else {
-                // Regular user view: clickable title and showtime chips
                 const externalUrl = event.detailUrl || theatreInfo[event.theatre]?.website;
-                const showtimes: Array<{ time: string; ticketUrl?: string }> = event.times.map((t: any) => {
-                  if (typeof t === "string") {
-                    return { time: t, ticketUrl: externalUrl };
-                  } else {
-                    return { time: t.time, ticketUrl: t.ticketUrl || externalUrl };
-                  }
-                });
-
+                const showtimes: Array<{ time: string; ticketUrl?: string }> = event.times.map((t: any) =>
+                  typeof t === "string" ? { time: t, ticketUrl: externalUrl } : { time: t.time, ticketUrl: t.ticketUrl || externalUrl }
+                );
                 return (
                   <ListItem
                     key={event.id}
@@ -406,68 +464,32 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "flex-start",
-                      borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
+                      borderBottom: border,
                       "&:last-child": { borderBottom: "none" },
                       py: 2,
                       px: 3,
                       gap: 2,
                     }}
                   >
-                    {/* Poster area - fixed width maintained even if no image */}
-                    <Box
-                      sx={{
-                        width: 60,
-                        height: 90,
-                        flexShrink: 0,
-                        backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
-                        borderRadius: 1,
-                        overflow: "hidden",
-                      }}
-                    >
+                    <Box sx={{ width: 60, height: 90, flexShrink: 0, backgroundColor: isDarkMode ? "#333" : "#e0e0e0", borderRadius: 1, overflow: "hidden" }}>
                       {displayImageUrl && (
-                        <img
-                          src={displayImageUrl}
-                          alt={event.title}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
+                        <img src={displayImageUrl} alt={event.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       )}
                     </Box>
-
-                    {/* Content area */}
                     <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                       <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 0.5 }}>
                         <Typography
                           variant="subtitle1"
-                          sx={{
-                            fontWeight: 600,
-                            cursor: externalUrl ? "pointer" : "default",
-                            "&:hover": {
-                              textDecoration: externalUrl ? "underline" : "none",
-                            },
-                          }}
+                          sx={{ fontWeight: 600, cursor: externalUrl ? "pointer" : "default", "&:hover": { textDecoration: externalUrl ? "underline" : "none" } }}
                           onClick={() => externalUrl && window.open(externalUrl, "_blank")}
                         >
                           {event.title}
                         </Typography>
                         {event.format && event.format !== "Digital" && (
-                          <Chip
-                            label={event.format}
-                            size="small"
-                            sx={{
-                              height: 20,
-                              fontSize: "0.7rem",
-                              backgroundColor: isDarkMode ? "#333" : "#e0e0e0",
-                            }}
-                          />
+                          <Chip label={event.format} size="small" sx={{ height: 20, fontSize: "0.7rem", backgroundColor: isDarkMode ? "#333" : "#e0e0e0" }} />
                         )}
                       </Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        {event.theatre}
-                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{event.theatre}</Typography>
                       <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                         {showtimes.map((showing, idx) => (
                           <Chip
@@ -475,13 +497,8 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
                             label={showing.time}
                             size="small"
                             clickable={!!showing.ticketUrl}
-                            onClick={() =>
-                              showing.ticketUrl && window.open(showing.ticketUrl, "_blank")
-                            }
-                            sx={{
-                              cursor: showing.ticketUrl ? "pointer" : "default",
-                              fontFamily: "monospace",
-                            }}
+                            onClick={() => showing.ticketUrl && window.open(showing.ticketUrl, "_blank")}
+                            sx={{ cursor: showing.ticketUrl ? "pointer" : "default", fontFamily: "monospace" }}
                           />
                         ))}
                       </Stack>
@@ -494,12 +511,7 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
         </DialogContent>
       </Dialog>
 
-      {/* Event detail modal */}
-      <EventModal
-        open={eventModalOpen}
-        onClose={handleEventModalClose}
-        selectedEvent={selectedEvent}
-      />
+      <EventModal open={eventModalOpen} onClose={handleEventModalClose} selectedEvent={selectedEvent} />
     </Box>
   );
 };
