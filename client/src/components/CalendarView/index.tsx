@@ -254,6 +254,7 @@ export const CalendarView = ({ filters }: CalendarViewProps) => {
                 borderRight: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
                 borderBottom: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
                 minHeight: 480,
+                minWidth: 0,
                 display: "flex",
                 flexDirection: "column",
               }}
