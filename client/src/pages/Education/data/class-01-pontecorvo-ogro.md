@@ -10,7 +10,7 @@ teaser: >
   What separates a political assassination from terrorism? A film made only six
   years after a real car flew over a five-story building — and the question that
   still has no easy answer.
-posterSrc: ""
+posterSrc: "https://upload.wikimedia.org/wikipedia/en/4/45/Operaci%C3%B3n_Ogro_%28film%29_poster.jpg"
 ---
 
 ## I — Pontecorvo's Ogro and the Question of Political Violence
