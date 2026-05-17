@@ -40,6 +40,7 @@ export function createApp() {
             "https://img.vwassets.com",
             "https://m.media-amazon.com",
             "https://hollywoodtheatre.org",
+            "https://i0.wp.com",
             "https://www.laurelhurst.com",
             "https://www.laurelhursttheater.com",
             "https://ticketing.useast.veezi.com",
